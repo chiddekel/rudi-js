@@ -129,6 +129,7 @@
       var attr = el.getAttribute("data-i18n-attr");
       var val = t(key);
       if (attr) el.setAttribute(attr, val);
+      else if (el.hasAttribute("data-i18n-html")) el.innerHTML = val;
       else el.textContent = val;
     });
     var titleKey = document.body && document.body.getAttribute("data-i18n-title");

@@ -44,7 +44,7 @@
 - 🐼 **Rudi żyje**: 10 pogodnych min, płynne animacje i radość przy każdym ukończonym etapie.
 - 📱 **Web + Android 8.0+**: PWA i natywna aplikacja z **GeckoView** — działa offline nawet bez systemowego WebView.
 - 🌗 **Jasny i ciemny motyw**, skalowanie z rozmiarem tekstu (`rem`), obsługa `prefers-reduced-motion`.
-- 🌍 **15 języków (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — UI w każdym; treść kursu po polsku i angielsku (inne języki UI + kurs EN).
+- 🌍 **15 języków (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — UI aplikacji i landingu GitHub Pages w każdym; treść kursu po polsku i angielsku (inne języki UI + kurs EN). `?lang=` lub selektor w nawigacji.
 - 🪶 **Zero zależności** w kursie: czysty HTML, CSS i JS, bez builda.
 
     </td>
@@ -156,7 +156,7 @@ Checklistę i znane poprawki Android 8 znajdziesz w [`docs/qa/android-8.md`](doc
 
 | Ścieżka | Co |
 |---|---|
-| `index.html` | Strona promocyjna (GitHub Pages) z placem zabaw na żywo |
+| `index.html` | Landing GitHub Pages (pełne i18n) z placem zabaw na żywo |
 | `app.html` | Aplikacja: ścieżka, lekcje, plac zabaw, ranking, profil |
 | `design-system.html` | Design system Rudi: tokeny, komponenty, miny maskotki |
 | `js/engine.js` | RudiScript: lekser → parser Pratta → AST → interpreter + kompilator bytecode |
