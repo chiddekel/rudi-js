@@ -81,3 +81,38 @@ test("Mustache renders JSON locale placeholders", () => {
   assert.match(en.ui["landing.program.lessons"], /\{\{n\}\}/);
   assert.equal(I18n.format(en.ui["landing.program.lessons"], { n: 15 }), "15 lessons");
 });
+
+test("t() resolves flat dotted UI keys from locale JSON", async () => {
+  // Stub XHR-less load by injecting through setLocale after mocking fetch via cache path:
+  // loadPack uses XMLHttpRequest in browser; in Node we seed by calling materialize after manual pack inject.
+  const en = JSON.parse(fs.readFileSync(path.join(localesDir, "en.json"), "utf8"));
+  const pl = JSON.parse(fs.readFileSync(path.join(localesDir, "pl.json"), "utf8"));
+  // Monkey-patch: setLocale → loadPack uses XHR. Provide a tiny fake XHR for file reads.
+  const RealXHR = global.XMLHttpRequest;
+  global.XMLHttpRequest = function () {
+    this.readyState = 0;
+    this.status = 0;
+    this.responseText = "";
+    this.open = function (_m, url) { this._url = url; };
+    this.send = function () {
+      const self = this;
+      const m = String(self._url).match(/locales\/([^/?#]+)\.json/);
+      const code = m ? decodeURIComponent(m[1]) : "en";
+      const file = path.join(localesDir, code + ".json");
+      self.responseText = fs.readFileSync(file, "utf8");
+      self.status = 200;
+      self.readyState = 4;
+      setTimeout(function () { self.onreadystatechange && self.onreadystatechange(); }, 0);
+    };
+  };
+  try {
+    await I18n.setLocale("en");
+    assert.equal(I18n.t("profile.title"), en.ui["profile.title"]);
+    assert.equal(I18n.t("nav.path"), en.ui["nav.path"]);
+    assert.equal(I18n.t("path.module", { n: 2 }), I18n.format(en.ui["path.module"], { n: 2 }));
+    await I18n.setLocale("pl");
+    assert.equal(I18n.t("profile.title"), pl.ui["profile.title"]);
+  } finally {
+    global.XMLHttpRequest = RealXHR;
+  }
+});

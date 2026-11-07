@@ -476,8 +476,11 @@
   function viewProfile() {
     var doneCount = Object.keys(S.done).length;
     var medalColor = { fox: "fox", sky: "sky", teal: "teal", plum: "plum", berry: "berry", sun: "sun" };
-    var langOpts = window.RudiI18n.SUPPORTED.map(function (l) {
-      return '<option value="' + l.code + '"' + (l.code === window.RudiI18n.code() ? " selected" : "") + ">" + esc(l.name) + "</option>";
+    var curLang = window.RudiI18n.code();
+    // Button grid instead of <select>: GeckoView has no PromptDelegate, so native selects don't open.
+    var langBtns = window.RudiI18n.SUPPORTED.map(function (l) {
+      var on = l.code === curLang;
+      return '<button type="button" class="lang-opt' + (on ? " is-on" : "") + '" data-lang="' + l.code + '" aria-pressed="' + on + '">' + esc(l.name) + "</button>";
     }).join("");
     mount(topbar(t("profile.title")) + '<div class="view stack">' +
       '<div class="profile-head"><span data-rudi data-mood="wink"></span><div><h1 style="margin:0">' + t("profile.heading") + '</h1><p class="text-soft" style="margin:0">' + t("profile.sub") + '</p></div></div>' +
@@ -490,12 +493,17 @@
         var ok = moduleDone(m);
         return '<figure><div class="medal medal--' + medalColor[m.color] + (ok ? "" : " is-locked") + '"><span style="width:2.125rem">' + icon(ok ? "star" : "lock") + "</span></div>" + esc(m.title) + "</figure>";
       }).join("") + "</div></div>" +
-      '<h2 style="margin:0.75rem 0 0">' + t("profile.settings") + '</h2><div class="card stack" style="--gap:0.875rem">' +
-      '<label class="field"><span class="field__label">' + t("profile.lang") + '</span><select id="lang" class="field__control" aria-label="' + t("profile.langHint") + '">' + langOpts + "</select></label>" +
+      '<h2 id="settings" style="margin:0.75rem 0 0">' + t("profile.settings") + '</h2><div class="card stack" style="--gap:0.875rem">' +
+      '<div class="field"><span class="field__label">' + t("profile.lang") + '</span><div class="lang-grid" role="group" aria-label="' + t("profile.langHint") + '">' + langBtns + "</div></div>" +
       '<label class="switch"><input type="checkbox" id="dark"' + (R.isDark() ? " checked" : "") + '><span class="switch__track"></span>' + t("profile.dark") + '</label>' +
       '<a class="btn btn--ghost btn--block" href="design-system.html">' + t("profile.design") + '</a>' +
       '<button class="btn btn--danger btn--block" id="reset">' + t("profile.reset") + '</button></div></div>', "profile");
-    document.getElementById("lang").addEventListener("change", function () { window.RudiI18n.setLocale(this.value); });
+    main.querySelectorAll("[data-lang]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var next = btn.getAttribute("data-lang");
+        if (next && next !== window.RudiI18n.code()) window.RudiI18n.setLocale(next);
+      });
+    });
     document.getElementById("dark").addEventListener("change", function () { R.theme(this.checked ? "dark" : "light"); });
     document.getElementById("reset").addEventListener("click", function () {
       openModal('<div data-rudi data-mood="wow" style="--rudi-size:6.875rem"></div><h2>' + t("profile.resetTitle") + '</h2><p class="text-soft">' + t("profile.resetBody") + '</p>' +

@@ -64,7 +64,10 @@
   }
 
   function deepGet(obj, path) {
-    var parts = path.split(".");
+    if (obj == null || path == null) return undefined;
+    // Locale catalogs use flat dotted keys ("profile.title"), not nested objects.
+    if (Object.prototype.hasOwnProperty.call(obj, path)) return obj[path];
+    var parts = String(path).split(".");
     var cur = obj;
     for (var i = 0; i < parts.length; i++) {
       if (cur == null) return undefined;
@@ -126,14 +129,20 @@
     });
   }
 
+  function localeUrl(locale) {
+    var file = "locales/" + locale + ".json";
+    try {
+      // Absolute URL from the page keeps file:// loads working in GeckoView.
+      if (typeof document !== "undefined" && document.baseURI) {
+        return new URL(file, document.baseURI).href;
+      }
+    } catch (e) {}
+    return file;
+  }
+
   function loadPack(locale) {
     if (cache[locale]) return Promise.resolve(cache[locale]);
-    var base = document.currentScript && document.currentScript.src
-      ? document.currentScript.src.replace(/\/js\/[^/]+$/, "/")
-      : "";
-    // Prefer relative to page (works for Pages, http.server, Android file:// assets)
-    var url = "locales/" + locale + ".json";
-    return fetchJson(url).then(function (data) {
+    return fetchJson(localeUrl(locale)).then(function (data) {
       cache[locale] = data;
       return data;
     }, function (err) {
@@ -143,7 +152,7 @@
   }
 
   function applyDocument() {
-    if (!pack) return;
+    if (!pack || typeof document === "undefined") return;
     var html = document.documentElement;
     html.lang = pack.meta && pack.meta.code || code;
     html.dir = (pack.meta && pack.meta.dir) || "ltr";
