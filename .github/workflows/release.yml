@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build signed APKs + GitHub Release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install release signing
+        env:
+          SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: |
+          test -n "$SIGNING_KEYSTORE_BASE64"
+          test -n "$SIGNING_STORE_PASSWORD"
+          test -n "$SIGNING_KEY_ALIAS"
+          test -n "$SIGNING_KEY_PASSWORD"
+          mkdir -p "$HOME/.android"
+          printf '%s' "$SIGNING_KEYSTORE_BASE64" | base64 -d > "$HOME/.android/rudi-js-release.jks"
+          {
+            echo "storeFile=$HOME/.android/rudi-js-release.jks"
+            echo "storePassword=$SIGNING_STORE_PASSWORD"
+            echo "keyAlias=$SIGNING_KEY_ALIAS"
+            echo "keyPassword=$SIGNING_KEY_PASSWORD"
+          } > "$HOME/.android/rudi-js-signing.properties"
+
+      - name: Assemble release
+        run: ./gradlew assembleRelease lint --warning-mode fail
+
+      - name: Stage APKs for release
+        working-directory: .
+        run: |
+          mkdir -p dist
+          for abi in arm64-v8a armeabi-v7a x86_64; do
+            src="android/app/build/outputs/apk/release/app-${abi}-release.apk"
+            test -f "$src"
+            cp "$src" "dist/rudi-js-${abi}.apk"
+          done
+          # Primary phone APK under a stable Latest-friendly name
+          cp dist/rudi-js-arm64-v8a.apk dist/rudi-js.apk
+          ls -lh dist
+
+      - name: Publish GitHub Release (Latest)
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Rudi.js ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true
+          files: |
+            dist/rudi-js.apk
+            dist/rudi-js-arm64-v8a.apk
+            dist/rudi-js-armeabi-v7a.apk
+            dist/rudi-js-x86_64.apk
+          body: |
+            Signed Android 8.0+ APKs (GeckoView, offline).
+
+            | Asset | For |
+            |---|---|
+            | `rudi-js.apk` | phones / tablets (**arm64**, same as `rudi-js-arm64-v8a.apk`) |
+            | `rudi-js-armeabi-v7a.apk` | older 32-bit ARM |
+            | `rudi-js-x86_64.apk` | emulators / ChromeOS x86_64 |
+
+            Install the matching ABI. No INTERNET permission; course ships inside the APK.
