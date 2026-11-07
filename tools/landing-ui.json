@@ -103,7 +103,7 @@
   },
   "landing.nav.play": {
     "en": "Playground",
-    "pl": "Plac zabaw",
+    "pl": "Piaskownica",
     "de": "Spielplatz",
     "fr": "Aire de jeu",
     "es": "Patio",
@@ -647,7 +647,7 @@
   },
   "landing.how.s3.title": {
     "en": "Run it in the Playground",
-    "pl": "Uruchamiaj w Placu zabaw",
+    "pl": "Uruchamiaj w Piaskownicy",
     "de": "Im Spielplatz ausführen",
     "fr": "Lance dans l'aire de jeu",
     "es": "Ejecuta en el Patio",
@@ -1140,7 +1140,7 @@
   },
   "landing.live.openPlay": {
     "en": "Open the full Playground",
-    "pl": "Otwórz pełny Plac zabaw",
+    "pl": "Otwórz pełną Piaskownicę",
     "de": "Vollständigen Spielplatz öffnen",
     "fr": "Ouvrir l'aire de jeu complète",
     "es": "Abrir el Patio completo",
