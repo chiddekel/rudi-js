@@ -8,7 +8,7 @@ section.block--tint { background: var(--surface-2); }
 .pill i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--secondary); }
 
 /* nav */
-.lnav { position: sticky; top: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(0.5rem); border-bottom: 0.125rem solid var(--line); }
+.lnav { position: sticky; top: 0; z-index: 40; background: var(--bg); /* solid: backdrop blur on a sticky bar janks scrolling on phones */ border-bottom: 0.125rem solid var(--line); }
 .lnav__in { display: flex; align-items: center; gap: 1.5rem; height: 4.5rem; }
 .lnav__brand { display: flex; align-items: center; gap: 0.625rem; font-weight: 900; font-size: 1.4rem; color: var(--ink); text-decoration: none; margin-right: auto; }
 .lnav__brand b { color: var(--primary); }

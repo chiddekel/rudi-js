@@ -99,10 +99,11 @@
   --depth: 0.25rem;
   --depth-lg: 0.375rem;
 
-  --ease-bounce: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-bounce: cubic-bezier(.34, 1.22, .64, 1); /* soft overshoot: playful, never snappy */
+  --ease-soft: cubic-bezier(.4, 0, .2, 1);
   --ease-out: cubic-bezier(.22, 1, .36, 1);
-  --t-fast: 120ms;
-  --t-med: 260ms;
+  --t-fast: 160ms;
+  --t-med: 360ms;
 
   --tap: 3rem; /* minimum touch target */
   color-scheme: light;

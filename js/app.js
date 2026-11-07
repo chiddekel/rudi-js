@@ -165,25 +165,31 @@
       node.classList.remove("pre-done"); node.classList.add("is-done", "is-popping");   // 2. checkpoint done
       node.innerHTML = icon("check");
       var stars = from.querySelector(".lnode__stars"); if (stars) stars.classList.remove("is-waiting");
-      R.setMood(walker, "joy"); walker.firstChild.classList.add("is-mina-joy", "is-cheering");
+      R.setMood(walker, "joy"); walker.firstElementChild.classList.add("is-cheering");
       R.confetti(45);
-      return wait(1400);
+      return wait(1700);
     }).then(function () {
       if (!alive()) return;
       if (!buddy) { R.setMood(walker, "love"); return wait(1600); }   // course finished: no next checkpoint
       var target = buddy.querySelector("[data-rudi]");
       next.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
       var a = walker.getBoundingClientRect(), b = target.getBoundingClientRect();
-      var dx = b.left - a.left, dy = b.top - a.top, hops = Math.max(3, Math.round(Math.abs(dy) / (5.625 * remPx()))), frames = [];
-      for (var i = 0; i <= hops * 2; i++) {
-        var t = i / (hops * 2), lift = i % 2 ? -1.625 * remPx() : 0;
-        frames.push({ transform: "translate(" + toRem(dx * t) + "," + toRem(dy * t + lift) + ")" });
-      }
+      var dx = b.left - a.left, dy = b.top - a.top, hops = Math.max(3, Math.round(Math.abs(dy) / (5.625 * remPx())));
+      var svg = walker.firstElementChild, dur = Math.min(3400, 560 * hops), lift = toRem(1 * remPx());
+      svg.classList.remove("is-cheering");
       R.setMood(walker, "happy");
       if (reduce || !walker.animate) return;
+      // Two composited layers: the wrapper glides along the path (one eased move),
+      // the SVG does parabolic hops on top (ease-out up, ease-in down, squash on landing).
       return new Promise(function (r) {
-        var anim = walker.animate(frames, { duration: Math.min(2600, 420 * hops), easing: "linear", fill: "forwards" });
-        anim.onfinish = r; anim.oncancel = r;
+        var travel = walker.animate([{ transform: "translate(0, 0)" }, { transform: "translate(" + toRem(dx) + "," + toRem(dy) + ")" }],
+          { duration: dur, easing: "cubic-bezier(.45, 0, .55, 1)", fill: "forwards" });
+        var hop = svg.animate([
+          { transform: "translateY(0) scale(1.025, .975)", easing: "cubic-bezier(.33, 0, .3, 1)" },
+          { transform: "translateY(-" + lift + ") scale(.99, 1.01)", offset: .48, easing: "cubic-bezier(.6, 0, .67, 1)" },
+          { transform: "translateY(0) scale(1.025, .975)" }
+        ], { duration: dur / hops, iterations: hops });
+        travel.onfinish = function () { hop.cancel(); r(); }; travel.oncancel = r;
       });
     }).then(function () {
       walker.remove();                                       // 3. Rudi arrives at the next checkpoint

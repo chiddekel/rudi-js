@@ -42,11 +42,14 @@
   MOUTH.blink = MOUTH.happy; MOUTH.love = MOUTH.joy; MOUTH.star = MOUTH.joy;
 
   /* Original red panda head. viewBox 0 0 200 190.
-     Parts are grouped (body, ears, eyes) so idle behaviors can animate them. */
+     Every face (eyes + mouth) is rendered once; changing expression only toggles which face group is
+     visible, so the SVG is never rebuilt (no layout churn, running animations keep going). */
+  var FACES = ["happy", "joy", "wow", "wink", "blink", "love", "star", "tongue", "laugh", "curious", "content"];
+  function faceOf(mood) { return mood === "sad" ? "curious" : FACES.indexOf(mood) >= 0 ? mood : "happy"; }
   function mascot(mood, label) {
-    mood = EYES[mood] ? mood : "happy";
+    var active = faceOf(mood);
     return '' +
-      '<svg class="rudi" viewBox="0 0 200 190" role="img" aria-label="' + (label || "Rudi, czerwona panda") + '"><g class="rudi__body">' +
+      '<svg class="rudi" viewBox="0 0 200 190" role="img" data-face="' + active + '" aria-label="' + (label || "Rudi, czerwona panda") + '"><g class="rudi__body">' +
       '<g class="rudi__ear rudi__ear--l"><circle cx="42" cy="56" r="31" fill="' + CREAM + '"/><circle cx="42" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="44" cy="62" r="13" fill="' + MARK + '"/></g>' +
       '<g class="rudi__ear rudi__ear--r"><circle cx="158" cy="56" r="31" fill="' + CREAM + '"/><circle cx="158" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="156" cy="62" r="13" fill="' + MARK + '"/></g>' +
       // head
@@ -58,13 +61,14 @@
       '<ellipse cx="42" cy="126" rx="23" ry="21" fill="' + CREAM + '"/><ellipse cx="158" cy="126" rx="23" ry="21" fill="' + CREAM + '"/>' +
       // tear marks
       '<path d="M72 118q-6 16 2 36M128 118q6 16-2 36" fill="none" stroke="' + MARK + '" stroke-width="11" stroke-linecap="round"/>' +
-      // muzzle
+      // muzzle, blush, nose
       '<ellipse cx="100" cy="143" rx="36" ry="27" fill="' + CREAM + '"/>' +
-      '<g class="rudi__eyes">' + EYES[mood] + '</g>' +
       '<ellipse cx="48" cy="142" rx="10" ry="6" fill="' + BLUSH + '" opacity=".6"/><ellipse cx="152" cy="142" rx="10" ry="6" fill="' + BLUSH + '" opacity=".6"/>' +
-      // nose
       '<path d="M90 126q10-6 20 0q-2 9-10 11q-8-2-10-11z" fill="' + INK + '"/>' +
-      MOUTH[mood] +
+      // faces
+      FACES.map(function (f) {
+        return '<g data-f="' + f + '"' + (f === active ? "" : ' style="opacity:0"') + '><g class="rudi__eyes">' + EYES[f] + "</g>" + MOUTH[f] + "</g>";
+      }).join("") +
       '</g></svg>';
   }
 
@@ -75,13 +79,24 @@
   function renderAll(root) {
     (root || document).querySelectorAll("[data-rudi]").forEach(function (el) { renderOne(el); });
   }
+  // switch expression in place (cheap: two style changes inside one SVG)
+  function showFace(el, mood) {
+    var svg = el.firstElementChild;
+    if (!svg || svg.tagName.toLowerCase() !== "svg") { renderOne(el, mood); return; }
+    var f = faceOf(mood), cur = svg.getAttribute("data-face");
+    if (cur === f) return;
+    var prev = svg.querySelector('[data-f="' + cur + '"]'), next = svg.querySelector('[data-f="' + f + '"]');
+    if (prev) prev.style.opacity = "0";
+    if (next) next.style.opacity = "";
+    svg.setAttribute("data-face", f);
+  }
 
-  function setMood(el, mood) { el.dataset.mood = mood; renderOne(el); }
+  function setMood(el, mood) { el.dataset.mood = mood; clearMina(el); showFace(el, mood); }
 
   /* ---------- Miny (idle facial expressions) ----------
      10 cheerful expressions. Each on-screen mascot loops on its own: pick a random mina (not the
      previous one), play it 2–5 times (face, then back to the screen's mood), short pause, repeat.
-     Never sad or angry: every face Rudi has is cheerful, so every on-screen mascot plays. */
+     Never sad or angry. Body motion runs on the HTML wrapper (GPU-composited transform/opacity only). */
   var MINY = ["blink", "wink", "joy", "wow", "love", "star", "tongue", "laugh", "curious", "content"];
 
   var reduceMotion = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
@@ -90,18 +105,27 @@
     var r = el.getBoundingClientRect();
     return r.width > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
   }
+  function clearMina(el) {
+    if (el._mina) { el.classList.remove("is-mina-" + el._mina); if (el.firstElementChild) el.firstElementChild.classList.remove("is-mina-" + el._mina); el._mina = null; }
+  }
   function face(el, mood, mina) {
-    renderOne(el, mood);
+    clearMina(el);
+    showFace(el, mood);
     // wink is a face change, not motion: always play it
-    if (mina && (mina === "wink" || !reduceMotion.matches) && el.firstChild) el.firstChild.classList.add("is-mina-" + mina);
+    if (mina && (mina === "wink" || !reduceMotion.matches)) {
+      void el.offsetWidth;                                   // restart the CSS animation for repeats
+      el.classList.add("is-mina-" + mina);
+      if (el.firstElementChild) el.firstElementChild.classList.add("is-mina-" + mina);
+      el._mina = mina;
+    }
   }
   function loop(el) {
     if (!el.isConnected) return;                           // mascot removed: stop
     var base = el.dataset.mood || "happy";
     if (document.hidden || !onScreen(el)) { el._rudiT = setTimeout(function () { loop(el); }, 1500); return; }
-    var pool = MINY.filter(function (m) { return m !== el._rudiLast && m !== base; });
+    var pool = MINY.filter(function (m) { return m !== el._rudiLast && m !== faceOf(base); });
     var mina = pool[Math.floor(Math.random() * pool.length)], reps = rnd(2, 5), i = 0;
-    var on = mina === "blink" ? 160 : 700, off = mina === "blink" ? 260 : 420;
+    var on = mina === "blink" ? 200 : 950, off = mina === "blink" ? 340 : 650;
     el._rudiLast = mina;
     (function step() {
       if (!el.isConnected || el.dataset.mood !== base) { el._rudiT = setTimeout(function () { loop(el); }, 800); return; }
@@ -110,7 +134,7 @@
         if (el.dataset.mood !== base) { loop(el); return; } // screen changed the mood: respect it
         face(el, base);
         if (++i < reps) el._rudiT = setTimeout(step, off);
-        else el._rudiT = setTimeout(function () { loop(el); }, rnd(1200, 3200));
+        else el._rudiT = setTimeout(function () { loop(el); }, rnd(2000, 4500));
       }, on);
     })();
   }
@@ -151,7 +175,7 @@
       p.style.background = colors[i % colors.length];
       p.style.setProperty("--dx", (Math.random() * 12.5 - 6.25) + "rem");
       p.style.setProperty("--rot", (Math.random() * 900 - 450) + "deg");
-      p.style.setProperty("--dur", (1 + Math.random() * 1.2) + "s");
+      p.style.setProperty("--dur", (1.8 + Math.random() * 1.2) + "s");
       p.style.animationDelay = Math.random() * .3 + "s";
       box.appendChild(p);
     }

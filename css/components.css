@@ -113,12 +113,12 @@ p { margin: 0 0 var(--s-3); }
   overflow: hidden;
 }
 .progress__fill {
-  position: absolute; inset: 0 auto 0 0;
-  width: calc(var(--value) * 1%);
-  min-width: 1.125rem;
+  /* full-width bar slid in with transform: composited, no layout per frame */
+  position: absolute; inset: 0;
   border-radius: inherit;
   background: var(--progress-c, var(--primary));
-  transition: width var(--t-med) var(--ease-bounce);
+  transform: translateX(calc(max(var(--value), 6) * 1% - 100%));
+  transition: transform var(--t-med) var(--ease-bounce);
 }
 .progress__fill::after { /* glossy highlight */
   content: ""; position: absolute; left: 0.625rem; right: 0.625rem; top: 0.25rem; height: 0.25rem;
@@ -158,7 +158,7 @@ p { margin: 0 0 var(--s-3); }
   background: var(--surface); border: 0.125rem solid var(--line-strong);
   color: var(--primary); font-weight: var(--fw-black); font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: .06em;
   white-space: nowrap;
-  animation: bob 1.6s ease-in-out infinite;
+  animation: bob 2.6s ease-in-out infinite;
 }
 .path__label::after {
   content: ""; position: absolute; top: 100%; left: 50%; width: 0.75rem; height: 0.75rem;
@@ -171,7 +171,7 @@ p { margin: 0 0 var(--s-3); }
 .path__node:nth-child(4n)   { translate: 1.5rem 0; }
 .path__node:nth-child(4n+1) { translate: -2.5rem 0; }
 
-@keyframes bob { 50% { transform: translate(-50%, -0.3125rem); } }
+@keyframes bob { 50% { transform: translate(-50%, -0.1875rem); } }
 
 /* ================= Choice tiles ================= */
 .choices { display: grid; gap: var(--s-3); }
@@ -204,7 +204,7 @@ p { margin: 0 0 var(--s-3); }
 .choice.is-wrong   { border-color: var(--danger); background: var(--danger-tint); box-shadow: 0 var(--depth) 0 var(--danger); color: var(--danger-shade); animation: shake .4s; }
 .choice:disabled { cursor: default; }
 
-@keyframes shake { 20%,60% { translate: -0.375rem 0; } 40%,80% { translate: 0.375rem 0; } }
+@keyframes shake { 25%, 75% { translate: -0.1875rem 0; } 50% { translate: 0.1875rem 0; } }
 
 /* Token pills (word bank / tag picker) */
 .tokens { display: flex; flex-wrap: wrap; gap: var(--s-2); }
@@ -294,8 +294,8 @@ p { margin: 0 0 var(--s-3); }
 /* ================= Mascot + speech bubble ================= */
 [data-rudi] { flex: none; display: inline-block; line-height: 0; }
 .rudi { flex: none; width: var(--rudi-size, 7.5rem); height: auto; }
-.rudi.is-bouncy { animation: rudi-hop 2.4s var(--ease-bounce) infinite; transform-origin: 50% 100%; }
-@keyframes rudi-hop { 0%, 70%, 100% { transform: translateY(0) scale(1); } 78% { transform: translateY(0) scale(1.06, .94); } 86% { transform: translateY(-0.625rem) scale(.97, 1.03); } }
+.rudi.is-bouncy { animation: rudi-hop 3.2s var(--ease-soft) infinite; transform-origin: 50% 100%; }
+@keyframes rudi-hop { 0%, 64%, 100% { transform: none; } 72% { transform: scale(1.025, .975); } 82% { transform: translateY(-0.375rem) scale(.99, 1.01); } 92% { transform: scale(1.015, .985); } }
 
 .speaker { display: flex; align-items: flex-end; gap: var(--s-3); }
 .bubble {
@@ -344,8 +344,8 @@ p { margin: 0 0 var(--s-3); }
   animation: toast-in var(--t-med) var(--ease-bounce);
 }
 .toast.is-leaving { animation: toast-out var(--t-med) var(--ease-out) forwards; }
-@keyframes toast-in { from { opacity: 0; transform: translateY(-1rem) scale(.96); } }
-@keyframes toast-out { to { opacity: 0; transform: translateY(-1rem); } }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-0.5rem) scale(.98); } }
+@keyframes toast-out { to { opacity: 0; transform: translateY(-0.5rem); } }
 
 /* ================= Modal (native <dialog>) ================= */
 .modal {
@@ -358,7 +358,7 @@ p { margin: 0 0 var(--s-3); }
 .modal::backdrop { background: rgba(28, 21, 17, .55); }
 .modal[open] { animation: modal-pop var(--t-med) var(--ease-bounce); }
 .modal .rudi { margin: 0 auto var(--s-4); }
-@keyframes modal-pop { from { opacity: 0; transform: scale(.9); } }
+@keyframes modal-pop { from { opacity: 0; transform: translateY(0.5rem) scale(.97); } }
 
 /* ================= Navigation: bottom tabs (mobile) / rail (desktop) ================= */
 .tabbar {
@@ -389,9 +389,10 @@ p { margin: 0 0 var(--s-3); }
 .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; }
 .confetti i {
   position: absolute; top: -0.75rem; width: 0.625rem; height: 0.875rem; border-radius: 0.1875rem;
-  animation: confetti-fall var(--dur, 1.4s) var(--ease-out) forwards;
+  animation: confetti-fall var(--dur, 2.2s) cubic-bezier(.25, .6, .4, 1) forwards;
+  will-change: transform;
 }
-@keyframes confetti-fall { to { transform: translate(var(--dx, 0), 105vh) rotate(var(--rot, 540deg)); opacity: .9; } }
+@keyframes confetti-fall { 0% { opacity: 0; } 8% { opacity: 1; } 75% { opacity: .9; } 100% { transform: translate(var(--dx, 0), 105vh) rotate(var(--rot, 360deg)); opacity: 0; } }
 
 /* ================= Utilities ================= */
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap, var(--s-4)); }
@@ -401,27 +402,34 @@ p { margin: 0 0 var(--s-3); }
 .sr-only { position: absolute; width: 0.0625rem; height: 0.0625rem; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ================= Rudi miny (idle expressions) ================= */
-.rudi .rudi__body, .rudi .rudi__ear, .rudi .rudi__eyes { transform-box: fill-box; transform-origin: 50% 100%; }
+.rudi .rudi__ear, .rudi .rudi__eyes { transform-box: fill-box; transform-origin: 50% 100%; }
+/* Body motion animates the HTML wrapper, not SVG internals: transform on an HTML box is GPU-composited. */
+[data-rudi] { transform-origin: 50% 100%; backface-visibility: hidden; }
 .rudi .rudi__ear--l { transform-origin: 80% 90%; }
 .rudi .rudi__ear--r { transform-origin: 20% 90%; }
-.rudi.is-mina-laugh .rudi__body { animation: mina-laugh .35s ease-in-out 2; }
-.rudi.is-mina-curious .rudi__body { animation: mina-tilt .7s var(--ease-out) forwards; }
-.rudi.is-mina-love .rudi__body,
-.rudi.is-mina-star .rudi__body { animation: mina-pop .45s var(--ease-bounce); }
-.rudi.is-mina-joy .rudi__body { animation: mina-hop .5s var(--ease-bounce); }
-.rudi.is-mina-wow .rudi__ear { animation: mina-ears .4s ease-in-out 2; }
-.rudi.is-mina-tongue .rudi__body { animation: mina-wiggle .35s ease-in-out 2; }
-.rudi.is-mina-content .rudi__body { animation: mina-breathe .7s ease-in-out; }
-.rudi.is-mina-wink .rudi__ear--r { animation: mina-ears .35s ease-in-out; }
-@keyframes mina-laugh { 50% { transform: translateY(-3%) rotate(2deg); } }
-@keyframes mina-tilt { to { transform: rotate(-8deg); } }
-@keyframes mina-pop { 40% { transform: scale(1.08); } }
-@keyframes mina-hop { 40% { transform: translateY(-7%); } 70% { transform: translateY(0) scale(1.04, .96); } }
-@keyframes mina-ears { 50% { transform: rotate(-12deg); } }
-@keyframes mina-wiggle { 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
-@keyframes mina-breathe { 50% { transform: scale(1.03); } }
+[data-rudi].is-mina-laugh { animation: mina-laugh .5s ease-in-out 2; }
+[data-rudi].is-mina-curious { animation: mina-tilt .9s ease-in-out; }
+[data-rudi].is-mina-love,
+[data-rudi].is-mina-star { animation: mina-pop .7s ease-in-out; }
+[data-rudi].is-mina-joy { animation: mina-hop .75s ease-in-out; }
+.rudi.is-mina-wow .rudi__ear { animation: mina-ears .55s ease-in-out 2; }
+[data-rudi].is-mina-tongue { animation: mina-wiggle .5s ease-in-out 2; }
+[data-rudi].is-mina-content { animation: mina-breathe .9s ease-in-out; }
+.rudi.is-mina-wink .rudi__ear--r { animation: mina-ears .5s ease-in-out; }
+@keyframes mina-laugh { 50% { transform: translateY(-1.5%) rotate(1.2deg); } }
+@keyframes mina-tilt { 40%, 65% { transform: rotate(-5deg); } }
+@keyframes mina-pop { 45% { transform: scale(1.04); } }
+@keyframes mina-hop { 42% { transform: translateY(-4%); } 75% { transform: scale(1.02, .98); } 100% { transform: none; } }
+@keyframes mina-ears { 50% { transform: rotate(-7deg); } }
+@keyframes mina-wiggle { 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
+@keyframes mina-breathe { 50% { transform: scale(1.02); } }
 .rudi .rudi__wink-shut { opacity: 0; }
-.rudi.is-mina-wink .rudi__wink-open { animation: wink-open .7s steps(1, end) forwards; }
-.rudi.is-mina-wink .rudi__wink-shut { animation: wink-shut .7s steps(1, end) forwards; }
-@keyframes wink-open { 0% { opacity: 1; } 12%, 78% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes wink-shut { 0% { opacity: 0; } 12%, 78% { opacity: 1; } 100% { opacity: 0; } }
+.rudi.is-mina-wink .rudi__wink-open { animation: wink-open .9s ease-in-out forwards; }
+.rudi.is-mina-wink .rudi__wink-shut { animation: wink-shut .9s ease-in-out forwards; }
+@keyframes wink-open { 0% { opacity: 1; } 18%, 72% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes wink-shut { 0% { opacity: 0; } 18%, 72% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Face changes cross-fade (opacity only) so expressions melt into each other. */
+.rudi [data-f] { transition: opacity .22s var(--ease-soft); }
+.rudi[data-face="blink"] [data-f], .rudi [data-f="blink"] { transition-duration: .12s; }
+@media (prefers-reduced-motion: reduce) { .rudi [data-f] { transition: none; } }
