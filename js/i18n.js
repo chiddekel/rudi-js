@@ -1,4 +1,5 @@
-/* Rudi.js i18n — locale detect, catalog load, t(), RTL, course materialize. Zero deps. */
+/* Rudi.js i18n — locale detect, catalog load, t(), RTL, course materialize.
+   String interpolation uses Mustache.js against JSON locale catalogs ({{var}}). */
 (function (global) {
   "use strict";
 
@@ -72,11 +73,31 @@
     return cur;
   }
 
+  function mustache() {
+    return global.Mustache || null;
+  }
+
   function format(str, vars) {
-    if (!vars) return str;
-    return String(str).replace(/\{(\w+)\}/g, function (_, k) {
-      return vars[k] != null ? String(vars[k]) : "{" + k + "}";
+    if (str == null) return str;
+    var template = String(str);
+    if (!vars) return template;
+    var M = mustache();
+    if (M && typeof M.render === "function") {
+      return M.render(template, vars);
+    }
+    // Fallback when Mustache is not loaded (keeps {{var}} and legacy {var}).
+    return template.replace(/\{\{(\w+)\}\}|\{(\w+)\}/g, function (_, a, b) {
+      var k = a || b;
+      return vars[k] != null ? String(vars[k]) : (a ? "{{" + k + "}}" : "{" + k + "}");
     });
+  }
+
+  function render(template, view, partials, config) {
+    var M = mustache();
+    if (M && typeof M.render === "function") {
+      return M.render(String(template), view || {}, partials, config);
+    }
+    return format(template, view || {});
   }
 
   function t(key, vars) {
@@ -216,6 +237,7 @@
     setLocale: setLocale,
     t: t,
     format: format,
+    render: render,
     code: function () { return code; },
     pack: function () { return pack; },
     materializeCourse: materializeCourse,

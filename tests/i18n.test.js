@@ -13,6 +13,11 @@ const codes = [
 ];
 
 global.window = global.window || {};
+// mustache.min.js is a UMD build: under Node it exports the API, so hoist it onto global
+// before i18n.js reads global.Mustache (browser script tags set this automatically).
+const Mustache = require(path.join(root, "js/vendor/mustache.min.js"));
+global.Mustache = Mustache;
+global.window.Mustache = Mustache;
 require(path.join(root, "js/i18n.js"));
 require(path.join(root, "js/course.js"));
 const I18n = global.window.RudiI18n;
@@ -66,4 +71,13 @@ test("normalize maps browser tags to supported codes", () => {
   assert.equal(I18n.normalize("zh-Hans"), "zh-CN");
   assert.equal(I18n.normalize("en-US"), "en");
   assert.equal(I18n.normalize("nope"), null);
+});
+
+test("Mustache renders JSON locale placeholders", () => {
+  assert.ok(global.Mustache && typeof global.Mustache.render === "function");
+  assert.equal(I18n.render("Module {{n}}", { n: 3 }), "Module 3");
+  assert.equal(I18n.format("VM: {{ms}} ms · {{steps}} steps", { ms: "1.2", steps: 9 }), "VM: 1.2 ms · 9 steps");
+  const en = JSON.parse(fs.readFileSync(path.join(localesDir, "en.json"), "utf8"));
+  assert.match(en.ui["landing.program.lessons"], /\{\{n\}\}/);
+  assert.equal(I18n.format(en.ui["landing.program.lessons"], { n: 15 }), "15 lessons");
 });

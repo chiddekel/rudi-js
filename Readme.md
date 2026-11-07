@@ -44,7 +44,7 @@
 - 🐼 **Rudi żyje**: 10 pogodnych min, płynne animacje i radość przy każdym ukończonym etapie.
 - 📱 **Web + Android 8.0+**: PWA i natywna aplikacja z **GeckoView** — działa offline nawet bez systemowego WebView.
 - 🌗 **Jasny i ciemny motyw**, skalowanie z rozmiarem tekstu (`rem`), obsługa `prefers-reduced-motion`.
-- 🌍 **15 języków (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — UI aplikacji i landingu GitHub Pages w każdym; treść kursu po polsku i angielsku (inne języki UI + kurs EN). `?lang=` lub selektor w nawigacji.
+- 🌍 **15 języków (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — UI aplikacji i landingu GitHub Pages w każdym; treść kursu po polsku i angielsku (inne języki UI + kurs EN). `?lang=` lub selektor w nawigacji. Placeholdery w JSON: Mustache `{{var}}` (`js/vendor/mustache.min.js`).
 - 🪶 **Zero zależności** w kursie: czysty HTML, CSS i JS, bez builda.
 
     </td>
@@ -162,6 +162,7 @@ Checklistę i znane poprawki Android 8 znajdziesz w [`docs/qa/android-8.md`](doc
 | `js/engine.js` | RudiScript: lekser → parser Pratta → AST → interpreter + kompilator bytecode |
 | `js/course.js` | Treść kursu: 6 modułów, 15 lekcji, 44 zadania |
 | `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | Aplikacja, maskotka, wizualizacje, lokalizacja |
+| `js/vendor/mustache.min.js` | Mustache 4.2.0 — render `{{var}}` z katalogów JSON |
 | `locales/` | Katalogi UI + kursu (`en`, `pl`, …) ładowane w runtime |
 | `css/` | `tokens.css`, `components.css`, `app.css`, `landing.css`, `fonts.css` |
 | `fonts/` | Nunito + JetBrains Mono (OFL), hostowane lokalnie |
