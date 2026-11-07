@@ -427,11 +427,11 @@
       if (err) h += '<div class="console" style="margin-top:' + (h ? "0.75rem" : "0") + '"><div class="console__line is-error">' + esc((err.stage === "lexer" ? t("play.stageLexer") : t("play.stageParser")) + ": " + err.message + (err.pos ? t("play.lineCol", { line: err.pos.line, col: err.pos.col }) : "")) + "</div></div>";
       panel.innerHTML = h;
     }
-    var t;
+    var debounce;
     ta.addEventListener("input", function () {
       sync(); playSrc = ta.value;
       try { localStorage.setItem("rudijs-play", playSrc); } catch (e) {}
-      clearTimeout(t); t = setTimeout(analyze, 150);
+      clearTimeout(debounce); debounce = setTimeout(analyze, 150);
     });
     ta.addEventListener("scroll", function () { hl.scrollTop = ta.scrollTop; hl.scrollLeft = ta.scrollLeft; });
     ta.addEventListener("keydown", function (e) {
