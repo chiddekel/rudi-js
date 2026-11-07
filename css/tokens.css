@@ -1,0 +1,151 @@
+/* Rudi Design System — tokens
+   Playful, chunky, friendly. Primary hue comes from the red panda mascot. */
+
+:root {
+  /* ---------- Palette (raw) ---------- */
+  --c-fox-50:  #FFF4EC;
+  --c-fox-100: #FFE3D2;
+  --c-fox-300: #FF9F6E;
+  --c-fox-500: #E8622C; /* Rudi fur */
+  --c-fox-600: #C64A17;
+  --c-fox-700: #9C3510;
+
+  --c-teal-100: #D3F5F0;
+  --c-teal-500: #14B3A2;
+  --c-teal-600: #0C8A7D;
+
+  --c-sun-100: #FFF2CC;
+  --c-sun-500: #FFC12E;
+  --c-sun-600: #DB9A00;
+
+  --c-sky-100: #DBEEFD;
+  --c-sky-500: #3AA6F0;
+  --c-sky-600: #1D80C4;
+
+  --c-berry-100: #FDE0EA;
+  --c-berry-500: #E8457A;
+  --c-berry-600: #BF2A5B;
+
+  --c-plum-100: #ECE5FF;
+  --c-plum-500: #8D6BEE;
+  --c-plum-600: #6847CA;
+
+  --c-red-100: #FFE0E0;
+  --c-red-500: #E5484D;
+  --c-red-600: #B5282D;
+
+  --c-bark-900: #3A2A21;
+  --c-bark-600: #7E6759;
+  --c-bark-400: #B4A295;
+  --c-bark-200: #E6D8CB;
+  --c-bark-100: #F1E6DB;
+
+  /* ---------- Semantic (light) ---------- */
+  --bg:          #FFF9F3;
+  --surface:     #FFFFFF;
+  --surface-2:   #FFF2E7;
+  --ink:         var(--c-bark-900);
+  --ink-soft:    var(--c-bark-600);
+  --ink-mute:    var(--c-bark-400);
+  --line:        var(--c-bark-100);
+  --line-strong: var(--c-bark-200);
+
+  --primary:        var(--c-fox-500);
+  --primary-shade:  var(--c-fox-600);
+  --primary-tint:   var(--c-fox-100);
+  --on-primary:     #FFFFFF;
+
+  --secondary:       var(--c-teal-500);
+  --secondary-shade: var(--c-teal-600);
+  --secondary-tint:  var(--c-teal-100);
+
+  --success:       var(--c-teal-500);
+  --success-shade: var(--c-teal-600);
+  --success-tint:  var(--c-teal-100);
+  --danger:        var(--c-red-500);
+  --danger-shade:  var(--c-red-600);
+  --danger-tint:   var(--c-red-100);
+  --info:          var(--c-sky-500);
+  --info-shade:    var(--c-sky-600);
+  --info-tint:     var(--c-sky-100);
+  --reward:        var(--c-sun-500);
+  --reward-shade:  var(--c-sun-600);
+  --reward-tint:   var(--c-sun-100);
+
+  /* ---------- Type ---------- */
+  --font: "Nunito", ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.1875rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: clamp(2.25rem, 6vw, 3.25rem);
+  --fw-reg: 600;
+  --fw-bold: 800;
+  --fw-black: 900;
+
+  /* ---------- Shape & space ---------- */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px;
+
+  /* The signature "chunky" depth: solid bottom shadow, no blur */
+  --depth: 4px;
+  --depth-lg: 6px;
+
+  --ease-bounce: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --t-fast: 120ms;
+  --t-med: 260ms;
+
+  --tap: 48px; /* minimum touch target */
+  color-scheme: light;
+}
+
+/* ---------- Dark ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:          #1C1511;
+    --surface:     #271E18;
+    --surface-2:   #31261F;
+    --ink:         #FBEFE6;
+    --ink-soft:    #CBB6A8;
+    --ink-mute:    #8E7A6D;
+    --line:        #3A2D25;
+    --line-strong: #4A3A30;
+    --primary-tint:   #4A2617;
+    --secondary-tint: #10393A;
+    --success-tint:   #10393A;
+    --danger-tint:    #48201F;
+    --info-tint:      #15324A;
+    --reward-tint:    #46370F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:          #1C1511;
+  --surface:     #271E18;
+  --surface-2:   #31261F;
+  --ink:         #FBEFE6;
+  --ink-soft:    #CBB6A8;
+  --ink-mute:    #8E7A6D;
+  --line:        #3A2D25;
+  --line-strong: #4A3A30;
+  --primary-tint:   #4A2617;
+  --secondary-tint: #10393A;
+  --success-tint:   #10393A;
+  --danger-tint:    #48201F;
+  --info-tint:      #15324A;
+  --reward-tint:    #46370F;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-fast: 0ms; --t-med: 0ms; }
+}

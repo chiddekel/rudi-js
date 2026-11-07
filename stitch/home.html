@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html lang="pl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rudi.js - Nauka Silnika JavaScript</title>
+<!-- Google Fonts: Nunito Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300..1000;1,6..12,300..1000&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-dim": "#9f0519",
+            "secondary-fixed": "#74f8e5",
+            "on-error": "#ffefee",
+            "inverse-surface": "#0f0e0b",
+            "tertiary": "#765600",
+            "on-background": "#302e2b",
+            "on-tertiary-fixed-variant": "#5f4500",
+            "tertiary-dim": "#684b00",
+            "on-secondary-fixed-variant": "#00675d",
+            "surface": "#fbf5f0",
+            "secondary-fixed-dim": "#65e9d7",
+            "on-tertiary-fixed": "#3b2900",
+            "on-primary-fixed-variant": "#541700",
+            "surface-variant": "#e2dcd5",
+            "secondary": "#00675d",
+            "outline-variant": "#b1aca7",
+            "secondary-dim": "#005a51",
+            "surface-dim": "#d9d3cc",
+            "surface-container": "#ede7e1",
+            "on-secondary-fixed": "#004840",
+            "on-surface": "#302e2b",
+            "tertiary-fixed": "#fabd29",
+            "on-primary-container": "#441100",
+            "inverse-primary": "#f96e37",
+            "inverse-on-surface": "#a09c97",
+            "primary-fixed": "#ff7945",
+            "primary": "#a43600",
+            "background": "#fbf5f0",
+            "on-primary-fixed": "#000000",
+            "surface-tint": "#a43600",
+            "surface-container-high": "#e8e2db",
+            "outline": "#7a7672",
+            "tertiary-fixed-dim": "#ebaf17",
+            "on-secondary": "#c0fff3",
+            "on-secondary-container": "#005c53",
+            "primary-container": "#ff7945",
+            "primary-dim": "#902e00",
+            "on-primary": "#ffefeb",
+            "primary-fixed-dim": "#f26933",
+            "surface-container-low": "#f6f0e9",
+            "error-container": "#fb5151",
+            "on-tertiary": "#fff1dc",
+            "on-error-container": "#570008",
+            "on-tertiary-container": "#543c00",
+            "on-surface-variant": "#5e5b57",
+            "surface-container-lowest": "#ffffff",
+            "secondary-container": "#74f8e5",
+            "tertiary-container": "#fabd29",
+            "surface-bright": "#fbf5f0",
+            "error": "#b31b25",
+            "surface-container-highest": "#e2dcd5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {},
+          "fontFamily": {
+            "headline": ["Nunito Sans"],
+            "display": ["Nunito Sans"],
+            "body": ["Nunito Sans"],
+            "label": ["Nunito Sans"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background-color: #fbf5f0;
+      color: #302e2b;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .animate-bob {
+      animation: bob 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.9; }
+      50% { transform: scale(1.12); opacity: 0.4; }
+      100% { transform: scale(0.95); opacity: 0.9; }
+    }
+    .animate-ring {
+      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen antialiased flex flex-col items-center select-none pb-24">
+<!-- ================= TOP APP BAR ================= -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-16 max-w-lg mx-auto bg-surface border-b-2 border-surface-variant shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-2xl bg-surface-container-high border-2 border-surface-variant flex items-center justify-center overflow-hidden shadow-[0_2px_0_0_#d9d3cc] active:translate-y-0.5 transition-transform cursor-pointer">
+<img alt="Rudi cute red panda mascot face" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ALJJyrB0JDWhoDoppbdAAuIpiGkMVm6b5lrtAQ0GkMNzdx_T7xMcYIQL8LyTUJi-MRo_e9eyb8XkZLEHzXBSxA2pkqLvf8oWVzuEX7RNi1WOARtRAJc-vdHNU6xG2Rj4P5bdyqfVDrh1e3L6apt-ep6uLljPPtqXZt98VYKuXPSniiG4r19aihWA3GvjhAkY7TIT0xR-BOFwnEiNZXfpOPXyL4ZRb7Hn3yGoIJFh_konbXhE-Mi3ZxxkVqOS-Q"/>
+</div>
+<span class="text-xl font-black text-primary tracking-wide">Rudi.js</span>
+</div>
+<!-- Stats pills -->
+<div class="flex items-center gap-1.5 sm:gap-2">
+<!-- Streak Flame -->
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full border-2 border-surface-variant shadow-[0_2px_0_0_#e2dcd5] cursor-pointer hover:opacity-90 active:translate-y-0.5 transition-all">
+<span class="text-base select-none">🔥</span>
+<span class="font-headline font-black text-xs text-primary-dim">12</span>
+</div>
+<!-- Gems -->
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full border-2 border-surface-variant shadow-[0_2px_0_0_#e2dcd5] cursor-pointer hover:opacity-90 active:translate-y-0.5 transition-all">
+<span class="text-base select-none">💎</span>
+<span class="font-headline font-black text-xs text-secondary-dim">450</span>
+</div>
+<!-- Hearts -->
+<div class="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full border-2 border-surface-variant shadow-[0_2px_0_0_#e2dcd5] cursor-pointer hover:opacity-90 active:translate-y-0.5 transition-all">
+<span class="text-base select-none">❤️</span>
+<span class="font-headline font-black text-xs text-error">5</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Mobile Width Restricted) -->
+<main class="w-full max-w-lg px-4 pt-20 pb-8 flex flex-col items-center">
+<!-- ================= UNIT 1 BANNER CARD ================= -->
+<section class="w-full mt-2 mb-8 bg-[#E8622C] text-white rounded-3xl p-5 border-2 border-primary-dim shadow-[0_6px_0_0_#902e00] relative overflow-hidden transition-transform">
+<!-- Decorative background glow ring -->
+<div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/10 pointer-events-none"></div>
+<div class="flex items-center justify-between gap-2 mb-2">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-black tracking-wider bg-white/20 text-white border border-white/30 uppercase">
+          MODUŁ 1 · PODSTAWY SILNIKA
+        </span>
+<button class="bg-surface-container-lowest text-on-surface font-headline font-black text-xs px-3 py-1.5 rounded-full border-2 border-surface-variant shadow-[0_3px_0_0_#d9d3cc] active:translate-y-0.5 active:shadow-none transition-all flex items-center gap-1 hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-sm" data-icon="menu_book">menu_book</span>
+<span>Przewodnik</span>
+</button>
+</div>
+<h1 class="text-2xl font-headline font-black tracking-tight text-white mb-1">
+        Lekser i Tokenizacja
+      </h1>
+<p class="text-xs text-white/90 font-medium leading-relaxed mb-4">
+        Dziel kod źródłowy JS na strumień tokenów (keywords, id, operators)
+      </p>
+<!-- Tokenizer Preview Interactive Pill/Card -->
+<div class="bg-[#2A1F19] rounded-2xl p-3 border-2 border-[#1E1510] shadow-[0_3px_0_0_#170f0b]">
+<div class="flex items-center justify-between text-[11px] font-mono mb-2 pb-1.5 border-b border-white/10">
+<span class="text-outline-variant font-bold">KOD WEJŚCIOWY:</span>
+<span class="text-amber-300 font-bold">const x = 42;</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5 font-mono text-[10px]">
+<span class="px-2 py-0.5 rounded-lg bg-pink-900/60 text-pink-300 border border-pink-700/50 font-black">KEYWORD</span>
+<span class="text-white/40">→</span>
+<span class="px-2 py-0.5 rounded-lg bg-blue-900/60 text-blue-300 border border-blue-700/50 font-black">IDENT</span>
+<span class="text-white/40">→</span>
+<span class="px-2 py-0.5 rounded-lg bg-teal-900/60 text-teal-300 border border-teal-700/50 font-black">ASSIGN</span>
+<span class="text-white/40">→</span>
+<span class="px-2 py-0.5 rounded-lg bg-amber-900/60 text-amber-300 border border-amber-700/50 font-black">NUMBER</span>
+</div>
+</div>
+</section>
+<!-- ================= ZIG-ZAG LEARNING PATH ================= -->
+<section class="w-full relative flex flex-col items-center py-4">
+<!-- SVG Path connector backdrop -->
+<svg class="absolute top-8 left-0 w-full h-[620px] pointer-events-none z-0" fill="none" viewbox="0 0 400 620">
+<path d="M 200 40 Q 280 80 270 140 Q 250 200 130 250 Q 80 290 200 370 Q 280 430 240 500 Q 220 540 200 580" stroke="#E2DCD5" stroke-dasharray="14 14" stroke-linecap="round" stroke-width="12"></path>
+</svg>
+<!-- NODE 1 (Completed) - Center -->
+<div class="relative z-10 flex flex-col items-center mb-14 group">
+<button class="w-18 h-18 w-[72px] h-[72px] rounded-full bg-[#FFC12E] border-4 border-white shadow-[0_6px_0_0_#D99B00] active:translate-y-1 active:shadow-none flex items-center justify-center transition-all cursor-pointer hover:scale-105">
+<span class="material-symbols-outlined text-white text-3xl font-black" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+<!-- 3 Stars -->
+<div class="flex items-center gap-0.5 mt-2 bg-white px-2 py-0.5 rounded-full border border-surface-variant shadow-[0_2px_0_0_#e2dcd5]">
+<span class="text-xs text-[#FFC12E]">★</span>
+<span class="text-xs text-[#FFC12E]">★</span>
+<span class="text-xs text-[#FFC12E]">★</span>
+</div>
+<span class="mt-1 font-headline font-black text-xs text-on-surface bg-surface-container-lowest px-3 py-1 rounded-xl border border-surface-variant shadow-[0_2px_0_0_#e2dcd5]">
+          1. Strumień znaków
+        </span>
+</div>
+<!-- NODE 2 (Completed) - Shifted Right -->
+<div class="relative z-10 flex flex-col items-center translate-x-16 mb-14 group">
+<button class="w-[72px] h-[72px] rounded-full bg-[#FFC12E] border-4 border-white shadow-[0_6px_0_0_#D99B00] active:translate-y-1 active:shadow-none flex items-center justify-center transition-all cursor-pointer hover:scale-105">
+<span class="material-symbols-outlined text-white text-3xl font-black" data-icon="check" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check</span>
+</button>
+<!-- 3 Stars -->
+<div class="flex items-center gap-0.5 mt-2 bg-white px-2 py-0.5 rounded-full border border-surface-variant shadow-[0_2px_0_0_#e2dcd5]">
+<span class="text-xs text-[#FFC12E]">★</span>
+<span class="text-xs text-[#FFC12E]">★</span>
+<span class="text-xs text-[#FFC12E]">★</span>
+</div>
+<span class="mt-1 font-headline font-black text-xs text-on-surface bg-surface-container-lowest px-3 py-1 rounded-xl border border-surface-variant shadow-[0_2px_0_0_#e2dcd5]">
+          2. Słowa kluczowe
+        </span>
+</div>
+<!-- NODE 3 (CURRENT ACTIVE) - Shifted Left with Mascot and Start Bubble -->
+<div class="relative z-20 flex flex-col items-center -translate-x-12 mb-14">
+<!-- START Floating Indicator -->
+<div class="absolute -top-11 z-30 animate-bob">
+<div class="bg-primary text-white font-headline font-black text-xs tracking-wider px-3.5 py-1 rounded-full shadow-[0_3px_0_0_#902e00] border-2 border-white uppercase flex items-center gap-1">
+<span>START</span>
+<span class="material-symbols-outlined text-xs" data-icon="play_arrow" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+<!-- Pulsing Ring Halo -->
+<div class="absolute inset-0 -m-3 rounded-full border-4 border-primary-container animate-ring pointer-events-none"></div>
+<!-- Chunky 3D Node Button -->
+<button class="relative w-20 h-20 rounded-full bg-[#E8622C] border-4 border-white shadow-[0_8px_0_0_#902e00] active:translate-y-1.5 active:shadow-[0_2px_0_0_#902e00] flex items-center justify-center transition-all cursor-pointer hover:scale-105 group">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="code" data-weight="fill" style="font-variation-settings: 'FILL' 1;">code</span>
+</button>
+<!-- Mascot & Speech Bubble placed to the right -->
+<div class="absolute left-24 top-0 flex items-center pointer-events-none select-none w-56">
+<!-- Speech Bubble -->
+<div class="relative bg-surface-container-lowest text-on-surface font-headline font-black text-xs px-3 py-2 rounded-2xl border-2 border-surface-variant shadow-[0_3px_0_0_#e2dcd5] whitespace-nowrap">
+            Dasz radę z tokenami! 🐾
+            <!-- Little speech triangle pointing left -->
+<div class="absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-y-4 border-y-transparent border-r-8 border-r-surface-variant"></div>
+<div class="absolute -left-1.5 top-1/2 -translate-y-1/2 w-0 h-0 border-y-4 border-y-transparent border-r-8 border-r-surface-container-lowest"></div>
+</div>
+<!-- Mascot Peek Avatar -->
+<div class="w-14 h-14 -ml-2 -mt-4 shrink-0">
+<img alt="Rudi red panda cheering" class="w-full h-full object-contain filter drop-shadow-md" src="https://lh3.googleusercontent.com/aida/ALJJyrC2sV7bPb6KTH-3FIh2Qaxw1Z1LFjDFDu5l0sshDHcadFjG_PvbGi3XG6C1cUXSzz4ha3g1ZjgXt_qR7qt9YC92jnKDNTz3NX8-B-5tcn0kqS9lsSkiHk21ojaWuEIXQ_j7DfKqDrAxibxCKAHM6t60n1gMn8v_RRrh-gAxtofzNMIAfQTmijZAmxPT1IeQItpQROni_zJ5x_TXPr9PxMVRhfN-hS3W4x5PtnQiY-se8uanEAyri__gXtY"/>
+</div>
+</div>
+<span class="mt-2 font-headline font-black text-xs text-primary bg-primary/10 px-3 py-1 rounded-xl border border-primary/30 shadow-[0_2px_0_0_#e2dcd5]">
+          3. Liczby i literały
+        </span>
+</div>
+<!-- BONUS NODE: Golden Chest - Shifted Right -->
+<div class="relative z-10 flex flex-col items-center translate-x-14 mb-14 group">
+<button class="w-[66px] h-[66px] rounded-2xl bg-[#fabd29] border-4 border-white shadow-[0_6px_0_0_#ebaf17] active:translate-y-1 active:shadow-none flex items-center justify-center transition-all cursor-pointer hover:scale-105">
+<span class="material-symbols-outlined text-[#543c00] text-3xl font-black" data-icon="featured_seasonal_and_gifts" data-weight="fill" style="font-variation-settings: 'FILL' 1;">featured_seasonal_and_gifts</span>
+</button>
+<span class="mt-2 font-headline font-black text-[11px] text-[#543c00] bg-tertiary-container/30 px-2.5 py-0.5 rounded-xl border border-tertiary-container shadow-[0_2px_0_0_#e2dcd5]">
+          Nagroda bonusowa: Regex vs Pętla
+        </span>
+</div>
+<!-- NODE 4 (Locked) - Center -->
+<div class="relative z-10 flex flex-col items-center mb-14 opacity-80 group">
+<button class="w-[72px] h-[72px] rounded-full bg-surface-dim border-4 border-white shadow-[0_6px_0_0_#b1aca7] flex items-center justify-center cursor-not-allowed">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+</button>
+<span class="mt-2 font-headline font-bold text-xs text-outline bg-surface-container px-3 py-1 rounded-xl border border-surface-variant">
+          4. Obsługa błędów leksera
+        </span>
+</div>
+<!-- NODE 5 (Locked) - Shifted Left -->
+<div class="relative z-10 flex flex-col items-center -translate-x-10 mb-8 opacity-80 group">
+<button class="w-[72px] h-[72px] rounded-full bg-surface-dim border-4 border-white shadow-[0_6px_0_0_#b1aca7] flex items-center justify-center cursor-not-allowed">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="military_tech" data-weight="fill" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</button>
+<span class="mt-2 font-headline font-bold text-xs text-outline bg-surface-container px-3 py-1 rounded-xl border border-surface-variant">
+          5. Sprawdzian modułu
+        </span>
+</div>
+</section>
+<!-- ================= NEXT UNIT PREVIEW (TEASER) ================= -->
+<section class="w-full mt-6 bg-surface-container-high rounded-3xl p-5 border-2 border-surface-variant shadow-[0_4px_0_0_#d9d3cc] relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider bg-outline/20 text-on-surface-variant uppercase">
+          MODUŁ 2 · PARSER &amp; DRZEWO AST
+        </span>
+<span class="material-symbols-outlined text-outline text-lg" data-icon="lock">lock</span>
+</div>
+<h2 class="text-lg font-headline font-black text-on-surface mb-1">
+        Budowanie gramatyki i drzewa składniowego
+      </h2>
+<p class="text-xs text-on-surface-variant font-medium mb-3">
+        Precedence Climbing, reguły gramatyczne i tworzenie węzłów AST.
+      </p>
+<div class="bg-surface-container-lowest rounded-xl p-2.5 border border-surface-variant font-mono text-[11px] text-outline flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-outline-variant" data-icon="account_tree">account_tree</span>
+<span>BinaryExpr { op: "+", left, right }</span>
+</div>
+</section>
+</main>
+<!-- ================= BOTTOM NAVIGATION BAR ================= -->
+<!-- Conforms verbatim to Shared Components JSON: 
+       destination_count: 4, labels: ["Ścieżka", "Plac zabaw", "Ranking", "Profil"]
+       icons: ["map", "terminal", "leaderboard", "person"]
+       Active state: "Ścieżka"
+  -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe bg-surface border-t-2 border-surface-variant shadow-[0_-4px_0_0_#e2dcd5] max-w-lg mx-auto">
+<!-- Tab 1: Ścieżka (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_3px_0_0_#902e00] font-black hover:scale-105 active:scale-95 active:translate-y-0.5 transition-all">
+<span class="material-symbols-outlined text-xl" data-icon="map" data-weight="fill" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label font-black text-xs tracking-tight">Ścieżka</span>
+</button>
+<!-- Tab 2: Plac zabaw -->
+<button class="flex flex-col items-center justify-center text-outline font-bold p-1 hover:scale-105 active:scale-95 active:translate-y-0.5 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="terminal">terminal</span>
+<span class="font-label text-xs">Plac zabaw</span>
+</button>
+<!-- Tab 3: Ranking -->
+<button class="flex flex-col items-center justify-center text-outline font-bold p-1 hover:scale-105 active:scale-95 active:translate-y-0.5 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="leaderboard">leaderboard</span>
+<span class="font-label text-xs">Ranking</span>
+</button>
+<!-- Tab 4: Profil -->
+<button class="flex flex-col items-center justify-center text-outline font-bold p-1 hover:scale-105 active:scale-95 active:translate-y-0.5 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+<span class="font-label text-xs">Profil</span>
+</button>
+</nav>
+<!-- Interactive sound / tactile feedback script -->
+<script>
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (navigator.vibrate) {
+          navigator.vibrate(10);
+        }
+      });
+    });
+  </script>
+</body></html>

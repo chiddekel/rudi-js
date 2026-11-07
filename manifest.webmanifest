@@ -1,0 +1,12 @@
+{
+  "name": "Rudi.js: zbuduj silnik JavaScript",
+  "short_name": "Rudi.js",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FFF9F3",
+  "theme_color": "#E8622C",
+  "lang": "pl",
+  "icons": [
+    { "src": "assets/icon-512.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
