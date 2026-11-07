@@ -1,3 +1,4 @@
+import java.util.Properties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -6,18 +7,57 @@ plugins {
 
 android {
     namespace = "io.github.chiddekel.rudijs"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) { minorApiLevel = 2 }   // GeckoView 159 needs API 37.2
+    }
 
     defaultConfig {
         applicationId = "io.github.chiddekel.rudijs"
         minSdk = 26            // Android 8.0 Oreo
         targetSdk = 37
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "0.1.0-beta.1"
+    }
+
+    // Release signing comes from a properties file kept OUTSIDE the repo
+    // (default ~/.android/rudi-js-signing.properties, override with RUDI_SIGNING_PROPERTIES).
+    // Without it the release APK is built unsigned (e.g. in CI).
+    val signingFile = file(
+        providers.environmentVariable("RUDI_SIGNING_PROPERTIES")
+            .getOrElse("${System.getProperty("user.home")}/.android/rudi-js-signing.properties"),
+    )
+    val releaseSigning = if (signingFile.isFile) {
+        val props = Properties().apply { signingFile.inputStream().use(::load) }
+        signingConfigs.create("release") {
+            storeFile = file(props.getProperty("storeFile"))
+            storePassword = props.getProperty("storePassword")
+            keyAlias = props.getProperty("keyAlias")
+            keyPassword = props.getProperty("keyPassword")
+        }
+    } else {
+        null
+    }
+
+    // GeckoView ships native code per CPU: one APK per ABI keeps each download small.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86_64")
+            isUniversalApk = false
+        }
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true          // compress native libs: ~3x smaller download
+            keepDebugSymbols += "**/*.so"      // GeckoView libs ship already stripped
+        }
     }
 
     buildTypes {
         release {
+            signingConfig = releaseSigning
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
@@ -46,6 +86,7 @@ kotlin {
 dependencies {
     implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.core:core-ktx:1.19.1")
+    implementation("org.mozilla.geckoview:geckoview:159.0.20261102144711")   // bundled Gecko engine
 }
 
 /** Copies the web app (the folder above android/) into the APK as assets/web. */

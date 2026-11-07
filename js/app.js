@@ -131,8 +131,12 @@
       });
     });
     if (cel && main.querySelector(".path__node.pre-done")) { celebrateStep(main.querySelector(".path__node.pre-done")); return; }
+    // Bring the current lesson into view once laid out (some engines report a 0px viewport during
+    // the first frame; scrolling against it would jump to the wrong place).
     var curBtn = main.querySelector(".path__node.is-current");
-    if (curBtn && curBtn.getBoundingClientRect().top > innerHeight * .8) curBtn.scrollIntoView({ block: "center" });
+    if (curBtn) requestAnimationFrame(function () {
+      if (innerHeight > 0 && curBtn.isConnected && curBtn.getBoundingClientRect().top > innerHeight * .8) curBtn.scrollIntoView({ block: "center" });
+    });
   }
 
   /* Checkpoint celebration: ring fills -> node turns done + Rudi cheers -> Rudi hops to the next lesson. */
