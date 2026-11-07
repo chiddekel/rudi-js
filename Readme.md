@@ -18,7 +18,7 @@
 <p align="center">
   <b><a href="https://chiddekel.github.io/rudi-js/">Site</a></b> ·
   <b><a href="https://chiddekel.github.io/rudi-js/app.html">Start the course</a></b> ·
-  <b><a href="https://chiddekel.github.io/rudi-js/app.html#/play">Playground</a></b> ·
+  <b><a href="https://chiddekel.github.io/rudi-js/app.html#/play">Sandbox</a></b> ·
   <b><a href="https://chiddekel.github.io/rudi-js/design-system.html">Design system</a></b>
 </p>
 
@@ -39,13 +39,13 @@
 
 - 🧩 **Puzzle lessons**: split code into tokens, arrange AST nodes, predict results and bytecode.
 - ⚙️ **A real engine in the browser**: RudiScript with a lexer, Pratt parser, interpreter with closures, and a bytecode compiler.
-- 🧪 **Playground**: write code and see tokens, AST, bytecode, and output live.
+- 🧪 **Sandbox** (Polish UI: **Piaskownica**): write code and see tokens, AST, bytecode, and output live — in the app and on the landing.
 - 🔥 **Gamification**: day streaks, XP, gems, hearts, badges, chests, and a league.
 - 🐼 **Rudi is alive**: 10 cheerful moods, smooth animations, and a celebration after every stage.
-- 📱 **Web + Android 8.0+**: PWA and a native app on **GeckoView** — works offline even without a system WebView.
+- 📱 **Web + Android 8.0+**: PWA and a native app on **GeckoView** — works offline even without a system WebView. Latest signed APKs: [GitHub Releases](https://github.com/chiddekel/rudi-js/releases) (currently **v0.1.0-beta.4**).
 - 🌗 **Light and dark themes**, scales with text size (`rem`), respects `prefers-reduced-motion`.
-- 🌍 **15 languages (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — app and GitHub Pages landing UI in each; course content in Polish and English (other languages get UI + English course). Use `?lang=` or the nav language picker. JSON placeholders: Mustache `{{var}}` (`js/mustache.js`, also `Rudi.mustache` / `Rudi.template`).
-- 🪶 **Zero npm dependencies**: plain HTML, CSS, and JS — no build step. Mustache is vendored for locale templates.
+- 🌍 **15 languages (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — app + GitHub Pages landing UI in each; course content in Polish and English (other languages get UI + English course). Switch with `?lang=`, the landing language select, or the **Profile** language buttons. Catalogs ship as `js/locale-data.js` for `file://` / GeckoView; placeholders use Mustache `{{var}}` (`js/mustache.js`, `Rudi.mustache` / `Rudi.template`).
+- 🪶 **Zero npm dependencies**: plain HTML, CSS, and JS — no build step. Mustache is vendored; regenerate locale bundles with `node tools/bundle-locales.mjs`.
 
     </td>
   </tr>
@@ -55,13 +55,13 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/readme/showcase-dark.png">
-  <img alt="Learning path, token lesson, and playground" src="docs/readme/showcase-light.png" width="100%">
+  <img alt="Learning path, token lesson, and sandbox" src="docs/readme/showcase-light.png" width="100%">
 </picture>
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/readme/landing.png" alt="Promotional landing page"><p align="center"><b>Site</b> · live playground on the landing</p></td>
-    <td width="50%"><img src="docs/readme/desktop-playground.png" alt="Desktop playground in dark mode"><p align="center"><b>Playground</b> · AST tree, dark mode</p></td>
+    <td width="50%"><img src="docs/readme/landing.png" alt="Promotional landing page"><p align="center"><b>Site</b> · live sandbox on the landing</p></td>
+    <td width="50%"><img src="docs/readme/desktop-playground.png" alt="Desktop sandbox in dark mode"><p align="center"><b>Sandbox / Piaskownica</b> · AST tree, dark mode</p></td>
   </tr>
   <tr>
     <td width="50%"><img src="docs/readme/desktop-path.png" alt="Desktop learning path"><p align="center"><b>Desktop</b> · side nav, lesson path</p></td>
@@ -145,8 +145,8 @@ Signed APKs from every tagged release land in [GitHub Releases](https://github.c
 **Quick UI check on an emulator** (needs an explicit ADB serial; does not wipe app data):
 
 ```sh
-python3 tests/android/ui.py emulator-5554          # list visible labels
-python3 tests/android/ui.py emulator-5554 "Lesson" # tap by a11y label
+python3 tests/android/ui.py emulator-5554               # list visible labels
+python3 tests/android/ui.py emulator-5554 "PIASKOWNICA" # tap by a11y label (PL)
 ```
 
 Android 8 checklist and known fixes: [`docs/qa/android-8.md`](docs/qa/android-8.md).
@@ -156,12 +156,12 @@ Android 8 checklist and known fixes: [`docs/qa/android-8.md`](docs/qa/android-8.
 
 | Path | What |
 |---|---|
-| `index.html` | GitHub Pages landing (full i18n) with a live playground |
-| `app.html` | App: path, lessons, playground, ranking, profile |
+| `index.html` | GitHub Pages landing (full i18n) with a live sandbox |
+| `app.html` | App: path, lessons, sandbox (Piaskownica), ranking, profile |
 | `design-system.html` | Rudi design system: tokens, components, mascot moods |
 | `js/engine.js` | RudiScript: lexer → Pratt parser → AST → interpreter + bytecode compiler |
 | `js/course.js` | Course content: 6 modules, 15 lessons, 44 exercises |
-| `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | App, mascot, visualizations, localization |
+| `js/app.js` · `js/viz.js` · `js/i18n.js` | App shell, visualizations, localization |
 | `js/mustache.js` · `js/rudi.js` | Mustache 4.2.0 (`Rudi.mustache` / `Rudi.template`) + mascot UI |
 | `js/locale-data.js` | Bundled `locales/*.json` for `file://` / GeckoView (`node tools/bundle-locales.mjs`) |
 | `locales/` | UI + course catalogs (`en`, `pl`, …); source of truth for the bundle |
