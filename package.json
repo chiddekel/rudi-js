@@ -1,8 +1,10 @@
 {
   "name": "rudi-js",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.2",
   "description": "Gamified course: build your own JavaScript engine.",
   "private": true,
   "license": "MIT",
-  "scripts": { "test": "node --test \"tests/*.test.js\"" }
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\""
+  }
 }

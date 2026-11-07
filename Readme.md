@@ -2,7 +2,7 @@
   <a href="https://chiddekel.github.io/rudi-js/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="docs/readme/banner-dark.png">
-      <img alt="Rudi.js: zbuduj własny silnik JavaScript, lekcja po lekcji" src="docs/readme/banner-light.png" width="100%">
+      <img alt="Rudi.js: build your own JavaScript engine, lesson by lesson" src="docs/readme/banner-light.png" width="100%">
     </picture>
   </a>
 </p>
@@ -11,89 +11,89 @@
   <a href="https://chiddekel.github.io/rudi-js/"><img alt="Live demo" src="https://img.shields.io/badge/demo-GitHub_Pages-E8622C?style=for-the-badge&logo=githubpages&logoColor=white"></a>
   <a href="https://github.com/chiddekel/rudi-js/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/chiddekel/rudi-js/ci.yml?branch=main&style=for-the-badge&label=CI&logo=githubactions&logoColor=white"></a>
   <img alt="Android 8.0+" src="https://img.shields.io/badge/Android-8.0%2B-14B3A2?style=for-the-badge&logo=android&logoColor=white">
-  <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-8D6BEE?style=for-the-badge">
+  <img alt="Zero npm dependencies" src="https://img.shields.io/badge/npm_deps-0-8D6BEE?style=for-the-badge">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-FFC12E?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <b><a href="https://chiddekel.github.io/rudi-js/">Strona</a></b> ·
-  <b><a href="https://chiddekel.github.io/rudi-js/app.html">Zacznij kurs</a></b> ·
-  <b><a href="https://chiddekel.github.io/rudi-js/app.html#/play">Plac zabaw</a></b> ·
+  <b><a href="https://chiddekel.github.io/rudi-js/">Site</a></b> ·
+  <b><a href="https://chiddekel.github.io/rudi-js/app.html">Start the course</a></b> ·
+  <b><a href="https://chiddekel.github.io/rudi-js/app.html#/play">Playground</a></b> ·
   <b><a href="https://chiddekel.github.io/rudi-js/design-system.html">Design system</a></b>
 </p>
 
 ---
 
-**Rudi.js** to otwarty, grywalizowany kurs, w którym krok po kroku budujesz własny silnik JavaScript: od pierwszego tokena, przez parser Pratta i drzewo AST, po maszynę wirtualną, garbage collector i JIT. Prowadzi Cię Rudi, czerwona panda, w krótkich, 5-minutowych lekcjach.
+**Rudi.js** is an open, gamified course where you build your own JavaScript engine step by step: from the first token, through a Pratt parser and AST, to a virtual machine, garbage collector, and JIT. Rudi the red panda guides you in short, five-minute lessons.
 
-> *Open, gamified course: build your own JavaScript engine (lexer → Pratt parser → AST → interpreter → bytecode VM → GC → JIT). Polish UI, runs in the browser and on Android, zero dependencies.*
+> *Lexer → Pratt parser → AST → interpreter → bytecode VM → GC → JIT. Runs in the browser and on Android. UI in 15 languages; course content in Polish and English.*
 
 <table>
   <tr>
     <td width="340" align="center" valign="top">
-      <img src="docs/readme/demo.gif" alt="Demo: lekcja, ukończenie i Rudi przeskakujący do następnej lekcji" width="320">
+      <img src="docs/readme/demo.gif" alt="Demo: lesson, completion, and Rudi hopping to the next lesson" width="320">
     </td>
     <td valign="top">
 
-### ✨ Co w środku
+### ✨ What's inside
 
-- 🧩 **Lekcje-układanki**: dziel kod na tokeny, układaj węzły AST, przewiduj wynik i bytecode.
-- ⚙️ **Prawdziwy silnik w przeglądarce**: RudiScript z lekserem, parserem Pratta, interpreterem z domknięciami i kompilatorem do bytecode'u.
-- 🧪 **Plac zabaw**: piszesz kod i na żywo widzisz tokeny, drzewo AST, bytecode i wynik.
-- 🔥 **Grywalizacja**: seria dni, XP, klejnoty, serca, odznaki, skrzynie i liga.
-- 🐼 **Rudi żyje**: 10 pogodnych min, płynne animacje i radość przy każdym ukończonym etapie.
-- 📱 **Web + Android 8.0+**: PWA i natywna aplikacja z **GeckoView** — działa offline nawet bez systemowego WebView.
-- 🌗 **Jasny i ciemny motyw**, skalowanie z rozmiarem tekstu (`rem`), obsługa `prefers-reduced-motion`.
-- 🌍 **15 języków (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — UI aplikacji i landingu GitHub Pages w każdym; treść kursu po polsku i angielsku (inne języki UI + kurs EN). `?lang=` lub selektor w nawigacji. Placeholdery w JSON: Mustache `{{var}}` (`js/vendor/mustache.min.js`).
-- 🪶 **Zero zależności** w kursie: czysty HTML, CSS i JS, bez builda.
+- 🧩 **Puzzle lessons**: split code into tokens, arrange AST nodes, predict results and bytecode.
+- ⚙️ **A real engine in the browser**: RudiScript with a lexer, Pratt parser, interpreter with closures, and a bytecode compiler.
+- 🧪 **Playground**: write code and see tokens, AST, bytecode, and output live.
+- 🔥 **Gamification**: day streaks, XP, gems, hearts, badges, chests, and a league.
+- 🐼 **Rudi is alive**: 10 cheerful moods, smooth animations, and a celebration after every stage.
+- 📱 **Web + Android 8.0+**: PWA and a native app on **GeckoView** — works offline even without a system WebView.
+- 🌗 **Light and dark themes**, scales with text size (`rem`), respects `prefers-reduced-motion`.
+- 🌍 **15 languages (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — app and GitHub Pages landing UI in each; course content in Polish and English (other languages get UI + English course). Use `?lang=` or the nav language picker. JSON placeholders: Mustache `{{var}}` (`js/vendor/mustache.min.js`).
+- 🪶 **Zero npm dependencies**: plain HTML, CSS, and JS — no build step. Mustache is vendored for locale templates.
 
     </td>
   </tr>
 </table>
 
-## 📸 Zrzuty ekranu
+## 📸 Screenshots
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/readme/showcase-dark.png">
-  <img alt="Ścieżka nauki, lekcja z tokenami i plac zabaw" src="docs/readme/showcase-light.png" width="100%">
+  <img alt="Learning path, token lesson, and playground" src="docs/readme/showcase-light.png" width="100%">
 </picture>
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/readme/landing.png" alt="Strona promocyjna"><p align="center"><b>Strona</b> · plac zabaw działający na żywo</p></td>
-    <td width="50%"><img src="docs/readme/desktop-playground.png" alt="Plac zabaw na desktopie w trybie ciemnym"><p align="center"><b>Plac zabaw</b> · drzewo AST, tryb ciemny</p></td>
+    <td width="50%"><img src="docs/readme/landing.png" alt="Promotional landing page"><p align="center"><b>Site</b> · live playground on the landing</p></td>
+    <td width="50%"><img src="docs/readme/desktop-playground.png" alt="Desktop playground in dark mode"><p align="center"><b>Playground</b> · AST tree, dark mode</p></td>
   </tr>
   <tr>
-    <td width="50%"><img src="docs/readme/desktop-path.png" alt="Ścieżka nauki na desktopie"><p align="center"><b>Desktop</b> · boczne menu, ścieżka lekcji</p></td>
-    <td width="50%"><img src="docs/readme/android.png" alt="Aplikacja Android na tablecie"><p align="center"><b>Android</b> · GeckoView, offline od API 26</p></td>
+    <td width="50%"><img src="docs/readme/desktop-path.png" alt="Desktop learning path"><p align="center"><b>Desktop</b> · side nav, lesson path</p></td>
+    <td width="50%"><img src="docs/readme/android.png" alt="Android app on a tablet"><p align="center"><b>Android</b> · GeckoView, offline from API 26</p></td>
   </tr>
 </table>
 
-## 🗺️ Program kursu
+## 🗺️ Course syllabus
 
-| | Moduł | Lekcje | O czym |
+| | Module | Lessons | About |
 |:-:|---|---|---|
-| 🟠 | **1. Lekser** | Droga kodu · Tokeny · Piszemy skaner | znaki → tokeny, maximal munch |
-| 🔵 | **2. Parser** | Drzewo AST · Precedencja · Instrukcje | ESTree, parser Pratta, łączność operatorów |
-| 🟢 | **3. Interpreter** | Chodzenie po drzewie · Zakresy · Domknięcia | środowiska, `const`, domknięcia |
-| 🟣 | **4. Bytecode VM** | Maszyna stosowa · Skoki | `PUSH_CONST`, `JUMP_IF_FALSE`, pętle |
-| 🩷 | **5. Pamięć i GC** | Mark & sweep · Generacje | korzenie, cykle, scavenge |
-| 🟡 | **6. JIT** | Ukryte klasy · Poziomy kompilacji | inline cache, Ignition → TurboFan, deoptymalizacja |
+| 🟠 | **1. Lexer** | The code's journey · Tokens · Writing a scanner | characters → tokens, maximal munch |
+| 🔵 | **2. Parser** | The AST · Precedence · Statements | ESTree, Pratt parser, operator associativity |
+| 🟢 | **3. Interpreter** | Walking the tree · Scopes · Closures | environments, `const`, closures |
+| 🟣 | **4. Bytecode VM** | Stack machine · Jumps | `PUSH_CONST`, `JUMP_IF_FALSE`, loops |
+| 🩷 | **5. Memory & GC** | Mark & sweep · Generations | roots, cycles, scavenge |
+| 🟡 | **6. JIT** | Hidden classes · Compilation tiers | inline caches, Ignition → TurboFan, deoptimization |
 
-**6 modułów · 15 lekcji · 44 zadania** w trzech formatach: wybór odpowiedzi, układanie kafelków i wpisywanie wyniku. Testy sprawdzają w silniku każdą odpowiedź, która jest kodem.
+**6 modules · 15 lessons · 44 exercises** in three formats: multiple choice, tile ordering, and typed answers. Tests verify every code answer against the engine.
 
-## 🧠 Jak to działa
+## 🧠 How it works
 
 ```mermaid
 flowchart LR
-    SRC["📝 Źródło<br/>let x = 40 + 2;"] --> LEX["🔤 Lekser<br/>tokenize()"]
-    LEX --> TOK["Tokeny<br/>KW · ID · OP · NUM"]
-    TOK --> PAR["🌳 Parser Pratta<br/>parse()"]
+    SRC["📝 Source<br/>let x = 40 + 2;"] --> LEX["🔤 Lexer<br/>tokenize()"]
+    LEX --> TOK["Tokens<br/>KW · ID · OP · NUM"]
+    TOK --> PAR["🌳 Pratt parser<br/>parse()"]
     PAR --> AST["AST<br/>VariableDeclaration"]
     AST --> INT["▶️ Interpreter<br/>run()"]
-    AST --> CMP["⚙️ Kompilator<br/>compile()"]
+    AST --> CMP["⚙️ Compiler<br/>compile()"]
     CMP --> BC["Bytecode<br/>PUSH_CONST 40 …"]
-    INT --> OUT["✅ Wynik<br/>42"]
+    INT --> OUT["✅ Result<br/>42"]
 
     classDef src fill:#F1E6DB,stroke:#B4A295,stroke-width:2px,color:#3A2A21
     classDef lex fill:#D3F5F0,stroke:#14B3A2,stroke-width:2px,color:#0C5F56
@@ -107,94 +107,94 @@ flowchart LR
     class INT,OUT run
 ```
 
-Cały silnik (`js/engine.js`) to ~340 linii czytelnego JS, który możesz rozebrać na części:
+The whole engine (`js/engine.js`) is ~340 lines of readable JS you can take apart:
 
 ```js
 const { tokens, ast, bytecode, run } = RudiEngine.evaluate(`
   function makeCounter() { let n = 0; return function () { n += 1; return n; }; }
   const c = makeCounter(); c(); c();
-  console.log("licznik:", c());
+  console.log("count:", c());
 `);
-run.output;          // ["licznik: 3"]
+run.output;          // ["count: 3"]
 bytecode[0].code[0]; // { op: "MAKE_CLOSURE", arg: "fn makeCounter()" }
 ```
 
-## 🚀 Szybki start
+## 🚀 Quick start
 
 ```sh
 git clone https://github.com/chiddekel/rudi-js.git
 cd rudi-js
-xdg-open app.html             # albo: python3 -m http.server 8080
-npm test                      # node:test: silnik + spójność kursu
+xdg-open app.html             # or: python3 -m http.server 8080
+npm test                      # node:test — engine + course consistency
 ```
 
-**Android 8.0+** (Kotlin + **GeckoView**, offline, bez uprawnienia INTERNET):
+**Android 8.0+** (Kotlin + **GeckoView**, offline, no INTERNET permission):
 
-Aplikacja nie polega na systemowym WebView. Host kopiuje bundel kursu do prywatnego katalogu aplikacji i ładuje go przez `file://`, więc nawigacja (`location.hash`) działa na API 26+ także wtedy, gdy dostawca WebView jest niedostępny.
+The app does not rely on the system WebView. The host copies the course bundle into private app storage and loads it over `file://`, so navigation (`location.hash`) works on API 26+ even when the vendor WebView is unavailable.
 
 ```sh
 cd android
 ./gradlew assembleDebug
-# APK per ABI, np.:
+# Per-ABI APKs, e.g.:
 #   app/build/outputs/apk/debug/app-x86_64-debug.apk
 #   app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
 ```
 
-Gotowe APK z każdego builda znajdziesz w artefaktach [GitHub Actions](https://github.com/chiddekel/rudi-js/actions/workflows/ci.yml). CI kończy się błędem przy każdym ostrzeżeniu Gradle, Kotlina lub lintu.
+Signed APKs from every tagged release land in [GitHub Releases](https://github.com/chiddekel/rudi-js/releases). Debug CI artifacts are on [GitHub Actions](https://github.com/chiddekel/rudi-js/actions/workflows/ci.yml). CI fails on any Gradle, Kotlin, or lint warning.
 
-**Szybkie sprawdzenie UI na emulatorze** (wymaga jawnego seriala ADB; nie czyści danych aplikacji):
+**Quick UI check on an emulator** (needs an explicit ADB serial; does not wipe app data):
 
 ```sh
-python3 tests/android/ui.py emulator-5554          # wypisz widoczne etykiety
-python3 tests/android/ui.py emulator-5554 "Lekcja" # stuknij po etykiecie a11y
+python3 tests/android/ui.py emulator-5554          # list visible labels
+python3 tests/android/ui.py emulator-5554 "Lesson" # tap by a11y label
 ```
 
-Checklistę i znane poprawki Android 8 znajdziesz w [`docs/qa/android-8.md`](docs/qa/android-8.md).
+Android 8 checklist and known fixes: [`docs/qa/android-8.md`](docs/qa/android-8.md).
 
 <details>
-<summary><b>📁 Struktura projektu</b></summary>
+<summary><b>📁 Project layout</b></summary>
 
-| Ścieżka | Co |
+| Path | What |
 |---|---|
-| `index.html` | Landing GitHub Pages (pełne i18n) z placem zabaw na żywo |
-| `app.html` | Aplikacja: ścieżka, lekcje, plac zabaw, ranking, profil |
-| `design-system.html` | Design system Rudi: tokeny, komponenty, miny maskotki |
-| `js/engine.js` | RudiScript: lekser → parser Pratta → AST → interpreter + kompilator bytecode |
-| `js/course.js` | Treść kursu: 6 modułów, 15 lekcji, 44 zadania |
-| `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | Aplikacja, maskotka, wizualizacje, lokalizacja |
-| `js/vendor/mustache.min.js` | Mustache 4.2.0 — render `{{var}}` z katalogów JSON |
-| `locales/` | Katalogi UI + kursu (`en`, `pl`, …) ładowane w runtime |
+| `index.html` | GitHub Pages landing (full i18n) with a live playground |
+| `app.html` | App: path, lessons, playground, ranking, profile |
+| `design-system.html` | Rudi design system: tokens, components, mascot moods |
+| `js/engine.js` | RudiScript: lexer → Pratt parser → AST → interpreter + bytecode compiler |
+| `js/course.js` | Course content: 6 modules, 15 lessons, 44 exercises |
+| `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | App, mascot, visualizations, localization |
+| `js/vendor/mustache.min.js` | Mustache 4.2.0 — render `{{var}}` from JSON catalogs |
+| `locales/` | UI + course catalogs (`en`, `pl`, …) loaded at runtime |
 | `css/` | `tokens.css`, `components.css`, `app.css`, `landing.css`, `fonts.css` |
-| `fonts/` | Nunito + JetBrains Mono (OFL), hostowane lokalnie |
-| `android/` | Aplikacja Android: Kotlin + GeckoView, AGP 9, `minSdk 26`, `targetSdk 37`, APK per ABI |
-| `tests/` | `node:test`: silnik i treść kursu |
-| `tests/android/ui.py` | Sterownik ADB po etykietach accessibility (E2E na emulatorze) |
-| `docs/qa/android-8.md` | Checklist i poprawki QA dla Android 8 / API 26 |
-| `stitch/` | Ekrany z Google Stitch, wizualna referencja projektu |
-| `docs/readme/` | Grafiki tego README |
+| `fonts/` | Nunito + JetBrains Mono (OFL), hosted locally |
+| `android/` | Android app: Kotlin + GeckoView, AGP 9, `minSdk 26`, `targetSdk 37`, per-ABI APKs |
+| `tests/` | `node:test`: engine and course content |
+| `tests/android/ui.py` | ADB driver by accessibility labels (emulator E2E) |
+| `docs/qa/android-8.md` | QA checklist and fixes for Android 8 / API 26 |
+| `stitch/` | Google Stitch screens, visual project reference |
+| `docs/readme/` | Graphics for this README |
 
 </details>
 
 <details>
-<summary><b>➕ Dodaj własną lekcję</b></summary>
+<summary><b>➕ Add your own lesson</b></summary>
 
-Kurs to dane w `js/course.js`. Nowe zadanie to jeden obiekt:
+The course is data in `js/course.js`. A new exercise is one object:
 
 ```js
-{ kind: "input", q: "Co wypisze program?", code: "console.log(2 ** 3 ** 2);", answer: "512",
-  explain: "** jest prawostronnie łączny: 2 ** (3 ** 2)." }
+{ kind: "input", q: "What does the program print?", code: "console.log(2 ** 3 ** 2);", answer: "512",
+  explain: "** is right-associative: 2 ** (3 ** 2)." }
 ```
 
-Dostępne typy: `choice` (wybór), `order` (układanie kafelków), `input` (wpisz wynik). `npm test` sprawdzi, czy odpowiedzi zgadzają się z silnikiem.
+Available kinds: `choice`, `order` (tile sorting), `input` (type the result). `npm test` checks that answers match the engine.
 
 </details>
 
 ## 🎨 Design
 
-Wygląd zaprojektowano w **[Google Stitch](https://stitch.withgoogle.com/)** (referencje w `stitch/`) i zbudowano jako własny design system: grube zaokrąglenia, przyciski 3D z twardym cieniem i ciepła paleta oparta na kolorze Rudiego. Maskotka to oryginalna czerwona panda w SVG z 10 minami. Animacje korzystają tylko z `transform` i `opacity`, więc pracuje przy nich karta graficzna.
+The look was designed in **[Google Stitch](https://stitch.withgoogle.com/)** (references in `stitch/`) and shipped as a custom design system: chunky radii, 3D buttons with hard shadows, and a warm palette based on Rudi's fur. The mascot is an original red panda in SVG with 10 moods. Animations use only `transform` and `opacity`, so the GPU does the work.
 
-## 📄 Licencja
+## 📄 License
 
-[MIT](LICENSE) © 2026 chiddekel · czcionki: [SIL Open Font License](https://openfontlicense.org/)
+[MIT](LICENSE) © 2026 chiddekel · fonts: [SIL Open Font License](https://openfontlicense.org/)
 
-<p align="center"><sub>Zrobione z 🧡 dla wszystkich, którzy chcą wiedzieć, co dzieje się po naciśnięciu <kbd>Enter</kbd> w konsoli.</sub></p>
+<p align="center"><sub>Made with 🧡 for everyone who wants to know what happens after pressing <kbd>Enter</kbd> in the console.</sub></p>
