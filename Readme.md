@@ -44,7 +44,7 @@
 - 🐼 **Rudi is alive**: 10 cheerful moods, smooth animations, and a celebration after every stage.
 - 📱 **Web + Android 8.0+**: PWA and a native app on **GeckoView** — works offline even without a system WebView.
 - 🌗 **Light and dark themes**, scales with text size (`rem`), respects `prefers-reduced-motion`.
-- 🌍 **15 languages (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — app and GitHub Pages landing UI in each; course content in Polish and English (other languages get UI + English course). Use `?lang=` or the nav language picker. JSON placeholders: Mustache `{{var}}` (`js/vendor/mustache.min.js`).
+- 🌍 **15 languages (i18n/l10n)**: en, pl, de, fr, es, it, pt-BR, uk, ar (RTL), hi, zh-CN, zh-TW, ja, ko, tr — app and GitHub Pages landing UI in each; course content in Polish and English (other languages get UI + English course). Use `?lang=` or the nav language picker. JSON placeholders: Mustache `{{var}}` (`js/mustache.js`, also `Rudi.mustache` / `Rudi.template`).
 - 🪶 **Zero npm dependencies**: plain HTML, CSS, and JS — no build step. Mustache is vendored for locale templates.
 
     </td>
@@ -162,7 +162,7 @@ Android 8 checklist and known fixes: [`docs/qa/android-8.md`](docs/qa/android-8.
 | `js/engine.js` | RudiScript: lexer → Pratt parser → AST → interpreter + bytecode compiler |
 | `js/course.js` | Course content: 6 modules, 15 lessons, 44 exercises |
 | `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | App, mascot, visualizations, localization |
-| `js/vendor/mustache.min.js` | Mustache 4.2.0 — render `{{var}}` from JSON catalogs |
+| `js/mustache.js` · `js/rudi.js` | Mustache 4.2.0 (`Rudi.mustache` / `Rudi.template`) + mascot UI |
 | `locales/` | UI + course catalogs (`en`, `pl`, …) loaded at runtime |
 | `css/` | `tokens.css`, `components.css`, `app.css`, `landing.css`, `fonts.css` |
 | `fonts/` | Nunito + JetBrains Mono (OFL), hosted locally |

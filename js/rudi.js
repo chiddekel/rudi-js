@@ -1,8 +1,18 @@
-/* Rudi Design System — mascot + UI helpers. No build step, no dependencies.
+/* Rudi Design System — mascot + UI helpers. No build step, no npm deps.
+   Mustache (js/mustache.js) powers JSON locale templates via Rudi.mustache / Rudi.template.
    Usage: <div data-rudi data-mood="happy" style="--rudi-size:8.75rem"></div>
-          Rudi.toast("Saved"), Rudi.confetti(), Rudi.sheet(el, "success"|"danger"), Rudi.theme("dark") */
+          Rudi.toast("Saved"), Rudi.confetti(), Rudi.sheet(el, "success"|"danger"), Rudi.theme("dark")
+          Rudi.template("Hi {{name}}", { name: "Rudi" }) */
 (function () {
   "use strict";
+
+  var MustacheApi = window.Mustache || null;
+  function template(str, view, partials, config) {
+    if (!MustacheApi || typeof MustacheApi.render !== "function") {
+      throw new Error("Mustache is not loaded — include js/mustache.js before js/rudi.js");
+    }
+    return MustacheApi.render(String(str), view || {}, partials, config);
+  }
 
   var FUR = "#E8622C", FUR_DARK = "#C64A17", MARK = "#8F3210", INK = "#2E1C13", CREAM = "#FFFFFF", BLUSH = "#FF8FA3";
 
@@ -244,7 +254,7 @@
 
   function init(root) { renderAll(root); renderIcons(root); bindChoices(root); startMiny(root); }
 
-  window.Rudi = { mascot: mascot, render: renderAll, miny: MINY, setMood: setMood, toast: toast, confetti: confetti, sheet: sheet,
+  window.Rudi = { mascot: mascot, render: renderAll, template: template, mustache: MustacheApi, miny: MINY, setMood: setMood, toast: toast, confetti: confetti, sheet: sheet,
                   theme: theme, isDark: isDark, progress: progress, icons: ICONS, init: init };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { init(); });

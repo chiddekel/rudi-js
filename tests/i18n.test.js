@@ -15,7 +15,7 @@ const codes = [
 global.window = global.window || {};
 // mustache.min.js is a UMD build: under Node it exports the API, so hoist it onto global
 // before i18n.js reads global.Mustache (browser script tags set this automatically).
-const Mustache = require(path.join(root, "js/vendor/mustache.min.js"));
+const Mustache = require(path.join(root, "js/mustache.js"));
 global.Mustache = Mustache;
 global.window.Mustache = Mustache;
 require(path.join(root, "js/i18n.js"));

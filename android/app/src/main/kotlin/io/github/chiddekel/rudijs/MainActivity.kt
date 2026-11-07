@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()   // transparent system bars, light/dark icons on Android 8–17
         super.onCreate(savedInstanceState)
         webRoot = File(filesDir, "web")
+        // Always refresh the bundled course (Mustache, locales, …) from the APK assets.
+        if (webRoot.exists()) webRoot.deleteRecursively()
         copyAssets("web", webRoot)
 
         val geckoView = GeckoView(this)

@@ -74,7 +74,9 @@
   }
 
   function mustache() {
-    return global.Mustache || null;
+    if (global.Mustache) return global.Mustache;
+    if (global.Rudi && global.Rudi.mustache) return global.Rudi.mustache;
+    return null;
   }
 
   function format(str, vars) {
