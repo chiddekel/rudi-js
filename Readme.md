@@ -163,7 +163,8 @@ Android 8 checklist and known fixes: [`docs/qa/android-8.md`](docs/qa/android-8.
 | `js/course.js` | Course content: 6 modules, 15 lessons, 44 exercises |
 | `js/app.js` · `js/rudi.js` · `js/viz.js` · `js/i18n.js` | App, mascot, visualizations, localization |
 | `js/mustache.js` · `js/rudi.js` | Mustache 4.2.0 (`Rudi.mustache` / `Rudi.template`) + mascot UI |
-| `locales/` | UI + course catalogs (`en`, `pl`, …) loaded at runtime |
+| `js/locale-data.js` | Bundled `locales/*.json` for `file://` / GeckoView (`node tools/bundle-locales.mjs`) |
+| `locales/` | UI + course catalogs (`en`, `pl`, …); source of truth for the bundle |
 | `css/` | `tokens.css`, `components.css`, `app.css`, `landing.css`, `fonts.css` |
 | `fonts/` | Nunito + JetBrains Mono (OFL), hosted locally |
 | `android/` | Android app: Kotlin + GeckoView, AGP 9, `minSdk 26`, `targetSdk 37`, per-ABI APKs |

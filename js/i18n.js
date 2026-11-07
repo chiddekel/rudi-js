@@ -142,6 +142,12 @@
 
   function loadPack(locale) {
     if (cache[locale]) return Promise.resolve(cache[locale]);
+    // Bundled catalogs (js/locale-data.js) work on file:// / GeckoView where XHR may be blocked.
+    var bundled = global.RUDI_LOCALE_DATA && global.RUDI_LOCALE_DATA[locale];
+    if (bundled) {
+      cache[locale] = bundled;
+      return Promise.resolve(bundled);
+    }
     return fetchJson(localeUrl(locale)).then(function (data) {
       cache[locale] = data;
       return data;

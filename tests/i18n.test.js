@@ -18,6 +18,10 @@ global.window = global.window || {};
 const Mustache = require(path.join(root, "js/mustache.js"));
 global.Mustache = Mustache;
 global.window.Mustache = Mustache;
+require(path.join(root, "js/locale-data.js"));
+if (!global.RUDI_LOCALE_DATA && global.window.RUDI_LOCALE_DATA) {
+  global.RUDI_LOCALE_DATA = global.window.RUDI_LOCALE_DATA;
+}
 require(path.join(root, "js/i18n.js"));
 require(path.join(root, "js/course.js"));
 const I18n = global.window.RudiI18n;
@@ -82,37 +86,14 @@ test("Mustache renders JSON locale placeholders", () => {
   assert.equal(I18n.format(en.ui["landing.program.lessons"], { n: 15 }), "15 lessons");
 });
 
-test("t() resolves flat dotted UI keys from locale JSON", async () => {
-  // Stub XHR-less load by injecting through setLocale after mocking fetch via cache path:
-  // loadPack uses XMLHttpRequest in browser; in Node we seed by calling materialize after manual pack inject.
-  const en = JSON.parse(fs.readFileSync(path.join(localesDir, "en.json"), "utf8"));
-  const pl = JSON.parse(fs.readFileSync(path.join(localesDir, "pl.json"), "utf8"));
-  // Monkey-patch: setLocale → loadPack uses XHR. Provide a tiny fake XHR for file reads.
-  const RealXHR = global.XMLHttpRequest;
-  global.XMLHttpRequest = function () {
-    this.readyState = 0;
-    this.status = 0;
-    this.responseText = "";
-    this.open = function (_m, url) { this._url = url; };
-    this.send = function () {
-      const self = this;
-      const m = String(self._url).match(/locales\/([^/?#]+)\.json/);
-      const code = m ? decodeURIComponent(m[1]) : "en";
-      const file = path.join(localesDir, code + ".json");
-      self.responseText = fs.readFileSync(file, "utf8");
-      self.status = 200;
-      self.readyState = 4;
-      setTimeout(function () { self.onreadystatechange && self.onreadystatechange(); }, 0);
-    };
-  };
-  try {
-    await I18n.setLocale("en");
-    assert.equal(I18n.t("profile.title"), en.ui["profile.title"]);
-    assert.equal(I18n.t("nav.path"), en.ui["nav.path"]);
-    assert.equal(I18n.t("path.module", { n: 2 }), I18n.format(en.ui["path.module"], { n: 2 }));
-    await I18n.setLocale("pl");
-    assert.equal(I18n.t("profile.title"), pl.ui["profile.title"]);
-  } finally {
-    global.XMLHttpRequest = RealXHR;
-  }
+test("t() resolves flat dotted UI keys from bundled locale data", async () => {
+  assert.ok(global.RUDI_LOCALE_DATA && global.RUDI_LOCALE_DATA.en);
+  const en = global.RUDI_LOCALE_DATA.en;
+  const pl = global.RUDI_LOCALE_DATA.pl;
+  await I18n.setLocale("en");
+  assert.equal(I18n.t("profile.title"), en.ui["profile.title"]);
+  assert.equal(I18n.t("nav.path"), en.ui["nav.path"]);
+  assert.equal(I18n.t("path.module", { n: 2 }), I18n.format(en.ui["path.module"], { n: 2 }));
+  await I18n.setLocale("pl");
+  assert.equal(I18n.t("profile.title"), pl.ui["profile.title"]);
 });
