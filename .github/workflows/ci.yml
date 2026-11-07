@@ -31,7 +31,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - uses: android-actions/setup-android@v3
       - name: Build (warnings fail the build)
         run: ./gradlew assembleDebug assembleRelease lint --warning-mode fail
       - uses: actions/upload-artifact@v4
