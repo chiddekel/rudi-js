@@ -13,41 +13,41 @@
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/components.css">
 <style>
-  .ds { max-width: 1040px; margin: 0 auto; padding: 0 16px 120px; }
-  .ds-top { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 2px solid var(--line); }
-  .ds-top__in { max-width: 1040px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; }
-  .ds-top__brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.25rem; color: var(--primary); margin-right: auto; }
-  .ds-top__brand .rudi { --rudi-size: 40px; }
-  .ds-nav { display: flex; gap: 6px; overflow-x: auto; padding: 10px 16px; max-width: 1040px; margin: 0 auto; scrollbar-width: none; }
-  .ds-nav a { flex: none; padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: .875rem; color: var(--ink-soft); text-decoration: none; border: 2px solid var(--line-strong); background: var(--surface); }
+  .ds { max-width: 65rem; margin: 0 auto; padding: 0 1rem 7.5rem; }
+  .ds-top { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 0.125rem solid var(--line); }
+  .ds-top__in { max-width: 65rem; margin: 0 auto; padding: 0.625rem 1rem; display: flex; align-items: center; gap: 0.75rem; }
+  .ds-top__brand { display: flex; align-items: center; gap: 0.625rem; font-weight: 900; font-size: 1.25rem; color: var(--primary); margin-right: auto; }
+  .ds-top__brand .rudi { --rudi-size: 2.5rem; }
+  .ds-nav { display: flex; gap: 0.375rem; overflow-x: auto; padding: 0.625rem 1rem; max-width: 65rem; margin: 0 auto; scrollbar-width: none; }
+  .ds-nav a { flex: none; padding: 0.375rem 0.75rem; border-radius: 62.4375rem; font-weight: 800; font-size: .875rem; color: var(--ink-soft); text-decoration: none; border: 0.125rem solid var(--line-strong); background: var(--surface); }
   .ds-nav a:hover { color: var(--primary); border-color: var(--primary); }
-  .hero { display: grid; gap: 24px; align-items: center; padding: 48px 0 24px; }
-  .hero .rudi { --rudi-size: min(240px, 60vw); margin: 0 auto; }
-  @media (min-width: 760px) { .hero { grid-template-columns: 1.2fr 1fr; } }
-  section { padding: 40px 0 8px; scroll-margin-top: 120px; }
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
-  .swatch { border-radius: var(--r-lg); overflow: hidden; border: 2px solid var(--line); background: var(--surface); }
-  .swatch__c { height: 76px; display: flex; }
+  .hero { display: grid; gap: 1.5rem; align-items: center; padding: 3rem 0 1.5rem; }
+  .hero .rudi { --rudi-size: min(15rem, 60vw); margin: 0 auto; }
+  @media (min-width: 47.5em) { .hero { grid-template-columns: 1.2fr 1fr; } }
+  section { padding: 2.5rem 0 0.5rem; scroll-margin-top: 7.5rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.75rem), 1fr)); }
+  .swatch { border-radius: var(--r-lg); overflow: hidden; border: 0.125rem solid var(--line); background: var(--surface); }
+  .swatch__c { height: 4.75rem; display: flex; }
   .swatch__c span { flex: 1; }
-  .swatch__t { padding: 10px 14px; font-size: .8125rem; }
+  .swatch__t { padding: 0.625rem 0.875rem; font-size: .8125rem; }
   .swatch__t b { display: block; font-size: 1rem; }
-  code { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: .8125em; background: var(--surface-2); padding: 1px 6px; border-radius: 6px; }
-  .moods { display: flex; flex-wrap: wrap; gap: 20px; }
+  code { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: .8125em; background: var(--surface-2); padding: 0.0625rem 0.375rem; border-radius: 0.375rem; }
+  .moods { display: flex; flex-wrap: wrap; gap: 1.25rem; }
   .moods figure { margin: 0; text-align: center; font-weight: 800; color: var(--ink-soft); font-size: .875rem; }
-  .moods .rudi { --rudi-size: 110px; margin-bottom: 6px; }
-  .phone { width: min(100%, 390px); margin: 0 auto; border: 10px solid var(--c-bark-900); border-radius: 44px; overflow: hidden; background: var(--bg); position: relative; height: 760px; }
+  .moods .rudi { --rudi-size: 6.875rem; margin-bottom: 0.375rem; }
+  .phone { width: min(100%, 24.375rem); margin: 0 auto; border: 0.625rem solid var(--c-bark-900); border-radius: 2.75rem; overflow: hidden; background: var(--bg); position: relative; height: 47.5rem; }
   .phone iframe { width: 100%; height: 100%; border: 0; display: block; }
-  .screens { display: grid; gap: 28px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
-  .screens figcaption { text-align: center; font-weight: 800; margin-top: 10px; color: var(--ink-soft); }
-  .type-row { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--line); padding: 10px 0; flex-wrap: wrap; }
-  .type-row small { width: 110px; color: var(--ink-mute); font-weight: 800; }
+  .screens { display: grid; gap: 1.75rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21.25rem), 1fr)); }
+  .screens figcaption { text-align: center; font-weight: 800; margin-top: 0.625rem; color: var(--ink-soft); }
+  .type-row { display: flex; align-items: baseline; gap: 1rem; border-bottom: 0.125rem solid var(--line); padding: 0.625rem 0; flex-wrap: wrap; }
+  .type-row small { width: 6.875rem; color: var(--ink-mute); font-weight: 800; }
 </style>
 </head>
 <body>
 
 <header class="ds-top">
   <div class="ds-top__in">
-    <div class="ds-top__brand"><span data-rudi data-mood="happy"></span>Rudi DS</div>
+    <div class="ds-top__brand"><span data-rudi data-mood="happy" data-static></span>Rudi DS</div>
     <span class="stat stat--streak"><span data-icon="flame"></span>12</span>
     <button class="btn btn--ghost btn--sm btn--icon" id="themeBtn" aria-label="Przełącz motyw"><span data-icon="moon"></span></button>
   </div>
@@ -111,10 +111,10 @@
       <figure><div data-rudi data-mood="joy"></div>joy</figure>
       <figure><div data-rudi data-mood="wow"></div>wow</figure>
       <figure><div data-rudi data-mood="wink"></div>wink</figure>
-      <figure><div data-rudi data-mood="sad"></div>sad</figure>
+      <figure><div data-rudi data-mood="curious"></div>curious</figure>
     </div>
-    <div class="speaker" style="margin-top:24px">
-      <div data-rudi data-mood="wink" style="--rudi-size:90px"></div>
+    <div class="speaker" style="margin-top:1.5rem">
+      <div data-rudi data-mood="wink" style="--rudi-size:5.625rem"></div>
       <div class="bubble">Hej! Jestem Rudi. Zaczynamy?</div>
     </div>
   </section>
@@ -122,7 +122,7 @@
   <!-- ============ Buttons ============ -->
   <section id="przyciski">
     <h2>Przyciski</h2>
-    <p class="text-soft">Twardy cień <code>--depth: 4px</code>. Po naciśnięciu przycisk „wciska się” w dół.</p>
+    <p class="text-soft">Twardy cień <code>--depth: 0.25rem</code>. Po naciśnięciu przycisk „wciska się” w dół.</p>
     <div class="stack">
       <div class="row">
         <button class="btn">Primary</button>
@@ -141,27 +141,27 @@
         <button class="btn btn--icon btn--secondary" aria-label="OK"><span data-icon="check"></span></button>
         <button class="btn btn--icon btn--ghost" aria-label="Zamknij"><span data-icon="close"></span></button>
       </div>
-      <div style="max-width:420px"><button class="btn btn--block btn--lg" id="toastBtn">Pokaż toast</button></div>
+      <div style="max-width:26.25rem"><button class="btn btn--block btn--lg" id="toastBtn">Pokaż toast</button></div>
     </div>
   </section>
 
   <!-- ============ Stats & progress ============ -->
   <section id="statystyki">
     <h2>Statystyki i postęp</h2>
-    <div class="row" style="margin-bottom:20px">
+    <div class="row" style="margin-bottom:1.25rem">
       <span class="stat stat--streak"><span data-icon="flame"></span>12</span>
       <span class="stat stat--gems"><span data-icon="gem"></span>450</span>
       <span class="stat stat--hearts"><span data-icon="heart"></span>5</span>
       <span class="stat stat--xp"><span data-icon="bolt"></span>1 240 XP</span>
       <span class="stat stat--streak is-muted"><span data-icon="flame"></span>0</span>
     </div>
-    <div class="stack" style="max-width:520px">
+    <div class="stack" style="max-width:32.5rem">
       <div class="progress" id="demoProgress" style="--value:35"><div class="progress__fill"></div></div>
       <div class="progress progress--reward" style="--value:70"><div class="progress__fill"></div></div>
       <div class="progress progress--success" style="--value:100"><div class="progress__fill"></div></div>
       <div class="row"><button class="btn btn--sm btn--ghost" id="progMinus">−10</button><button class="btn btn--sm" id="progPlus">+10</button></div>
     </div>
-    <div class="grid" style="margin-top:24px">
+    <div class="grid" style="margin-top:1.5rem">
       <div class="card card--hero">
         <p class="eyebrow" style="color:rgba(255,255,255,.8)">Część 1</p>
         <h3>Podstawy</h3>
@@ -174,7 +174,7 @@
         <div class="progress progress--reward" style="--value:55"><div class="progress__fill"></div></div>
       </div>
       <div class="card card--tint">
-        <div class="speaker"><div data-rudi data-mood="wow" style="--rudi-size:64px"></div><div><b>Seria zagrożona!</b><br><span class="text-soft">Zrób dziś jedną lekcję.</span></div></div>
+        <div class="speaker"><div data-rudi data-mood="wow" style="--rudi-size:4rem"></div><div><b>Seria zagrożona!</b><br><span class="text-soft">Zrób dziś jedną lekcję.</span></div></div>
       </div>
     </div>
   </section>
@@ -182,7 +182,7 @@
   <!-- ============ Path ============ -->
   <section id="sciezka">
     <h2>Ścieżka lekcji</h2>
-    <div class="card" style="max-width:420px;margin:0 auto;padding-top:56px">
+    <div class="card" style="max-width:26.25rem;margin:0 auto;padding-top:3.5rem">
       <div class="path">
         <button class="path__node is-done" aria-label="Lekcja 1 ukończona"><span data-icon="check"></span></button>
         <button class="path__node is-done" aria-label="Lekcja 2 ukończona"><span data-icon="star"></span></button>
@@ -197,14 +197,14 @@
   <!-- ============ Quiz ============ -->
   <section id="quiz">
     <h2>Zadanie (interaktywne)</h2>
-    <div class="card" style="max-width:640px;margin:0 auto">
-      <div class="row" style="margin-bottom:20px;flex-wrap:nowrap">
+    <div class="card" style="max-width:40rem;margin:0 auto">
+      <div class="row" style="margin-bottom:1.25rem;flex-wrap:nowrap">
         <button class="btn btn--flat btn--icon" aria-label="Zamknij" style="--btn-fg:var(--ink-mute)"><span data-icon="close"></span></button>
         <div class="progress" id="quizProgress" style="--value:40;flex:1"><div class="progress__fill"></div></div>
         <span class="stat stat--hearts"><span data-icon="heart"></span><span id="hearts">5</span></span>
       </div>
-      <div class="speaker" style="margin-bottom:20px">
-        <div data-rudi data-mood="happy" id="quizRudi" style="--rudi-size:88px"></div>
+      <div class="speaker" style="margin-bottom:1.25rem">
+        <div data-rudi data-mood="happy" id="quizRudi" style="--rudi-size:5.5rem"></div>
         <div class="bubble">Co pasuje dalej? 🔺 🟧 🔺 …</div>
       </div>
       <div class="choices choices--grid" data-choices id="quizChoices">
@@ -213,7 +213,7 @@
         <button class="choice choice--tall" aria-pressed="false"><span class="choice__art">🔺</span>Trójkąt</button>
         <button class="choice choice--tall" aria-pressed="false"><span class="choice__art">⭐</span>Gwiazda</button>
       </div>
-      <div style="margin-top:20px"><button class="btn btn--block btn--lg" id="checkBtn" disabled>Sprawdź</button></div>
+      <div style="margin-top:1.25rem"><button class="btn btn--block btn--lg" id="checkBtn" disabled>Sprawdź</button></div>
     </div>
   </section>
 
@@ -223,12 +223,12 @@
     <div class="grid">
       <div class="field"><label class="field__label" for="f1">Nazwa użytkownika</label><input class="input" id="f1" placeholder="np. rudi_fan"><span class="field__hint">3–20 znaków</span></div>
       <div class="field"><label class="field__label" for="f2">E-mail</label><input class="input is-invalid" id="f2" value="rudi@"><span class="field__hint is-error">Niepoprawny adres e-mail</span></div>
-      <div class="stack" style="--gap:12px;align-content:start;padding-top:28px">
+      <div class="stack" style="--gap:0.75rem;align-content:start;padding-top:1.75rem">
         <label class="switch"><input type="checkbox" checked><span class="switch__track"></span>Dźwięki</label>
         <label class="switch"><input type="checkbox"><span class="switch__track"></span>Przypomnienia</label>
       </div>
     </div>
-    <h3 style="margin-top:24px">Tokeny (bank wyrazów / tagi)</h3>
+    <h3 style="margin-top:1.5rem">Tokeny (bank wyrazów / tagi)</h3>
     <div class="tokens" id="tokens">
       <button class="token">szybko</button><button class="token">łatwo</button><button class="token">codziennie</button><button class="token">razem</button><button class="token">dalej</button>
     </div>
@@ -237,7 +237,7 @@
   <!-- ============ Lists ============ -->
   <section id="listy">
     <h2>Ranking</h2>
-    <div class="card" style="max-width:520px">
+    <div class="card" style="max-width:32.5rem">
       <ul class="list">
         <li class="list__item"><span class="list__rank" style="color:var(--reward-shade)">1</span><span class="avatar" style="--avatar-c:var(--c-berry-500)">MK</span><span class="list__main">Marta K.</span><span class="list__meta">1 820 XP</span></li>
         <li class="list__item"><span class="list__rank">2</span><span class="avatar" style="--avatar-c:var(--c-sky-500)">TJ</span><span class="list__main">Tomek J.</span><span class="list__meta">1 540 XP</span></li>
@@ -250,13 +250,13 @@
   <!-- ============ Rewards ============ -->
   <section id="nagrody">
     <h2>Odznaki i modal</h2>
-    <div class="row" style="--gap:16px;margin-bottom:20px">
+    <div class="row" style="--gap:1rem;margin-bottom:1.25rem">
       <div class="medal">🔥</div><div class="medal medal--fox">⚡</div><div class="medal medal--teal">🎯</div><div class="medal medal--plum">👑</div><div class="medal is-locked">?</div>
     </div>
     <div class="row">
       <span class="badge">Fox</span><span class="badge badge--new">Nowe</span><span class="badge badge--pro">Pro</span><span class="badge badge--info">Info</span>
     </div>
-    <div style="margin-top:20px"><button class="btn btn--reward" id="modalBtn">Otwórz modal nagrody</button></div>
+    <div style="margin-top:1.25rem"><button class="btn btn--reward" id="modalBtn">Otwórz modal nagrody</button></div>
   </section>
 
   <!-- ============ Screens ============ -->
@@ -264,9 +264,9 @@
     <h2>Ekrany (Google Stitch)</h2>
     <p class="text-soft">Referencje wygenerowane w Stitch (projekt „Rudi Design System”), na których oparta jest aplikacja. <a href="app.html">Otwórz aplikację Rudi.js →</a></p>
     <div class="screens">
-      <figure style="margin:0"><div class="phone" style="height:auto;max-height:760px;overflow:auto"><img src="stitch/home.png" alt="Stitch: ścieżka nauki" loading="lazy"></div><figcaption><a href="stitch/home.html">Ścieżka</a></figcaption></figure>
-      <figure style="margin:0"><div class="phone" style="height:auto;max-height:760px;overflow:auto"><img src="stitch/lesson.png" alt="Stitch: zadanie z tokenizacji" loading="lazy"></div><figcaption><a href="stitch/lesson.html">Lekcja</a></figcaption></figure>
-      <figure style="margin:0"><div class="phone" style="height:auto;max-height:760px;overflow:auto"><img src="stitch/playground.png" alt="Stitch: plac zabaw" loading="lazy"></div><figcaption><a href="stitch/playground.html">Plac zabaw</a></figcaption></figure>
+      <figure style="margin:0"><div class="phone" style="height:auto;max-height:47.5rem;overflow:auto"><img src="stitch/home.png" alt="Stitch: ścieżka nauki" loading="lazy"></div><figcaption><a href="stitch/home.html">Ścieżka</a></figcaption></figure>
+      <figure style="margin:0"><div class="phone" style="height:auto;max-height:47.5rem;overflow:auto"><img src="stitch/lesson.png" alt="Stitch: zadanie z tokenizacji" loading="lazy"></div><figcaption><a href="stitch/lesson.html">Lekcja</a></figcaption></figure>
+      <figure style="margin:0"><div class="phone" style="height:auto;max-height:47.5rem;overflow:auto"><img src="stitch/playground.png" alt="Stitch: plac zabaw" loading="lazy"></div><figcaption><a href="stitch/playground.html">Plac zabaw</a></figcaption></figure>
     </div>
   </section>
 </main>
@@ -280,7 +280,7 @@
 </div>
 
 <dialog class="modal" id="modal">
-  <div data-rudi data-mood="joy" style="--rudi-size:140px"></div>
+  <div data-rudi data-mood="joy" style="--rudi-size:8.75rem"></div>
   <h2>Nowa odznaka!</h2>
   <p class="text-soft">Zdobyłeś „Ognisty start” za 7 dni serii.</p>
   <form method="dialog"><button class="btn btn--block btn--lg">Super</button></form>
@@ -314,7 +314,7 @@
     picked.classList.add(ok ? "is-correct" : "is-wrong");
     if (ok) { qp = Math.min(100, qp + 20); Rudi.progress($("quizProgress"), qp); Rudi.confetti(40); }
     else { hearts = Math.max(0, hearts - 1); $("hearts").textContent = hearts; group.querySelector("[data-ok]").classList.add("is-correct"); }
-    Rudi.setMood($("quizRudi"), ok ? "joy" : "sad");
+    Rudi.setMood($("quizRudi"), ok ? "joy" : "curious");
     $("sheetIcon").innerHTML = Rudi.icons[ok ? "check" : "close"];
     $("sheetText").textContent = ok ? "Świetnie!" : "Poprawnie: kwadrat";
     $("sheetBtn").textContent = ok ? "Dalej" : "Rozumiem";

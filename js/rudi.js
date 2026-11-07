@@ -1,5 +1,5 @@
 /* Rudi Design System — mascot + UI helpers. No build step, no dependencies.
-   Usage: <div data-rudi data-mood="happy" style="--rudi-size:140px"></div>
+   Usage: <div data-rudi data-mood="happy" style="--rudi-size:8.75rem"></div>
           Rudi.toast("Saved"), Rudi.confetti(), Rudi.sheet(el, "success"|"danger"), Rudi.theme("dark") */
 (function () {
   "use strict";
@@ -12,29 +12,43 @@
     joy:   '<path d="M62 108q10-13 20 0M118 108q10-13 20 0" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>',
     wow:   '<circle cx="72" cy="105" r="12" fill="' + INK + '"/><circle cx="128" cy="105" r="12" fill="' + INK + '"/>' +
            '<circle cx="76" cy="100" r="4.5" fill="#fff"/><circle cx="132" cy="100" r="4.5" fill="#fff"/>',
-    sad:   '<ellipse cx="72" cy="108" rx="8" ry="10" fill="' + INK + '"/><ellipse cx="128" cy="108" rx="8" ry="10" fill="' + INK + '"/>' +
-           '<circle cx="74" cy="105" r="3" fill="#fff"/><circle cx="130" cy="105" r="3" fill="#fff"/>' +
-           '<path d="M58 90l20 6M142 90l-20 6" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
     wink:  '<ellipse cx="72" cy="106" rx="9" ry="11" fill="' + INK + '"/><circle cx="75" cy="102" r="3.4" fill="#fff"/>' +
-           '<path d="M118 108q10-11 20 0" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>'
+           '<g class="rudi__wink-open"><ellipse cx="128" cy="106" rx="9" ry="11" fill="' + INK + '"/><circle cx="131" cy="102" r="3.4" fill="#fff"/></g>' +
+           '<path class="rudi__wink-shut" d="M118 108q10-11 20 0" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>',
+    blink: '<path d="M63 108h18M119 108h18" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
+    love:  '<path d="M72 117l-10-10a6 6 0 0 1 10-7a6 6 0 0 1 10 7zM128 117l-10-10a6 6 0 0 1 10-7a6 6 0 0 1 10 7z" fill="#E8457A" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>',
+    star:  '<path d="M72 94l3.5 7.5 8 1-6 5.5 1.6 8-7.1-4-7.1 4 1.6-8-6-5.5 8-1zM128 94l3.5 7.5 8 1-6 5.5 1.6 8-7.1-4-7.1 4 1.6-8-6-5.5 8-1z" fill="#FFC12E" stroke="' + INK + '" stroke-width="2.4" stroke-linejoin="round"/>',
+    tongue: null, // filled below (same eyes as happy)
+    laugh: '<path d="M62 106q10-12 20 0M118 106q10-12 20 0" fill="none" stroke="' + INK + '" stroke-width="6" stroke-linecap="round"/>',
+    curious: '<ellipse cx="76" cy="107" rx="8" ry="10" fill="' + INK + '"/><ellipse cx="132" cy="107" rx="8" ry="10" fill="' + INK + '"/>' +
+           '<circle cx="79" cy="103" r="3" fill="#fff"/><circle cx="135" cy="103" r="3" fill="#fff"/>' +
+           '<path d="M120 91q9-8 20-3" fill="none" stroke="' + INK + '" stroke-width="4.5" stroke-linecap="round"/>',
+    content: '<path d="M62 103q10 10 20 0M118 103q10 10 20 0" fill="none" stroke="' + INK + '" stroke-width="5.5" stroke-linecap="round"/>'
   };
+  EYES.tongue = EYES.happy;
+  EYES.sad = EYES.curious; // Rudi is never sad or angry: legacy "sad" shows the curious face
 
   var MOUTH = {
     happy: '<path d="M88 143q12 11 24 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
     joy:   '<path d="M84 141q16 2 32 0q-2 20-16 20t-16-20z" fill="' + INK + '"/><path d="M92 153q8-6 16 0q-4 6-8 6t-8-6z" fill="#FF7A8A"/>',
     wow:   '<ellipse cx="100" cy="149" rx="8" ry="10" fill="' + INK + '"/>',
-    sad:   '<path d="M88 152q12-10 24 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
-    wink:  '<path d="M86 142q14 14 28 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/><path d="M104 147q4 8 9 2" fill="#FF7A8A"/>'
+    wink:  '<path d="M86 142q14 14 28 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/><path d="M104 147q4 8 9 2" fill="#FF7A8A"/>',
+    tongue: '<path d="M91 145q0 19 9 19t9-19z" fill="#FF7A8A" stroke="' + INK + '" stroke-width="3" stroke-linejoin="round"/><path d="M100 147v9" stroke="#E0566A" stroke-width="2.5" stroke-linecap="round"/><path d="M86 143q14 10 28 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
+    laugh: '<path d="M80 139q20 3 40 0q-3 26-20 26t-20-26z" fill="' + INK + '"/><path d="M90 156q10-7 20 0q-5 7-10 7t-10-7z" fill="#FF7A8A"/>',
+    curious: '<path d="M92 147q9 4 18-3" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>',
+    content: '<path d="M90 144q10 8 20 0" fill="none" stroke="' + INK + '" stroke-width="5" stroke-linecap="round"/>'
   };
+  MOUTH.sad = MOUTH.curious;
+  MOUTH.blink = MOUTH.happy; MOUTH.love = MOUTH.joy; MOUTH.star = MOUTH.joy;
 
-  /* Original red panda head. viewBox 0 0 200 190 */
+  /* Original red panda head. viewBox 0 0 200 190.
+     Parts are grouped (body, ears, eyes) so idle behaviors can animate them. */
   function mascot(mood, label) {
     mood = EYES[mood] ? mood : "happy";
     return '' +
-      '<svg class="rudi" viewBox="0 0 200 190" role="img" aria-label="' + (label || "Rudi, czerwona panda") + '">' +
-      // ears
-      '<g><circle cx="42" cy="56" r="31" fill="' + CREAM + '"/><circle cx="42" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="44" cy="62" r="13" fill="' + MARK + '"/>' +
-      '<circle cx="158" cy="56" r="31" fill="' + CREAM + '"/><circle cx="158" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="156" cy="62" r="13" fill="' + MARK + '"/></g>' +
+      '<svg class="rudi" viewBox="0 0 200 190" role="img" aria-label="' + (label || "Rudi, czerwona panda") + '"><g class="rudi__body">' +
+      '<g class="rudi__ear rudi__ear--l"><circle cx="42" cy="56" r="31" fill="' + CREAM + '"/><circle cx="42" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="44" cy="62" r="13" fill="' + MARK + '"/></g>' +
+      '<g class="rudi__ear rudi__ear--r"><circle cx="158" cy="56" r="31" fill="' + CREAM + '"/><circle cx="158" cy="58" r="22" fill="' + FUR_DARK + '"/><circle cx="156" cy="62" r="13" fill="' + MARK + '"/></g>' +
       // head
       '<ellipse cx="100" cy="116" rx="82" ry="68" fill="' + FUR_DARK + '"/>' +
       '<ellipse cx="100" cy="111" rx="82" ry="66" fill="' + FUR + '"/>' +
@@ -46,22 +60,75 @@
       '<path d="M72 118q-6 16 2 36M128 118q6 16-2 36" fill="none" stroke="' + MARK + '" stroke-width="11" stroke-linecap="round"/>' +
       // muzzle
       '<ellipse cx="100" cy="143" rx="36" ry="27" fill="' + CREAM + '"/>' +
-      EYES[mood] +
+      '<g class="rudi__eyes">' + EYES[mood] + '</g>' +
       '<ellipse cx="48" cy="142" rx="10" ry="6" fill="' + BLUSH + '" opacity=".6"/><ellipse cx="152" cy="142" rx="10" ry="6" fill="' + BLUSH + '" opacity=".6"/>' +
       // nose
       '<path d="M90 126q10-6 20 0q-2 9-10 11q-8-2-10-11z" fill="' + INK + '"/>' +
       MOUTH[mood] +
-      '</svg>';
+      '</g></svg>';
   }
 
+  function renderOne(el, mood) {
+    el.innerHTML = mascot(mood || el.dataset.mood, el.dataset.label);
+    if (el.hasAttribute("data-bouncy")) el.firstChild.classList.add("is-bouncy");
+  }
   function renderAll(root) {
+    (root || document).querySelectorAll("[data-rudi]").forEach(function (el) { renderOne(el); });
+  }
+
+  function setMood(el, mood) { el.dataset.mood = mood; renderOne(el); }
+
+  /* ---------- Miny (idle facial expressions) ----------
+     10 cheerful expressions. Each on-screen mascot loops on its own: pick a random mina (not the
+     previous one), play it 2–5 times (face, then back to the screen's mood), short pause, repeat.
+     Never sad or angry: every face Rudi has is cheerful, so every on-screen mascot plays. */
+  var MINY = ["blink", "wink", "joy", "wow", "love", "star", "tongue", "laugh", "curious", "content"];
+
+  var reduceMotion = window.matchMedia ? matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  function rnd(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+  function onScreen(el) {
+    var r = el.getBoundingClientRect();
+    return r.width > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
+  }
+  function face(el, mood, mina) {
+    renderOne(el, mood);
+    // wink is a face change, not motion: always play it
+    if (mina && (mina === "wink" || !reduceMotion.matches) && el.firstChild) el.firstChild.classList.add("is-mina-" + mina);
+  }
+  function loop(el) {
+    if (!el.isConnected) return;                           // mascot removed: stop
+    var base = el.dataset.mood || "happy";
+    if (document.hidden || !onScreen(el)) { el._rudiT = setTimeout(function () { loop(el); }, 1500); return; }
+    var pool = MINY.filter(function (m) { return m !== el._rudiLast && m !== base; });
+    var mina = pool[Math.floor(Math.random() * pool.length)], reps = rnd(2, 5), i = 0;
+    var on = mina === "blink" ? 160 : 700, off = mina === "blink" ? 260 : 420;
+    el._rudiLast = mina;
+    (function step() {
+      if (!el.isConnected || el.dataset.mood !== base) { el._rudiT = setTimeout(function () { loop(el); }, 800); return; }
+      face(el, mina, mina);
+      el._rudiT = setTimeout(function () {
+        if (el.dataset.mood !== base) { loop(el); return; } // screen changed the mood: respect it
+        face(el, base);
+        if (++i < reps) el._rudiT = setTimeout(step, off);
+        else el._rudiT = setTimeout(function () { loop(el); }, rnd(1200, 3200));
+      }, on);
+    })();
+  }
+  function startMiny(root) {
     (root || document).querySelectorAll("[data-rudi]").forEach(function (el) {
-      el.innerHTML = mascot(el.dataset.mood, el.dataset.label);
-      if (el.hasAttribute("data-bouncy")) el.firstChild.classList.add("is-bouncy");
+      if (el._rudiOn || el.hasAttribute("data-static")) return; // logos stay still
+      el._rudiOn = true;
+      el._rudiT = setTimeout(function () { loop(el); }, rnd(400, 2500)); // desync mascots
     });
   }
-
-  function setMood(el, mood) { el.dataset.mood = mood; renderAll(el.parentNode); }
+  // mascots appear as views change: watch the DOM
+  if (window.MutationObserver) {
+    var queued = false;
+    new MutationObserver(function () {
+      if (queued) return; queued = true;
+      setTimeout(function () { queued = false; startMiny(); }, 200);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
 
   /* ---------- Toast ---------- */
   function toast(msg, ms) {
@@ -82,7 +149,7 @@
       var p = document.createElement("i");
       p.style.left = Math.random() * 100 + "%";
       p.style.background = colors[i % colors.length];
-      p.style.setProperty("--dx", (Math.random() * 200 - 100) + "px");
+      p.style.setProperty("--dx", (Math.random() * 12.5 - 6.25) + "rem");
       p.style.setProperty("--rot", (Math.random() * 900 - 450) + "deg");
       p.style.setProperty("--dur", (1 + Math.random() * 1.2) + "s");
       p.style.animationDelay = Math.random() * .3 + "s";
@@ -151,9 +218,9 @@
     });
   }
 
-  function init(root) { renderAll(root); renderIcons(root); bindChoices(root); }
+  function init(root) { renderAll(root); renderIcons(root); bindChoices(root); startMiny(root); }
 
-  window.Rudi = { mascot: mascot, render: renderAll, setMood: setMood, toast: toast, confetti: confetti, sheet: sheet,
+  window.Rudi = { mascot: mascot, render: renderAll, miny: MINY, setMood: setMood, toast: toast, confetti: confetti, sheet: sheet,
                   theme: theme, isDark: isDark, progress: progress, icons: ICONS, init: init };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { init(); });

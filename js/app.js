@@ -43,7 +43,7 @@
   }
   function topbar(title) {
     return '<header class="topbar">' + (title ? '<span class="topbar__title">' + esc(title) + "</span>" :
-      '<span class="topbar__brand"><span data-rudi data-mood="happy"></span>Rudi.js</span>') + statsHTML() + "</header>";
+      '<span class="topbar__brand"><span data-rudi data-mood="happy" data-static></span>Rudi.js</span>') + statsHTML() + "</header>";
   }
   function setTab(name) {
     document.querySelectorAll(".tabbar__item").forEach(function (a) {
@@ -67,36 +67,43 @@
   modal.addEventListener("click", function (e) { if (e.target === modal || e.target.closest("[data-close]")) closeModal(); });
 
   /* ================= Path ================= */
-  var OFFSETS = [0, 52, 76, 52, 0, -52, -76, -52];
+  var OFFSETS = [0, 3.25, 4.75, 3.25, 0, -3.25, -4.75, -3.25]; // rem: zig-zag of the lesson path
+  // measured geometry (getBoundingClientRect) is in CSS px; convert with the live root font size
+  function remPx() { return parseFloat(getComputedStyle(document.documentElement).fontSize) || 16; }
+  function toRem(px) { return (px / remPx()).toFixed(4) + "rem"; }
+  var celebrate = null; // lesson id just completed for the first time -> animate on the path
   function viewPath() {
     var cur = currentId(), html = topbar() + '<div class="view">', n = 0;
+    var cel = celebrate; celebrate = null;
     COURSE.forEach(function (m, mi) {
       var unlocked = isUnlocked(m.lessons[0].id);
       html += '<section class="unit unit--' + m.color + (unlocked ? "" : " is-locked") + '">' +
         '<div class="unit__top"><span class="unit__eyebrow">Moduł ' + (mi + 1) + "</span>" +
-        (unlocked ? '<button class="btn btn--sm" data-guide="' + mi + '">' + icon("book") + "Przewodnik</button>" : '<span style="width:26px;color:var(--ink-mute)">' + icon("lock") + "</span>") + "</div>" +
+        (unlocked ? '<button class="btn btn--sm" data-guide="' + mi + '">' + icon("book") + "Przewodnik</button>" : '<span style="width:1.625rem;color:var(--ink-mute)">' + icon("lock") + "</span>") + "</div>" +
         "<h2>" + esc(m.title) + "</h2><p>" + esc(m.subtitle) + "</p></section>";
       html += '<div class="lpath">';
       m.lessons.forEach(function (l) {
         var done = S.done[l.id], isCur = l.id === cur, open = isUnlocked(l.id);
-        var cls = done ? "is-done" : isCur ? "is-current" : open ? "" : "is-locked";
+        var pre = cel === l.id; // rendered as "current" first, flips to done during the celebration
+        var cls = pre ? "pre-done" : done ? "is-done" : isCur ? "is-current" : open ? "" : "is-locked";
         var stars = done ? done.stars : 0, starsHTML = "";
         if (done) { for (var s = 0; s < 3; s++) starsHTML += '<span class="' + (s < stars ? "" : "is-off") + '">' + icon("star") + "</span>"; }
-        html += '<div class="lnode' + (open ? "" : " is-locked") + '" style="transform:translateX(' + OFFSETS[n++ % OFFSETS.length] + 'px)">' +
+        var off = OFFSETS[n++ % OFFSETS.length];
+        html += '<div class="lnode' + (open ? "" : " is-locked") + (off > 0 ? " is-left" : "") + '" style="transform:translateX(' + off + 'rem)">' +
           '<button class="path__node ' + cls + '" data-lesson="' + l.id + '" aria-label="' + esc(l.title) + (open ? "" : " (zablokowane)") + '">' +
-          (isCur ? '<span class="path__label">Start</span>' : "") + icon(done ? "check" : open ? l.icon : "lock") + "</button>" +
-          (done ? '<span class="lnode__stars">' + starsHTML + "</span>" : "") +
+          (isCur ? '<span class="path__label' + (cel ? " is-waiting" : "") + '">Start</span>' : "") + icon(done && !pre ? "check" : open ? l.icon : "lock") + "</button>" +
+          (done ? '<span class="lnode__stars' + (pre ? " is-waiting" : "") + '">' + starsHTML + "</span>" : "") +
           '<span class="lnode__name">' + esc(l.title) + "</span>" +
-          (isCur ? '<span class="lnode__buddy"><span data-rudi data-mood="wink" data-bouncy></span><span class="bubble">Dasz radę!</span></span>' : "") +
+          (isCur ? '<span class="lnode__buddy' + (cel ? " is-waiting" : "") + '"><span data-rudi data-mood="wink" data-bouncy></span><span class="bubble">Dasz radę!</span></span>' : "") +
           "</div>";
       });
       var chestOpen = moduleDone(m), got = S.chests[m.id];
-      html += '<div class="lnode' + (chestOpen ? "" : " is-locked") + '" style="transform:translateX(' + OFFSETS[n++ % OFFSETS.length] + 'px)">' +
+      html += '<div class="lnode' + (chestOpen ? "" : " is-locked") + '" style="transform:translateX(' + OFFSETS[n++ % OFFSETS.length] + 'rem)">' +
         '<button class="path__node ' + (got ? "is-done" : chestOpen ? "" : "is-locked") + '" data-chest="' + m.id + '" aria-label="Skrzynia" style="' + (chestOpen && !got ? "--n-bg:var(--reward);--n-shade:var(--reward-shade)" : "") + '">' + icon("chest") + "</button>" +
         '<span class="lnode__name">' + (got ? "Otwarta" : "Skrzynia +20") + "</span></div>";
       html += "</div>";
     });
-    html += '<div class="speaker" style="justify-content:center;padding:24px 0"><span data-rudi data-mood="joy" style="--rudi-size:80px"></span><div class="bubble">Na końcu: Twój własny silnik JS!</div></div></div>';
+    html += '<div class="speaker" style="justify-content:center;padding:1.5rem 0"><span data-rudi data-mood="joy" style="--rudi-size:5rem"></span><div class="bubble">Na końcu: Twój własny silnik JS!</div></div></div>';
     mount(html, "path");
 
     main.querySelectorAll("[data-lesson]").forEach(function (b) {
@@ -117,19 +124,79 @@
     main.querySelectorAll("[data-guide]").forEach(function (b) {
       b.addEventListener("click", function () {
         var m = COURSE[+b.dataset.guide];
-        openModal('<div data-rudi data-mood="happy" style="--rudi-size:100px"></div><h2>Moduł ' + (+b.dataset.guide + 1) + ": " + esc(m.title) + "</h2>" +
-          '<p class="text-soft">' + esc(m.subtitle) + '</p><ul class="list" style="text-align:left;margin-bottom:16px">' +
+        openModal('<div data-rudi data-mood="happy" style="--rudi-size:6.25rem"></div><h2>Moduł ' + (+b.dataset.guide + 1) + ": " + esc(m.title) + "</h2>" +
+          '<p class="text-soft">' + esc(m.subtitle) + '</p><ul class="list" style="text-align:left;margin-bottom:1rem">' +
           m.lessons.map(function (l) { return '<li class="list__item"><span class="list__main">' + esc(l.title) + '</span><span class="list__meta">' + (S.done[l.id] ? "★".repeat(S.done[l.id].stars) : l.exercises.length + " zad.") + "</span></li>"; }).join("") +
           '</ul><button class="btn btn--block" data-close>Jasne</button>');
       });
     });
+    if (cel && main.querySelector(".path__node.pre-done")) { celebrateStep(main.querySelector(".path__node.pre-done")); return; }
     var curBtn = main.querySelector(".path__node.is-current");
     if (curBtn && curBtn.getBoundingClientRect().top > innerHeight * .8) curBtn.scrollIntoView({ block: "center" });
   }
 
+  /* Checkpoint celebration: ring fills -> node turns done + Rudi cheers -> Rudi hops to the next lesson. */
+  function celebrateStep(node) {
+    var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var from = node.closest(".lnode"), next = main.querySelector(".path__node.is-current");
+    var buddy = next && next.closest(".lnode").querySelector(".lnode__buddy");
+    var alive = function () { return node.isConnected; };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? Math.min(ms, 120) : ms); }); };
+
+    // floating Rudi starts where the buddy sits next to the finished node
+    // same spot a buddy would take: 1.125rem outside the ring, on the roomier side, vertically centred on the node
+    // ring = 0.75rem outside the node, buddy gap 1.125rem, Rudi 3.375rem (same as .lnode__buddy)
+    var u = remPx(), nr = node.getBoundingClientRect(), side = from.classList.contains("is-left") ? -1 : 1, size = 3.375 * u;
+    var cx = nr.left + nr.width / 2 + side * (nr.width / 2 + 0.75 * u + 1.125 * u + size / 2);
+    var walker = document.createElement("span");
+    walker.className = "rudi-walker";
+    walker.setAttribute("data-rudi", ""); walker.setAttribute("data-static", ""); walker.dataset.mood = "wink";
+    walker.style.left = toRem(cx - size / 2 + scrollX); walker.style.top = toRem(nr.top + nr.height / 2 - size / 2 + scrollY);
+    document.body.appendChild(walker);
+    R.setMood(walker, "wink");
+    node.scrollIntoView({ block: "center" });
+
+    wait(350).then(function () {
+      if (!alive()) return;
+      node.style.setProperty("--ring", 100);                 // 1. progress ring fills
+      return wait(900);
+    }).then(function () {
+      if (!alive()) return;
+      node.classList.remove("pre-done"); node.classList.add("is-done", "is-popping");   // 2. checkpoint done
+      node.innerHTML = icon("check");
+      var stars = from.querySelector(".lnode__stars"); if (stars) stars.classList.remove("is-waiting");
+      R.setMood(walker, "joy"); walker.firstChild.classList.add("is-mina-joy", "is-cheering");
+      R.confetti(45);
+      return wait(1400);
+    }).then(function () {
+      if (!alive()) return;
+      if (!buddy) { R.setMood(walker, "love"); return wait(1600); }   // course finished: no next checkpoint
+      var target = buddy.querySelector("[data-rudi]");
+      next.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+      var a = walker.getBoundingClientRect(), b = target.getBoundingClientRect();
+      var dx = b.left - a.left, dy = b.top - a.top, hops = Math.max(3, Math.round(Math.abs(dy) / (5.625 * remPx()))), frames = [];
+      for (var i = 0; i <= hops * 2; i++) {
+        var t = i / (hops * 2), lift = i % 2 ? -1.625 * remPx() : 0;
+        frames.push({ transform: "translate(" + toRem(dx * t) + "," + toRem(dy * t + lift) + ")" });
+      }
+      R.setMood(walker, "happy");
+      if (reduce || !walker.animate) return;
+      return new Promise(function (r) {
+        var anim = walker.animate(frames, { duration: Math.min(2600, 420 * hops), easing: "linear", fill: "forwards" });
+        anim.onfinish = r; anim.oncancel = r;
+      });
+    }).then(function () {
+      walker.remove();                                       // 3. Rudi arrives at the next checkpoint
+      if (!alive()) return;
+      if (buddy) buddy.classList.remove("is-waiting");
+      var label = next && next.querySelector(".path__label"); if (label) label.classList.remove("is-waiting");
+      if (buddy) R.toast("Następny przystanek: " + LESSONS[lessonIndex(next.dataset.lesson)].lesson.title);
+    });
+  }
+
   function noHearts() {
-    openModal('<div data-rudi data-mood="sad" style="--rudi-size:120px"></div><h2>Brak serc</h2><p class="text-soft">Serca odnawiają się codziennie. Możesz też je uzupełnić.</p>' +
-      '<div class="stack" style="--gap:10px">' +
+    openModal('<div data-rudi data-mood="curious" style="--rudi-size:7.5rem"></div><h2>Brak serc</h2><p class="text-soft">Serca odnawiają się codziennie. Możesz też je uzupełnić.</p>' +
+      '<div class="stack" style="--gap:0.625rem">' +
       '<button class="btn btn--info btn--block" id="refill"' + (S.gems < 30 ? " disabled" : "") + ">" + icon("gem") + "Uzupełnij za 30</button>" +
       '<a class="btn btn--ghost btn--block" href="#/play" data-close>Poćwicz na placu zabaw</a></div>');
     var r = document.getElementById("refill");
@@ -163,8 +230,8 @@
     setProgress();
 
     document.getElementById("quit").addEventListener("click", function () {
-      openModal('<div data-rudi data-mood="sad" style="--rudi-size:110px"></div><h2>Na pewno?</h2><p class="text-soft">Postęp tej lekcji przepadnie.</p>' +
-        '<div class="stack" style="--gap:10px"><button class="btn btn--block" data-close>Zostaję</button><button class="btn btn--ghost btn--block" id="reallyQuit">Wyjdź</button></div>');
+      openModal('<div data-rudi data-mood="curious" style="--rudi-size:6.875rem"></div><h2>Na pewno?</h2><p class="text-soft">Postęp tej lekcji przepadnie.</p>' +
+        '<div class="stack" style="--gap:0.625rem"><button class="btn btn--block" data-close>Zostaję</button><button class="btn btn--ghost btn--block" id="reallyQuit">Wyjdź</button></div>');
       document.getElementById("reallyQuit").addEventListener("click", function () { closeModal(); location.hash = "#/"; });
     });
 
@@ -172,7 +239,7 @@
       var ex = exs[queue[0]]; state = { kind: ex.kind, value: null, placed: [] };
       var kindLabel = { choice: "Wybierz odpowiedź", order: "Ułóż w kolejności", input: "Wpisz wynik" }[ex.kind];
       var h = '<span class="lesson__kind">' + kindLabel + (attempts[queue[0]] ? " · powtórka" : "") + "</span>" +
-        '<div class="speaker"><span data-rudi data-mood="happy" id="lr" style="--rudi-size:72px"></span><div class="bubble"><p class="lesson__q">' + esc(ex.q) + "</p></div></div>";
+        '<div class="speaker"><span data-rudi data-mood="happy" id="lr" style="--rudi-size:4.5rem"></span><div class="bubble"><p class="lesson__q">' + esc(ex.q) + "</p></div></div>";
       if (ex.code) h += codeCard(ex.code, ex.kind === "input" && /PUSH/.test(ex.code) ? "bytecode.txt" : "engine_input.js");
       if (ex.kind === "choice") {
         h += '<div class="choices" data-choices>' + ex.options.map(function (o, i) {
@@ -239,7 +306,7 @@
       else { attempts[qi] = (attempts[qi] || 0) + 1; S.hearts = Math.max(0, S.hearts - 1); save(); document.getElementById("lh").textContent = S.hearts; queue.push(queue.shift()); }
       attempts[qi] = attempts[qi] || 0;
 
-      R.setMood(document.getElementById("lr"), ok ? "joy" : "sad");
+      R.setMood(document.getElementById("lr"), ok ? "joy" : "curious");
       document.getElementById("sIcon").innerHTML = icon(ok ? "check" : "close");
       document.getElementById("sTitle").textContent = ok ? ["Świetnie!", "Dokładnie!", "Brawo!", "Tak jest!"][Math.floor(Math.random() * 4)] : "Poprawnie: " + correctText(ex);
       document.getElementById("sExplain").textContent = ex.explain || "";
@@ -261,6 +328,7 @@
       var stars = acc === 100 ? 3 : acc >= 75 ? 2 : 1;
       var xp = 10 + (acc === 100 ? 5 : 0);
       var prev = S.done[L.id];
+      if (!prev) celebrate = L.id;                            // first completion: animate on the path
       S.done[L.id] = { stars: Math.max(stars, prev ? prev.stars : 0) };
       S.xp += xp; S.gems += 5;
       if (S.lastDay !== today()) { S.streak = S.lastDay === yesterday() ? S.streak + 1 : 1; S.lastDay = today(); }
@@ -286,9 +354,9 @@
     var r = lastResult;
     if (!r) { location.hash = "#/"; return; }
     var mm = Math.floor(r.secs / 60), ss = ("0" + (r.secs % 60)).slice(-2), starsHTML = "";
-    for (var s = 0; s < 3; s++) starsHTML += '<span style="color:' + (s < r.stars ? "var(--reward)" : "var(--line-strong)") + ';width:40px">' + icon("star") + "</span>";
+    for (var s = 0; s < 3; s++) starsHTML += '<span style="color:' + (s < r.stars ? "var(--reward)" : "var(--line-strong)") + ';width:2.5rem">' + icon("star") + "</span>";
     mount('<div class="done"><div data-rudi data-mood="joy" data-bouncy></div><h1>Lekcja ukończona!</h1><p class="text-soft" style="margin:0">' + esc(r.title) + "</p>" +
-      '<div class="row" style="justify-content:center;--gap:4px">' + starsHTML + "</div>" +
+      '<div class="row" style="justify-content:center;--gap:0.25rem">' + starsHTML + "</div>" +
       '<div class="done__stats">' +
       '<div class="dstat dstat--xp"><div class="dstat__h">XP</div><div class="dstat__v">' + icon("bolt") + r.xp + "</div></div>" +
       '<div class="dstat dstat--time"><div class="dstat__h">Czas</div><div class="dstat__v">' + icon("clock") + mm + ":" + ss + "</div></div>" +
@@ -312,8 +380,8 @@
   var astHTML = V.astHTML;
 
   function viewPlay() {
-    mount(topbar("Plac zabaw") + '<div class="view stack" style="padding-top:16px">' +
-      '<div class="speaker"><span data-rudi data-mood="wink" style="--rudi-size:64px"></span><div class="bubble">Wpisz kod i zobacz, jak silnik Rudi.js go przetwarza!</div></div>' +
+    mount(topbar("Plac zabaw") + '<div class="view stack" style="padding-top:1rem">' +
+      '<div class="speaker"><span data-rudi data-mood="wink" style="--rudi-size:4rem"></span><div class="bubble">Wpisz kod i zobacz, jak silnik Rudi.js go przetwarza!</div></div>' +
       '<div class="chips">' + EXAMPLES.map(function (x, i) { return '<button class="btn btn--ghost btn--sm" data-ex="' + i + '">' + esc(x.name) + "</button>"; }).join("") + "</div>" +
       '<div class="code"><div class="code__bar"><i></i><i></i><i></i>main.js<span class="code__tag">RudiScript</span></div>' +
       '<div class="editor"><pre id="hl" aria-hidden="true"></pre><textarea id="src" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Kod źródłowy"></textarea></div></div>' +
@@ -334,7 +402,7 @@
       if (playTab === "tokens") {
         h = tokens ? '<div class="tokens-list">' + tokens.filter(function (t) { return t.type !== "eof"; }).map(function (t, i) {
           return tileHTML({ t: t.type === "string" ? t.raw : t.value, type: t.type }, i, "tabindex=\"-1\"");
-        }).join("") + '</div><p class="text-mute" style="margin:12px 0 0;font-size:.8125rem">' + (tokens.length - 1) + " tokenów + EOF</p>" : "";
+        }).join("") + '</div><p class="text-mute" style="margin:0.75rem 0 0;font-size:.8125rem">' + (tokens.length - 1) + " tokenów + EOF</p>" : "";
       } else if (playTab === "ast") {
         h = ast ? '<div class="ast"><ul>' + astHTML(ast) + "</ul></div>" : "";
       } else {
@@ -344,7 +412,7 @@
           }).join("") + "</ol></div>";
         }).join("") + "</div>" : "";
       }
-      if (err) h += '<div class="console" style="margin-top:' + (h ? "12px" : "0") + '"><div class="console__line is-error">' + esc((err.stage === "lexer" ? "Lekser" : "Parser") + ": " + err.message + (err.pos ? " (linia " + err.pos.line + ", kol. " + err.pos.col + ")" : "")) + "</div></div>";
+      if (err) h += '<div class="console" style="margin-top:' + (h ? "0.75rem" : "0") + '"><div class="console__line is-error">' + esc((err.stage === "lexer" ? "Lekser" : "Parser") + ": " + err.message + (err.pos ? " (linia " + err.pos.line + ", kol. " + err.pos.col + ")" : "")) + "</div></div>";
       panel.innerHTML = h;
     }
     var t;
@@ -382,12 +450,12 @@
   ];
   function viewRank() {
     var list = RIVALS.concat([{ n: "Ty", xp: S.xp, c: "var(--primary)", me: true }]).sort(function (a, b) { return b.xp - a.xp; });
-    mount(topbar("Ranking") + '<div class="view stack" style="padding-top:20px">' +
-      '<div class="card card--tint center"><div class="medal medal--fox" style="margin:0 auto 10px">' + '<span style="width:36px">' + icon("trophy") + "</span></div>" +
-      '<h2 style="margin:0">Liga Bytecode</h2><p class="text-soft" style="margin:4px 0 0">Top 3 awansują do Ligi JIT</p></div>' +
+    mount(topbar("Ranking") + '<div class="view stack" style="padding-top:1.25rem">' +
+      '<div class="card card--tint center"><div class="medal medal--fox" style="margin:0 auto 0.625rem">' + '<span style="width:2.25rem">' + icon("trophy") + "</span></div>" +
+      '<h2 style="margin:0">Liga Bytecode</h2><p class="text-soft" style="margin:0.25rem 0 0">Top 3 awansują do Ligi JIT</p></div>' +
       '<div class="card"><ul class="list">' + list.map(function (p, i) {
         return '<li class="list__item' + (p.me ? " is-me" : "") + '"><span class="list__rank"' + (i < 3 ? ' style="color:var(--reward-shade)"' : "") + ">" + (i + 1) + "</span>" +
-          '<span class="avatar" style="--avatar-c:' + p.c + '">' + (p.me ? '<span data-rudi data-mood="happy" style="--rudi-size:34px"></span>' : esc(p.n.slice(0, 1) + p.n.split(" ")[1].slice(0, 1))) + "</span>" +
+          '<span class="avatar" style="--avatar-c:' + p.c + '">' + (p.me ? '<span data-rudi data-mood="happy" style="--rudi-size:2.125rem"></span>' : esc(p.n.slice(0, 1) + p.n.split(" ")[1].slice(0, 1))) + "</span>" +
           '<span class="list__main">' + esc(p.n) + '</span><span class="list__meta">' + p.xp + " XP</span></li>";
       }).join("") + "</ul></div></div>", "rank");
   }
@@ -403,18 +471,18 @@
       '<div class="kpi" style="color:var(--c-sun-600)">' + icon("bolt") + '<div><b style="color:var(--ink)">' + S.xp + "</b><span>XP łącznie</span></div></div>" +
       '<div class="kpi" style="color:var(--c-sky-500)">' + icon("gem") + '<div><b style="color:var(--ink)">' + S.gems + "</b><span>klejnoty</span></div></div>" +
       '<div class="kpi" style="color:var(--c-teal-500)">' + icon("check") + '<div><b style="color:var(--ink)">' + doneCount + "/" + LESSONS.length + "</b><span>lekcji</span></div></div></div>" +
-      '<h2 style="margin:12px 0 0">Odznaki</h2><div class="card"><div class="medals">' + COURSE.map(function (m) {
+      '<h2 style="margin:0.75rem 0 0">Odznaki</h2><div class="card"><div class="medals">' + COURSE.map(function (m) {
         var ok = moduleDone(m);
-        return '<figure><div class="medal medal--' + medalColor[m.color] + (ok ? "" : " is-locked") + '"><span style="width:34px">' + icon(ok ? "star" : "lock") + "</span></div>" + esc(m.title) + "</figure>";
+        return '<figure><div class="medal medal--' + medalColor[m.color] + (ok ? "" : " is-locked") + '"><span style="width:2.125rem">' + icon(ok ? "star" : "lock") + "</span></div>" + esc(m.title) + "</figure>";
       }).join("") + "</div></div>" +
-      '<h2 style="margin:12px 0 0">Ustawienia</h2><div class="card stack" style="--gap:14px">' +
+      '<h2 style="margin:0.75rem 0 0">Ustawienia</h2><div class="card stack" style="--gap:0.875rem">' +
       '<label class="switch"><input type="checkbox" id="dark"' + (R.isDark() ? " checked" : "") + '><span class="switch__track"></span>Tryb ciemny</label>' +
       '<a class="btn btn--ghost btn--block" href="design-system.html">Design system</a>' +
       '<button class="btn btn--danger btn--block" id="reset">Resetuj postęp</button></div></div>', "profile");
     document.getElementById("dark").addEventListener("change", function () { R.theme(this.checked ? "dark" : "light"); });
     document.getElementById("reset").addEventListener("click", function () {
-      openModal('<div data-rudi data-mood="wow" style="--rudi-size:110px"></div><h2>Zresetować postęp?</h2><p class="text-soft">Stracisz XP, serię i ukończone lekcje.</p>' +
-        '<div class="stack" style="--gap:10px"><button class="btn btn--danger btn--block" id="doReset">Tak, resetuj</button><button class="btn btn--ghost btn--block" data-close>Anuluj</button></div>');
+      openModal('<div data-rudi data-mood="wow" style="--rudi-size:6.875rem"></div><h2>Zresetować postęp?</h2><p class="text-soft">Stracisz XP, serię i ukończone lekcje.</p>' +
+        '<div class="stack" style="--gap:0.625rem"><button class="btn btn--danger btn--block" id="doReset">Tak, resetuj</button><button class="btn btn--ghost btn--block" data-close>Anuluj</button></div>');
       document.getElementById("doReset").addEventListener("click", function () { S = fresh(); save(); closeModal(); R.toast("Postęp wyczyszczony"); viewProfile(); });
     });
   }
