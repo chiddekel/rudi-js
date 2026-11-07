@@ -93,6 +93,17 @@ flowchart LR
     AST --> CMP["⚙️ Kompilator<br/>compile()"]
     CMP --> BC["Bytecode<br/>PUSH_CONST 40 …"]
     INT --> OUT["✅ Wynik<br/>42"]
+
+    classDef src fill:#F1E6DB,stroke:#B4A295,stroke-width:2px,color:#3A2A21
+    classDef lex fill:#D3F5F0,stroke:#14B3A2,stroke-width:2px,color:#0C5F56
+    classDef par fill:#FFF2CC,stroke:#DB9A00,stroke-width:2px,color:#6B4A00
+    classDef cmp fill:#ECE5FF,stroke:#8D6BEE,stroke-width:2px,color:#4A2FA0
+    classDef run fill:#FFE3D2,stroke:#E8622C,stroke-width:2px,color:#9C3510
+    class SRC src
+    class LEX,TOK lex
+    class PAR,AST par
+    class CMP,BC cmp
+    class INT,OUT run
 ```
 
 Cały silnik (`js/engine.js`) to ~340 linii czytelnego JS, który możesz rozebrać na części:
