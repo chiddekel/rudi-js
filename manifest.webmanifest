@@ -1,7 +1,7 @@
 {
   "name": "Rudi.js: zbuduj silnik JavaScript",
   "short_name": "Rudi.js",
-  "start_url": "./index.html",
+  "start_url": "./app.html",
   "display": "standalone",
   "background_color": "#FFF9F3",
   "theme_color": "#E8622C",

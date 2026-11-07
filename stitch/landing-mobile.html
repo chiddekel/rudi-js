@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html lang="pl"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rudi.js — Zbuduj własny silnik JavaScript od podstaw</title>
+<!-- Google Fonts: Nunito & Nunito Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,300..1000;1,6..12,300..1000&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#004840",
+            "on-primary": "#ffefeb",
+            "tertiary": "#765600",
+            "inverse-on-surface": "#a09c97",
+            "background": "#fbf5f0",
+            "on-surface-variant": "#5e5b57",
+            "primary": "#a43600",
+            "on-error-container": "#570008",
+            "surface-container-highest": "#e2dcd5",
+            "on-error": "#ffefee",
+            "surface-container-low": "#f6f0e9",
+            "tertiary-fixed": "#fabd29",
+            "primary-container": "#ff7945",
+            "inverse-surface": "#0f0e0b",
+            "on-background": "#302e2b",
+            "on-tertiary-fixed": "#3b2900",
+            "on-surface": "#302e2b",
+            "surface": "#fbf5f0",
+            "surface-tint": "#a43600",
+            "error-dim": "#9f0519",
+            "on-primary-fixed": "#000000",
+            "surface-container": "#ede7e1",
+            "on-tertiary": "#fff1dc",
+            "error-container": "#fb5151",
+            "surface-dim": "#d9d3cc",
+            "error": "#b31b25",
+            "on-tertiary-container": "#543c00",
+            "surface-bright": "#fbf5f0",
+            "tertiary-dim": "#684b00",
+            "primary-fixed": "#ff7945",
+            "inverse-primary": "#f96e37",
+            "secondary-container": "#74f8e5",
+            "outline": "#7a7672",
+            "surface-container-high": "#e8e2db",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#f26933",
+            "secondary-fixed": "#74f8e5",
+            "secondary-dim": "#005a51",
+            "on-secondary-container": "#005c53",
+            "tertiary-container": "#fabd29",
+            "on-tertiary-fixed-variant": "#5f4500",
+            "tertiary-fixed-dim": "#ebaf17",
+            "secondary": "#00675d",
+            "outline-variant": "#b1aca7",
+            "on-primary-fixed-variant": "#541700",
+            "secondary-fixed-dim": "#65e9d7",
+            "on-secondary-fixed-variant": "#00675d",
+            "on-secondary": "#c0fff3",
+            "on-primary-container": "#441100",
+            "primary-dim": "#902e00",
+            "surface-variant": "#e2dcd5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1.25rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "headline": ["Nunito Sans", "sans-serif"],
+            "display": ["Nunito Sans", "sans-serif"],
+            "body": ["Nunito Sans", "sans-serif"],
+            "label": ["Nunito Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background-color: #fbf5f0;
+      color: #302e2b;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Smooth 3D click interactions */
+    .btn-3d {
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    .btn-3d:active {
+      transform: translateY(4px);
+    }
+    .btn-primary-3d {
+      box-shadow: 0 4px 0 0 #a43600;
+    }
+    .btn-primary-3d:active {
+      box-shadow: 0 0px 0 0 #a43600;
+    }
+    .btn-card-3d {
+      box-shadow: 0 4px 0 0 #e2dcd5;
+    }
+    .btn-teal-3d {
+      box-shadow: 0 4px 0 0 #005a51;
+    }
+    .btn-teal-3d:active {
+      box-shadow: 0 0px 0 0 #005a51;
+    }
+    .btn-sun-3d {
+      box-shadow: 0 4px 0 0 #684b00;
+    }
+    .btn-sun-3d:active {
+      box-shadow: 0 0px 0 0 #684b00;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- STICKY TOP APP BAR (Shared Component Anchor) -->
+<header class="docked full-width top-0 sticky z-50 bg-surface border-b-2 border-outline-variant shadow-[0_4px_0_0_#b1aca7]">
+<div class="flex justify-between items-center w-full px-4 py-3 max-w-md mx-auto">
+<a class="flex items-center gap-2 font-headline font-black text-xl text-primary tracking-tight group" href="#">
+<img alt="Rudi Logo" class="w-9 h-9 object-contain drop-shadow-sm group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/ALJJyrB0JDWhoDoppbdAAuIpiGkMVm6b5lrtAQ0GkMNzdx_T7xMcYIQL8LyTUJi-MRo_e9eyb8XkZLEHzXBSxA2pkqLvf8oWVzuEX7RNi1WOARtRAJc-vdHNU6xG2Rj4P5bdyqfVDrh1e3L6apt-ep6uLljPPtqXZt98VYKuXPSniiG4r19aihWA3GvjhAkY7TIT0xR-BOFwnEiNZXfpOPXyL4ZRb7Hn3yGoIJFh_konbXhE-Mi3ZxxkVqOS-Q"/>
+<span class="flex items-center gap-1">
+          Rudi<span class="text-on-surface-variant font-extrabold text-base">.js</span>
+</span>
+</a>
+<div class="flex items-center gap-2">
+<a class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-on-surface border border-outline-variant hover:bg-surface-container-high transition-colors" href="#github">
+<span class="material-symbols-outlined text-lg">code</span>
+</a>
+<a class="btn-3d btn-primary-3d bg-primary-container text-on-primary font-headline font-black text-sm px-4 py-2 rounded-xl flex items-center gap-1 active:translate-y-1" href="#kurs">
+<span>Start</span>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER (Mobile-First Canvas) -->
+<main class="w-full max-w-md mx-auto px-4 pt-4 pb-20 space-y-8">
+<!-- HERO SECTION -->
+<section class="flex flex-col items-center text-center pt-2">
+<!-- Badge Pill -->
+<div class="inline-flex items-center gap-1.5 bg-surface-container border-2 border-outline-variant rounded-full px-3.5 py-1 text-xs font-headline font-black text-primary mb-4 shadow-[0_2px_0_0_#b1aca7]">
+<span class="material-symbols-outlined fill text-sm text-primary">local_fire_department</span>
+<span>W 100% BEZPŁATNY &amp; OPEN-SOURCE</span>
+</div>
+<!-- Main Title -->
+<h1 class="font-headline font-black text-3xl sm:text-4xl text-on-surface leading-[1.15] tracking-tight mb-3">
+        Zbuduj własny silnik <span class="text-primary underline decoration-primary-container decoration-wavy decoration-2">JavaScript</span>.
+      </h1>
+<!-- Subtitle -->
+<p class="font-body font-semibold text-on-surface-variant text-sm sm:text-base leading-relaxed max-w-xs mb-6">
+        Od pustego pliku do parsowania, AST i Bytecode VM. Praktyczny, zgrywalizowany kurs krok po kroku z uroczą maskotką Rudi.
+      </p>
+<!-- CTA Buttons -->
+<div class="w-full flex flex-col gap-3 mb-6">
+<a class="btn-3d btn-primary-3d w-full bg-primary-container text-on-primary font-headline font-black text-lg py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2" href="#kurs">
+<span>Zacznij za darmo 🚀</span>
+</a>
+<a class="btn-3d btn-card-3d w-full bg-surface-container-lowest text-on-surface border-2 border-outline-variant font-headline font-black text-sm py-3 px-6 rounded-2xl flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors" href="https://github.com" target="_blank">
+<span class="material-symbols-outlined text-base">star</span>
+<span>Zobacz na GitHubie ⭐ (2.4k)</span>
+</a>
+</div>
+<!-- Hero Visual Interactive Mockup -->
+<div class="w-full relative mt-2">
+<div class="bg-surface-container-lowest border-2 border-outline-variant rounded-3xl p-4 shadow-[0_4px_0_0_#e2dcd5] text-left">
+<!-- Mockup Top Bar -->
+<div class="flex items-center justify-between pb-3 border-b-2 border-surface-container">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="w-3 h-3 rounded-full bg-tertiary-container"></span>
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span>
+<span class="text-xs font-mono font-bold text-on-surface-variant ml-1">Lekcja 01: Lekser</span>
+</div>
+<span class="inline-flex items-center gap-1 text-[11px] font-black text-secondary bg-secondary-container/40 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-xs">bolt</span> +20 XP
+            </span>
+</div>
+<!-- Code Snippet -->
+<div class="my-3 p-3 rounded-xl bg-[#2A1F19] text-surface-bright font-mono text-xs shadow-inner">
+<div class="text-outline-variant">// Wejście do zbadania:</div>
+<div class="mt-1">
+<span class="text-[#FF7945] font-bold">let</span> <span class="text-[#FABD29]">x</span> <span class="text-white">=</span> <span class="text-[#74F8E5] font-bold">40</span> <span class="text-white">+</span> <span class="text-[#74F8E5] font-bold">2</span><span class="text-white">;</span>
+</div>
+</div>
+<!-- Token Tiles Grid -->
+<div class="text-[11px] font-headline font-black text-on-surface-variant mb-1.5 flex items-center justify-between">
+<span>WYGENEROWANE TOKENY:</span>
+<span class="text-secondary font-black flex items-center gap-0.5">
+<span class="material-symbols-outlined text-xs">check_circle</span> 100% Poprawnie
+            </span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-1 rounded-lg bg-primary-container/20 border border-primary text-primary font-mono text-[11px] font-bold shadow-[0_2px_0_0_#a43600]">
+              KEYWORD: "let"
+            </span>
+<span class="px-2 py-1 rounded-lg bg-tertiary-container/30 border border-tertiary text-on-tertiary-container font-mono text-[11px] font-bold shadow-[0_2px_0_0_#765600]">
+              IDENT: "x"
+            </span>
+<span class="px-2 py-1 rounded-lg bg-surface-container border border-outline text-on-surface font-mono text-[11px] font-bold shadow-[0_2px_0_0_#b1aca7]">
+              ASSIGN: "="
+            </span>
+<span class="px-2 py-1 rounded-lg bg-secondary-container/40 border border-secondary text-secondary font-mono text-[11px] font-bold shadow-[0_2px_0_0_#00675d]">
+              NUM: "40"
+            </span>
+<span class="px-2 py-1 rounded-lg bg-surface-container border border-outline text-on-surface font-mono text-[11px] font-bold shadow-[0_2px_0_0_#b1aca7]">
+              PLUS: "+"
+            </span>
+<span class="px-2 py-1 rounded-lg bg-secondary-container/40 border border-secondary text-secondary font-mono text-[11px] font-bold shadow-[0_2px_0_0_#00675d]">
+              NUM: "2"
+            </span>
+</div>
+</div>
+<!-- Rudi Mascot floating badge -->
+<div class="flex items-center justify-center -mt-5">
+<div class="bg-surface-container-lowest border-2 border-outline-variant px-3 py-1.5 rounded-2xl shadow-[0_3px_0_0_#e2dcd5] flex items-center gap-2">
+<img alt="Rudi Pomocnik" class="w-10 h-10 object-contain drop-shadow" src="https://lh3.googleusercontent.com/aida/ALJJyrC2sV7bPb6KTH-3FIh2Qaxw1Z1LFjDFDu5l0sshDHcadFjG_PvbGi3XG6C1cUXSzz4ha3g1ZjgXt_qR7qt9YC92jnKDNTz3NX8-B-5tcn0kqS9lsSkiHk21ojaWuEIXQ_j7DfKqDrAxibxCKAHM6t60n1gMn8v_RRrh-gAxtofzNMIAfQTmijZAmxPT1IeQItpQROni_zJ5x_TXPr9PxMVRhfN-hS3W4x5PtnQiY-se8uanEAyri__gXtY"/>
+<div class="text-left">
+<p class="font-headline font-black text-xs text-primary">Rudi podpowiada:</p>
+<p class="font-body font-bold text-[11px] text-on-surface-variant">Lekser przekształcił ciąg znaków w 6 atomowych tokenów!</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- STATS STRIP -->
+<section class="grid grid-cols-2 gap-2.5">
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_4px_0_0_#e2dcd5] text-center">
+<span class="font-headline font-black text-2xl text-primary block">6</span>
+<span class="font-headline font-bold text-xs text-on-surface-variant">Modułów wiedzy</span>
+</div>
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_4px_0_0_#e2dcd5] text-center">
+<span class="font-headline font-black text-2xl text-secondary block">15</span>
+<span class="font-headline font-bold text-xs text-on-surface-variant">Krótkich lekcji</span>
+</div>
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_4px_0_0_#e2dcd5] text-center">
+<span class="font-headline font-black text-2xl text-tertiary-fixed-dim block">44</span>
+<span class="font-headline font-bold text-xs text-on-surface-variant">Zadania i quizy</span>
+</div>
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_4px_0_0_#e2dcd5] text-center">
+<span class="font-headline font-black text-2xl text-on-surface block">0</span>
+<span class="font-headline font-bold text-xs text-on-surface-variant">Zależności (Zero npm)</span>
+</div>
+</section>
+<!-- JAK TO DZIAŁA -->
+<section class="space-y-3">
+<div class="text-center mb-2">
+<h2 class="font-headline font-black text-2xl text-on-surface">Jak to działa?</h2>
+<p class="font-body font-semibold text-xs text-on-surface-variant">Trzy proste kroki do zbudowania pełnego kompilatora</p>
+</div>
+<!-- Krok 1 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5] flex gap-3.5 items-start">
+<div class="w-10 h-10 rounded-2xl bg-primary-container text-on-primary font-headline font-black text-base flex items-center justify-center shrink-0 shadow-[0_3px_0_0_#a43600]">
+          1
+        </div>
+<div>
+<h3 class="font-headline font-black text-base text-on-surface">Ucz się w 5 minut dziennie</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+            Mikrolekcje dopasowane do smartfona. Rozwiązuj łamigłówki kodowania w drodze do pracy lub szkoły bez zbędnej teorii.
+          </p>
+</div>
+</div>
+<!-- Krok 2 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5] flex gap-3.5 items-start">
+<div class="w-10 h-10 rounded-2xl bg-secondary-container text-on-secondary-container font-headline font-black text-base flex items-center justify-center shrink-0 shadow-[0_3px_0_0_#005c53]">
+          2
+        </div>
+<div>
+<h3 class="font-headline font-black text-base text-on-surface">Układaj tokeny i drzewa AST</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+            Wizualizuj parsowanie Pratta metodą drag-and-drop. Obserwuj jak gramatyka przekształca się w hierarchiczne węzły logiczne.
+          </p>
+</div>
+</div>
+<!-- Krok 3 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5] flex gap-3.5 items-start">
+<div class="w-10 h-10 rounded-2xl bg-tertiary-container text-on-tertiary-container font-headline font-black text-base flex items-center justify-center shrink-0 shadow-[0_3px_0_0_#765600]">
+          3
+        </div>
+<div>
+<h3 class="font-headline font-black text-base text-on-surface">Uruchamiaj w Placu zabaw</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+            Kompiluj kod na żywo do Bytecode. Zobacz jak Twoja własna wirtualna maszyna wykonuje opkody i zwraca wynik do konsoli.
+          </p>
+</div>
+</div>
+</section>
+<!-- PIPELINE DIAGRAM SILNIKA -->
+<section class="bg-surface-container border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#b1aca7]">
+<div class="text-center mb-4">
+<span class="font-headline font-black text-[11px] text-primary uppercase tracking-wider">Architektura Rudi.js</span>
+<h2 class="font-headline font-black text-xl text-on-surface mt-0.5">Pipeline Wykonania JS</h2>
+</div>
+<div class="flex flex-col items-center gap-2">
+<!-- Node 1 -->
+<div class="w-full bg-surface-container-lowest border-2 border-outline-variant py-2.5 px-3 rounded-2xl text-center shadow-[0_3px_0_0_#e2dcd5]">
+<span class="font-mono text-xs font-black text-on-surface">Kod źródłowy JS: `let x = 40 + 2;`</span>
+</div>
+<span class="material-symbols-outlined text-primary text-xl">arrow_downward</span>
+<!-- Node 2 -->
+<div class="w-full bg-primary-container text-on-primary py-2.5 px-3 rounded-2xl text-center shadow-[0_3px_0_0_#a43600]">
+<span class="font-headline font-black text-xs">🏷️ Lekser ➔ Strumień Tokenów</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-xl">arrow_downward</span>
+<!-- Node 3 -->
+<div class="w-full bg-secondary text-on-secondary py-2.5 px-3 rounded-2xl text-center shadow-[0_3px_0_0_#004840]">
+<span class="font-headline font-black text-xs">🌳 Parser Pratta ➔ Drzewo AST</span>
+</div>
+<span class="material-symbols-outlined text-tertiary-fixed-dim text-xl">arrow_downward</span>
+<!-- Node 4 -->
+<div class="w-full bg-tertiary-container text-on-tertiary-container py-2.5 px-3 rounded-2xl text-center shadow-[0_3px_0_0_#765600]">
+<span class="font-headline font-black text-xs">⚡ Maszyna Wirtualna (Bytecode VM)</span>
+</div>
+<span class="material-symbols-outlined text-on-surface text-xl">arrow_downward</span>
+<!-- Node 5 -->
+<div class="w-full bg-[#2A1F19] text-[#74F8E5] py-2.5 px-3 rounded-2xl text-center shadow-[0_3px_0_0_#000000]">
+<span class="font-mono text-xs font-black">🎯 Wynik stdout: `42` (0.4ms)</span>
+</div>
+</div>
+</section>
+<!-- MODULE ROADMAP -->
+<section class="space-y-3.5" id="kurs">
+<div class="text-center mb-2">
+<span class="font-headline font-black text-[11px] text-secondary uppercase tracking-wider">Plan Nauki</span>
+<h2 class="font-headline font-black text-2xl text-on-surface">Program 6 Modułów</h2>
+<p class="font-body font-semibold text-xs text-on-surface-variant">Przejdź od zera do własnego silnika z JIT</p>
+</div>
+<!-- Moduł 1 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-primary-container text-on-primary font-headline font-black text-xs shadow-[0_2px_0_0_#a43600]">
+            Moduł 01
+          </span>
+<span class="font-headline font-black text-xs text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 45 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Lekser i Tokenizacja</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Konwersja surowego tekstu na czytelne żetony (tokens): słowa kluczowe, identyfikatory, literały liczb i operatory arytmetyczne.
+        </p>
+</div>
+<!-- Moduł 2 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-secondary text-on-secondary font-headline font-black text-xs shadow-[0_2px_0_0_#004840]">
+            Moduł 02
+          </span>
+<span class="font-headline font-black text-xs text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 60 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Parser Pratta &amp; Drzewo AST</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Zrozumienie priorytetów operatorów (precedence climbing), tworzenie węzłów BinaryExpression i budowa hierarchii kodu.
+        </p>
+</div>
+<!-- Moduł 3 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-[#3AA6F0] text-white font-headline font-black text-xs shadow-[0_2px_0_0_#1E7BB8]">
+            Moduł 03
+          </span>
+<span class="font-headline font-black text-xs text-[#1E7BB8] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 50 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Interpreter Tree-Walking</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Spacer po drzewie AST. Dynamiczna ewaluacja, tablica środowiska zmiennych (Environment Scope) oraz obsługa domknięć (closures).
+        </p>
+</div>
+<!-- Moduł 4 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-[#8D6BEE] text-white font-headline font-black text-xs shadow-[0_2px_0_0_#6246B5]">
+            Moduł 04
+          </span>
+<span class="font-headline font-black text-xs text-[#6246B5] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 80 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Maszyna Wirtualna (Bytecode VM)</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Kompilacja AST do liniowego kodu bajtowego. Tworzenie maszyny stosowej: OP_LOAD, OP_ADD, OP_JUMP_IF_FALSE i ramki wywołań.
+        </p>
+</div>
+<!-- Moduł 5 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-tertiary-container text-on-tertiary-container font-headline font-black text-xs shadow-[0_2px_0_0_#765600]">
+            Moduł 05
+          </span>
+<span class="font-headline font-black text-xs text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 45 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Zarządzanie Pamięcią i GC</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Alokacja obiektów na stercie i własny Garbage Collector w oparciu o algorytm Mark-and-Sweep. Unikanie wycieków pamięci.
+        </p>
+</div>
+<!-- Moduł 6 -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded-xl bg-[#10B981] text-white font-headline font-black text-xs shadow-[0_2px_0_0_#047857]">
+            Moduł 06
+          </span>
+<span class="font-headline font-black text-xs text-[#047857] flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span> 70 min
+          </span>
+</div>
+<h3 class="font-headline font-black text-lg text-on-surface">Wstęp do Kompilatora JIT</h3>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-1 leading-normal">
+          Detekcja "gorących funkcji" (hot loops), profilowanie typów w locie i wstęp do emitowania natywnego kodu maszynowego.
+        </p>
+</div>
+</section>
+<!-- PLAC ZABAW SHOWCASE (Interactive Playground Preview) -->
+<section class="bg-surface-container-lowest border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#e2dcd5]">
+<div class="flex items-center justify-between mb-3">
+<div>
+<span class="font-headline font-black text-[11px] text-primary uppercase">Podgląd na żywo</span>
+<h2 class="font-headline font-black text-xl text-on-surface">Plac Zabaw Rudi.js</h2>
+</div>
+<span class="material-symbols-outlined text-secondary-dim text-2xl">terminal</span>
+</div>
+<!-- Terminal Mock -->
+<div class="rounded-2xl bg-[#2A1F19] text-white p-3.5 font-mono text-xs shadow-inner">
+<div class="flex items-center justify-between pb-2 border-b border-white/10 text-white/50 text-[10px]">
+<span>editor.js</span>
+<span class="text-[#74F8E5]">Bytecode Ready</span>
+</div>
+<div class="pt-2">
+<span class="text-[#FF7945] font-bold">const</span> a = <span class="text-[#FABD29]">40</span> + <span class="text-[#FABD29]">2</span>;<br/>
+          console.<span class="text-[#74F8E5]">log</span>(a);
+        </div>
+<!-- AST Visual in Playground -->
+<div class="mt-3 p-2 bg-white/5 rounded-xl border border-white/10 text-[11px]">
+<span class="text-white/40 block text-[9px] uppercase font-bold tracking-wider">Wygenerowane AST:</span>
+<div class="text-[#FABD29] font-bold mt-0.5">Program</div>
+<div class="pl-3 text-[#FF7945]">└─ VariableDeclaration (const a)</div>
+<div class="pl-6 text-[#74F8E5]">└─ BinaryExpression (+)</div>
+<div class="pl-9 text-white/70">├─ Literal (40)</div>
+<div class="pl-9 text-white/70">└─ Literal (2)</div>
+</div>
+<!-- Terminal Output -->
+<div class="mt-3 pt-2 border-t border-white/10 flex items-center justify-between">
+<span class="text-secondary font-bold flex items-center gap-1">
+<span class="text-white/40">&gt;</span> 42
+          </span>
+<span class="text-[10px] text-white/40 font-sans font-bold">Kompilacja: 0.4ms</span>
+</div>
+</div>
+<p class="font-body font-semibold text-xs text-on-surface-variant mt-3 text-center">
+        Testuj i modyfikuj gramatykę bezpośrednio w przeglądarce!
+      </p>
+</section>
+<!-- GRYWALIZACJA (Gamification Features) -->
+<section class="space-y-3">
+<div class="text-center mb-1">
+<span class="font-headline font-black text-[11px] text-tertiary-fixed-dim uppercase tracking-wider">Motywacja</span>
+<h2 class="font-headline font-black text-2xl text-on-surface">Ucz się jak w grze</h2>
+<p class="font-body font-semibold text-xs text-on-surface-variant">Mechanizmy, które nie pozwolą Ci odpuścić</p>
+</div>
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Streak -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_3px_0_0_#e2dcd5] flex items-center gap-2.5">
+<span class="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined fill text-xl">local_fire_department</span>
+</span>
+<div class="text-left">
+<h4 class="font-headline font-black text-xs text-on-surface">Płomień serii</h4>
+<p class="font-body font-bold text-[10px] text-on-surface-variant">Codzienny streak</p>
+</div>
+</div>
+<!-- XP & Poziomy -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_3px_0_0_#e2dcd5] flex items-center gap-2.5">
+<span class="w-10 h-10 rounded-xl bg-tertiary-container/30 flex items-center justify-center text-tertiary shrink-0">
+<span class="material-symbols-outlined fill text-xl">bolt</span>
+</span>
+<div class="text-left">
+<h4 class="font-headline font-black text-xs text-on-surface">Punkty XP</h4>
+<p class="font-body font-bold text-[10px] text-on-surface-variant">Odblokuj poziomy</p>
+</div>
+</div>
+<!-- Życia -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_3px_0_0_#e2dcd5] flex items-center gap-2.5">
+<span class="w-10 h-10 rounded-xl bg-error/20 flex items-center justify-center text-error shrink-0">
+<span class="material-symbols-outlined fill text-xl">favorite</span>
+</span>
+<div class="text-left">
+<h4 class="font-headline font-black text-xs text-on-surface">5 Serc</h4>
+<p class="font-body font-bold text-[10px] text-on-surface-variant">Szybka regeneracja</p>
+</div>
+</div>
+<!-- Odznaki -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-3.5 rounded-2xl shadow-[0_3px_0_0_#e2dcd5] flex items-center gap-2.5">
+<span class="w-10 h-10 rounded-xl bg-secondary-container/40 flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined fill text-xl">military_tech</span>
+</span>
+<div class="text-left">
+<h4 class="font-headline font-black text-xs text-on-surface">Certyfikat</h4>
+<p class="font-body font-bold text-[10px] text-on-surface-variant">Za ukończenie VM</p>
+</div>
+</div>
+</div>
+</section>
+<!-- OPEN-SOURCE & GITHUB -->
+<section class="bg-surface-container border-2 border-outline-variant p-4 rounded-3xl shadow-[0_4px_0_0_#b1aca7]" id="github">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-on-surface text-xl">terminal</span>
+<h3 class="font-headline font-black text-base text-on-surface">Klonuj i modyfikuj lokalnie</h3>
+</div>
+<div class="bg-[#2A1F19] text-white p-3 rounded-2xl font-mono text-xs flex items-center justify-between shadow-inner">
+<span class="truncate text-secondary-container">git clone https://github.com/rudijs/engine.git</span>
+<button class="ml-2 px-2.5 py-1 bg-surface-container-low text-on-surface font-headline font-black text-[10px] rounded-lg active:scale-95 transition-transform shrink-0" onclick="navigator.clipboard.writeText('git clone https://github.com/rudijs/engine.git'); alert('Skopiowano komendę!');">
+          Kopiuj
+        </button>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-outline-variant text-[11px] font-headline font-bold text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-sm">verified</span>
+<span>Licencja MIT</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-sm">favorite</span>
+<span>Wspierane przez społeczność</span>
+</div>
+</div>
+</section>
+<!-- FINAL BANNER CTA -->
+<section class="bg-primary-container text-on-primary border-2 border-primary p-6 rounded-3xl shadow-[0_6px_0_0_#a43600] text-center relative overflow-hidden">
+<div class="flex justify-center mb-3">
+<img alt="Świętujący Rudi" class="w-20 h-20 object-contain drop-shadow-md" src="https://lh3.googleusercontent.com/aida/ALJJyrA3wCZazi9tY2epl-uFmJ0C-VyNzdLoJHxnsWG3V04PufcMkYimm8Lpc5NECUIla50awOGI_n2Uh_EUYhbBFheTW3dlqFDfs868qryDe8QYkiXFt9PWcMC-gH-rUik9959mcimRLH_hC3XLqVlUNCew6s91ugbd4HVp26snE4hmdZ6KauR43YKbvqWlI39mcInXMLfXKkJjjArPBFgUTD1-iT69qZ6EwKJyUMuX-2F59to2jdQTATIZNfw"/>
+</div>
+<h2 class="font-headline font-black text-2xl leading-tight mb-2">
+        Gotowy zbudować swój pierwszy silnik JS?
+      </h2>
+<p class="font-body font-bold text-xs text-on-primary-container/90 mb-5 max-w-xs mx-auto">
+        Dołącz do tysięcy programistów, którzy poznali wewnętrzne mechanizmy V8 i JavaScriptu.
+      </p>
+<a class="btn-3d btn-card-3d inline-block w-full bg-surface-container-lowest text-primary font-headline font-black text-base py-3.5 px-6 rounded-2xl shadow-[0_4px_0_0_#a43600]" href="#kurs">
+        Zacznij naukę za darmo
+      </a>
+<span class="block font-body font-bold text-[11px] text-on-primary/80 mt-2">
+        Bez karty kredytowej. Całkowicie bezpłatne.
+      </span>
+</section>
+</main>
+<!-- FOOTER (Shared Component Anchor) -->
+<footer class="full-width bg-surface-container border-t-2 border-outline-variant">
+<div class="flex flex-col items-center text-center w-full px-6 py-8 pb-24 gap-4 max-w-md mx-auto">
+<div class="flex items-center gap-2">
+<img alt="Rudi.js" class="w-7 h-7 object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrB0JDWhoDoppbdAAuIpiGkMVm6b5lrtAQ0GkMNzdx_T7xMcYIQL8LyTUJi-MRo_e9eyb8XkZLEHzXBSxA2pkqLvf8oWVzuEX7RNi1WOARtRAJc-vdHNU6xG2Rj4P5bdyqfVDrh1e3L6apt-ep6uLljPPtqXZt98VYKuXPSniiG4r19aihWA3GvjhAkY7TIT0xR-BOFwnEiNZXfpOPXyL4ZRb7Hn3yGoIJFh_konbXhE-Mi3ZxxkVqOS-Q"/>
+<span class="font-headline font-black text-lg text-primary tracking-tight">Rudi.js</span>
+</div>
+<p class="font-body font-semibold text-xs text-on-surface-variant max-w-xs">
+        © 2025 Rudi.js — Learn compilers hands-on with Rudi the Red Panda.
+      </p>
+<div class="flex flex-wrap justify-center gap-4 text-xs font-label font-bold text-on-surface-variant">
+<a class="hover:text-primary underline transition-colors" href="#github">GitHub</a>
+<a class="hover:text-primary underline transition-colors" href="#">Discord</a>
+<a class="hover:text-primary underline transition-colors" href="#kurs">Curriculum</a>
+<a class="hover:text-primary underline transition-colors" href="#">License</a>
+</div>
+</div>
+</footer>
+<!-- BOTTOM NAVBAR (Shared Component Mobile Anchor) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-3 py-2 pb-safe bg-surface-container-lowest border-t-2 border-outline-variant shadow-[0_-4px_0_0_#e2dcd5]">
+<!-- Modules (Active default match for Course landing) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary rounded-xl px-3 py-1.5 shadow-[0_3px_0_0_#a43600] active:translate-y-0.5" href="#kurs">
+<span class="material-symbols-outlined text-lg">school</span>
+<span class="font-label font-black text-xs">Modules</span>
+</a>
+<!-- Playground -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 font-bold hover:text-primary active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg">code</span>
+<span class="font-label font-bold text-xs">Playground</span>
+</a>
+<!-- Roadmap -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 font-bold hover:text-primary active:scale-95 transition-transform" href="#kurs">
+<span class="material-symbols-outlined text-lg">alt_route</span>
+<span class="font-label font-bold text-xs">Roadmap</span>
+</a>
+<!-- Docs -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 font-bold hover:text-primary active:scale-95 transition-transform" href="#github">
+<span class="material-symbols-outlined text-lg">menu_book</span>
+<span class="font-label font-bold text-xs">Docs</span>
+</a>
+</nav>
+</body></html>

@@ -4,39 +4,254 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#E8622C">
-<meta name="description" content="Rudi.js: grywalizowany kurs budowy silnika JavaScript.">
-<title>Rudi.js</title>
+<title>Rudi.js: zbuduj własny silnik JavaScript</title>
+<meta name="description" content="Darmowy, open-source'owy, grywalizowany kurs: lekser, parser Pratta, AST, interpreter, bytecode VM, GC i JIT. 5 minut dziennie z czerwoną pandą Rudim.">
+<meta property="og:title" content="Rudi.js: zbuduj własny silnik JavaScript">
+<meta property="og:description" content="Grywalizowany kurs budowy silnika JS: od pierwszego tokena po JIT. Za darmo, w przeglądarce.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://chiddekel.github.io/rudi-js/stitch/lesson.png">
 <link rel="icon" href="assets/rudi.svg" type="image/svg+xml">
-<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-<div class="app" id="app">
-  <main id="main"></main>
 
-  <nav class="tabbar" aria-label="Nawigacja">
-    <span class="tabbar__brand"><span data-rudi data-mood="happy"></span>Rudi.js</span>
-    <a class="tabbar__item" data-tab="path" href="#/"><span data-icon="map"></span>Ścieżka</a>
-    <a class="tabbar__item" data-tab="play" href="#/play"><span data-icon="code"></span>Plac zabaw</a>
-    <a class="tabbar__item" data-tab="rank" href="#/rank"><span data-icon="trophy"></span>Ranking</a>
-    <a class="tabbar__item" data-tab="profile" href="#/profile"><span data-icon="user"></span>Profil</a>
-  </nav>
-</div>
+<header class="lnav">
+  <div class="wrap lnav__in">
+    <a class="lnav__brand" href="#top"><span data-rudi data-mood="happy"></span><span>Rudi<b>.js</b></span></a>
+    <nav class="lnav__links" aria-label="Sekcje">
+      <a href="#jak">Kurs</a><a href="#program">Program</a><a href="#potok">Architektura</a><a href="#plac">Plac zabaw</a>
+    </nav>
+    <a class="btn btn--ghost btn--sm" href="https://github.com/chiddekel/rudi-js"><span data-icon="github"></span>GitHub</a>
+    <a class="btn btn--sm" href="app.html">Zacznij naukę →</a>
+  </div>
+</header>
 
-<dialog class="modal" id="modal" aria-label="Okno"></dialog>
+<main id="top">
+  <!-- Hero -->
+  <div class="wrap hero">
+    <div>
+      <span class="pill"><i></i>Darmowe i open source · GitHub Pages</span>
+      <h1>Zbuduj własny<br><em>silnik JavaScript.</em></h1>
+      <p class="hero__lead">Od pierwszego tokena po maszynę wirtualną, garbage collector i JIT. Interaktywny, grywalizowany kurs z maskotką Rudim, po 5 minut dziennie.</p>
+      <div class="hero__cta">
+        <a class="btn btn--lg" href="app.html">Zacznij za darmo</a>
+        <a class="btn btn--ghost btn--lg" href="https://github.com/chiddekel/rudi-js"><span data-icon="github"></span>Zobacz na GitHubie</a>
+      </div>
+      <div class="hero__note"><span>bez konta</span><span>bez reklam</span><span>działa offline</span><span>postęp w przeglądarce</span></div>
+    </div>
+    <div class="phone" aria-label="Podgląd lekcji">
+      <div class="phone__notch"></div>
+      <div class="spread">
+        <span class="stat stat--hearts"><span data-icon="heart"></span>5</span>
+        <span class="stat stat--gems"><span data-icon="gem"></span>450</span>
+        <span class="stat stat--streak"><span data-icon="flame"></span>12</span>
+      </div>
+      <div class="progress" style="--value:62"><div class="progress__fill"></div></div>
+      <div class="speaker"><span data-rudi data-mood="wink" style="--rudi-size:58px"></span><div class="bubble" style="font-size:.9rem">Na jakie tokeny lekser podzieli ten kod?</div></div>
+      <div class="code"><div class="code__bar"><i></i><i></i><i></i>engine_input.js</div><pre id="heroCode"></pre></div>
+      <div class="phone__tiles" id="heroTiles"></div>
+      <div class="phone__ok"><span data-icon="check"></span>Świetnie! 7 tokenów<small>+15 XP</small></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <section class="block block--tint" aria-label="W liczbach">
+    <div class="wrap stats">
+      <div class="card"><b style="color:var(--c-fox-600)">6 modułów</b><span>od leksera po JIT</span></div>
+      <div class="card"><b style="color:var(--c-teal-600)">15 lekcji</b><span>architektura krok po kroku</span></div>
+      <div class="card"><b style="color:var(--c-sun-600)">44 zadania</b><span>quizy, układanki, wyniki</span></div>
+      <div class="card"><b>0 zależności</b><span>czysty HTML, CSS i JS</span></div>
+    </div>
+  </section>
+
+  <!-- How -->
+  <section class="block" id="jak">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h1">Jak działa nauka z Rudim?</h2><p>Zamiast 800-stronicowego podręcznika kompilatorów: krótkie lekcje, w których dotykasz każdego mechanizmu.</p></div>
+      <div class="steps">
+        <div class="card step" style="color:var(--c-sun-600)"><div class="step__ic"><span data-icon="clock"></span></div><span class="eyebrow">Krok 1</span><h3 style="color:var(--ink)">Ucz się 5 minut dziennie</h3><p>Krótkie lekcje i quizy. Pomyłka kosztuje serce, a zadanie wraca na koniec lekcji, aż je opanujesz.</p></div>
+        <div class="card step" style="color:var(--c-teal-600)"><div class="step__ic"><span data-icon="tree"></span></div><span class="eyebrow">Krok 2</span><h3 style="color:var(--ink)">Układaj tokeny i drzewa AST</h3><p>Dziel kod na tokeny, układaj węzły od korzenia, przewiduj precedencję i bytecode.</p></div>
+        <div class="card step" style="color:var(--c-fox-600)"><div class="step__ic"><span data-icon="play"></span></div><span class="eyebrow">Krok 3</span><h3 style="color:var(--ink)">Uruchamiaj w Placu zabaw</h3><p>Prawdziwy mini-silnik w przeglądarce: tokeny, AST, bytecode i konsola na żywo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline -->
+  <section class="block block--tint" id="potok">
+    <div class="wrap">
+      <div class="sec-head"><span class="pill">Architektura silnika</span><h2 class="h1">Potok przetwarzania kodu</h2><p>Zobacz, jak zwykły ciąg znaków w pliku <code>.js</code> staje się wynikiem, krok po kroku.</p></div>
+      <div class="pipe">
+        <div class="card" style="--pc:var(--c-bark-400)"><small>Wejście</small><h3>Źródło</h3><code>let x = 42;</code></div>
+        <div class="card" style="--pc:var(--c-teal-500)"><small>Lekser</small><h3>Tokeny</h3><code>KW ID OP NUM</code></div>
+        <div class="card" style="--pc:var(--c-sun-600)"><small>Parser</small><h3>Drzewo AST</h3><code>VariableDeclaration</code></div>
+        <div class="card" style="--pc:var(--c-plum-500)"><small>Kompilator</small><h3>Bytecode</h3><code>PUSH_CONST 42</code></div>
+        <div class="card" style="--pc:var(--c-fox-500)"><small>Maszyna wirtualna</small><h3>Wynik</h3><code>x = 42</code></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modules -->
+  <section class="block" id="program">
+    <div class="wrap">
+      <div class="sec-head"><span class="pill">Ścieżka nauki</span><h2 class="h1">Program kursu</h2><p>Sześć modułów, które po kolei odsłaniają, jak działa silnik JavaScript.</p></div>
+      <div class="mods" id="mods"></div>
+    </div>
+  </section>
+
+  <!-- Live playground -->
+  <section class="block block--tint" id="plac">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h1">Sprawdź kod na żywo</h2><p>To nie zrzut ekranu. Poniżej działa silnik RudiScript: zmień kod i zobacz drzewo AST oraz wynik.</p></div>
+      <div class="live">
+        <div class="live__bar"><i></i><i></i><i></i>rudi-playground<button class="btn btn--secondary btn--sm" id="liveRun"><span data-icon="play"></span>Uruchom silnik</button></div>
+        <div class="live__grid">
+          <div class="code"><div class="code__bar"><i></i><i></i><i></i>main.js<span class="code__tag" id="liveTok"></span></div>
+            <div class="editor"><pre id="liveHl" aria-hidden="true"></pre><textarea id="liveSrc" wrap="off" spellcheck="false" autocapitalize="off" aria-label="Kod źródłowy"></textarea></div></div>
+          <div class="card live__ast"><h4>Drzewo AST (parser Pratta)</h4><div id="liveAst"></div></div>
+        </div>
+        <div class="console" id="liveOut"><div class="console__line is-dim">Naciśnij „Uruchom silnik”</div></div>
+      </div>
+      <p class="center" style="margin-top:28px"><a class="btn btn--lg" href="app.html#/play">Otwórz pełny Plac zabaw</a></p>
+    </div>
+  </section>
+
+  <!-- Gamification -->
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><h2 class="h1">Nauka, która wciąga</h2><p>Mechaniki z gier, żeby wracać codziennie, aż silnik będzie gotowy.</p></div>
+      <div class="games">
+        <div class="card game" style="--gc:var(--c-fox-600)"><div class="game__ic"><span data-icon="flame"></span></div><h3>Seria dni</h3><p>Codzienna lekcja podtrzymuje serię.</p></div>
+        <div class="card game" style="--gc:var(--c-sky-600)"><div class="game__ic"><span data-icon="gem"></span></div><h3>Klejnoty i XP</h3><p>Nagrody za lekcje i skrzynie modułów.</p></div>
+        <div class="card game" style="--gc:var(--c-red-500)"><div class="game__ic"><span data-icon="heart"></span></div><h3>Serca</h3><p>Każdy błąd kosztuje serce. Odnawiają się codziennie.</p></div>
+        <div class="card game" style="--gc:var(--c-sun-600)"><div class="game__ic"><span data-icon="trophy"></span></div><h3>Odznaki i liga</h3><p>Odznaka za każdy moduł i tygodniowy ranking.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open source -->
+  <section class="block block--tint">
+    <div class="wrap">
+      <div class="card oss">
+        <div>
+          <span class="pill">100% otwarty kod</span>
+          <h2>Darmowe, statyczne, Twoje.</h2>
+          <p class="text-soft" style="font-size:1.1rem">Bez kont, reklam i trackerów. Całość działa statycznie na GitHub Pages na licencji MIT. Sklonuj, zmień lekcje w <code>js/course.js</code> i opublikuj własny kurs.</p>
+          <div class="row"><span>Licencja MIT</span><span>Działa offline</span><span>Zero trackerów</span></div>
+        </div>
+        <div class="stack" style="--gap:14px">
+          <div class="console">
+            <div class="console__head"><span>Klonuj repozytorium</span><span>bash</span></div>
+            <div class="clone"><code id="cloneCmd">git clone https://github.com/chiddekel/rudi-js.git</code><button id="copyBtn">Kopiuj</button></div>
+            <div class="console__line is-dim" style="margin-top:10px">cd rudi-js &amp;&amp; npm test</div>
+          </div>
+          <a class="btn btn--ghost btn--block" href="https://github.com/chiddekel/rudi-js"><span data-icon="star"></span>Dodaj gwiazdkę na GitHubie</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="block">
+    <div class="wrap">
+      <div class="cta">
+        <div style="position:relative;z-index:1">
+          <span class="pill" style="background:rgba(255,255,255,.15);border-color:transparent;color:#fff">Zacznij już dziś</span>
+          <h2>Gotowy, żeby zbudować własny JavaScript?</h2>
+          <p>Kurs jest darmowy, a Twój postęp zapisuje się w przeglądarce.</p>
+          <a class="btn btn--lg" href="app.html">Rozpocznij Moduł 1 →</a>
+        </div>
+        <div class="cta__rudi"><span data-rudi data-mood="joy" data-bouncy></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="lfoot">
+  <div class="wrap">
+    <div class="lfoot__grid">
+      <div><a class="lnav__brand" href="#top" style="padding:0"><span data-rudi data-mood="happy"></span><span>Rudi<b>.js</b></span></a><p class="text-soft" style="margin-top:10px;max-width:420px">Interaktywny, darmowy kurs budowy interpretera i maszyny wirtualnej JavaScript.</p></div>
+      <div><h4>Kurs</h4><a href="app.html">Aplikacja</a><a href="app.html#/play">Plac zabaw</a><a href="design-system.html">Design system</a></div>
+      <div><h4>Projekt</h4><a href="https://github.com/chiddekel/rudi-js">Repozytorium GitHub</a><a href="https://github.com/chiddekel/rudi-js/issues">Zgłoś błąd</a><a href="https://github.com/chiddekel/rudi-js/blob/main/LICENSE">Licencja MIT</a></div>
+    </div>
+    <div class="lfoot__bottom">© 2026 Rudi.js · MIT. Rudi to czerwona panda. Nie sowa i nie logo przeglądarki.</div>
+  </div>
+</footer>
 
 <script src="js/rudi.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/course.js"></script>
-<script src="js/app.js"></script>
+<script src="js/viz.js"></script>
 <script>
-  // tab icons that app.js registers after rudi.js init
-  Rudi.init(document.querySelector(".tabbar"));
+(function () {
+  var R = window.Rudi, E = window.RudiEngine, V = window.RudiViz, $ = function (id) { return document.getElementById(id); };
+  R.icons.github = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg>';
+  R.icons.clock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  R.icons.play = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5z"/></svg>';
+  R.icons.tree = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="9" y="2.5" width="6" height="5" rx="1.5"/><rect x="2.5" y="16.5" width="6" height="5" rx="1.5"/><rect x="15.5" y="16.5" width="6" height="5" rx="1.5"/><path d="M12 7.5V12M5.5 16.5V12h13v4.5"/></svg>';
+
+  // Hero: real lexer output as tiles
+  var heroSrc = "let x = 40 + 2;";
+  $("heroCode").innerHTML = V.highlight(heroSrc);
+  $("heroTiles").innerHTML = E.tokenize(heroSrc).filter(function (t) { return t.type !== "eof"; }).map(function (t, i) { return V.tileHTML({ t: t.value, type: t.type }, i, 'tabindex="-1"'); }).join("");
+
+  // Modules from course data
+  var COLOR = { fox: "var(--c-fox-600)", sky: "var(--c-sky-600)", teal: "var(--c-teal-600)", plum: "var(--c-plum-500)", berry: "var(--c-berry-500)", sun: "var(--c-sun-600)" };
+  var BLURB = {
+    m1: "Jak zamienić surowy ciąg znaków w strumień tokenów, bez generatorów parserów.",
+    m2: "Gramatyka, AST w stylu ESTree i parser Pratta, który w jednej pętli załatwia precedencję.",
+    m3: "Rekurencyjne wykonywanie węzłów AST, łańcuch środowisk i domknięcia w praktyce.",
+    m4: "Dlaczego silniki kompilują AST do bytecode'u: maszyna stosowa i skoki warunkowe.",
+    m5: "Korzenie, mark & sweep, cykle referencji i hipoteza generacyjna.",
+    m6: "Ukryte klasy, inline cache, poziomy kompilacji V8 i deoptymalizacja."
+  };
+  function pl(n, one, few, many) { var d = n % 10, t = n % 100; return n + " " + (n === 1 ? one : d >= 2 && d <= 4 && (t < 12 || t > 14) ? few : many); }
+  $("mods").innerHTML = window.RUDI_COURSE.map(function (m, i) {
+    var n = m.lessons.reduce(function (a, l) { return a + l.exercises.length; }, 0);
+    return '<article class="card mod" style="--mc:' + COLOR[m.color] + '"><div class="mod__top"><span class="badge">Moduł 0' + (i + 1) + "</span>" + pl(m.lessons.length, "lekcja", "lekcje", "lekcji") + "</div>" +
+      "<h3>" + V.esc(m.title) + "</h3><p>" + V.esc(BLURB[m.id] || m.subtitle) + "</p><ul>" +
+      m.lessons.map(function (l) { return "<li>" + V.esc(l.title) + "</li>"; }).join("") +
+      '</ul><div class="mod__foot"><span>' + pl(n, "zadanie", "zadania", "zadań") + "</span><code>" + ["lexer", "parser", "interpreter", "vm", "gc", "jit"][i] + ".js</code></div></article>";
+  }).join("");
+
+  // Live playground
+  var ta = $("liveSrc"), hl = $("liveHl");
+  ta.value = "const a = 40 + 2;\nconsole.log(a);\n// Twój silnik policzy to sam!";
+  function analyze() {
+    hl.innerHTML = V.highlight(ta.value) + "\n";
+    try {
+      var toks = E.tokenize(ta.value), ast = E.parse(toks);
+      $("liveTok").textContent = (toks.length - 1) + " tokenów";
+      $("liveAst").innerHTML = '<div class="ast"><ul>' + V.astHTML(ast) + "</ul></div>";
+    } catch (e) {
+      $("liveTok").textContent = "błąd";
+      $("liveAst").innerHTML = '<div class="console"><div class="console__line is-error">' + V.esc(e.message) + "</div></div>";
+    }
+  }
+  var t; ta.addEventListener("input", function () { clearTimeout(t); t = setTimeout(analyze, 120); hl.innerHTML = V.highlight(ta.value) + "\n"; });
+  ta.addEventListener("scroll", function () { hl.scrollTop = ta.scrollTop; hl.scrollLeft = ta.scrollLeft; });
+  $("liveRun").addEventListener("click", function () {
+    var t0 = performance.now(), r = E.evaluate(ta.value), ms = (performance.now() - t0).toFixed(1), h = "";
+    if (r.run) h = r.run.output.map(function (l) { return '<div class="console__line">' + V.esc(l) + "</div>"; }).join("") || '<div class="console__line is-dim">(brak wyjścia)</div>';
+    if (r.error) h += '<div class="console__line is-error">' + V.esc(r.error.message) + "</div>";
+    $("liveOut").innerHTML = h + '<div class="console__line is-dim">' + (r.error ? "błąd: " + r.error.stage : "VM: " + ms + " ms, " + r.run.steps + " kroków") + "</div>";
+    if (!r.error) R.confetti(30);
+  });
+  analyze();
+
+  $("copyBtn").addEventListener("click", function () {
+    var txt = $("cloneCmd").textContent, b = this;
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { b.textContent = "Skopiowano"; }, function () { b.textContent = "Zaznacz i skopiuj"; });
+    setTimeout(function () { b.textContent = "Kopiuj"; }, 1600);
+  });
+
+  R.init();
+})();
 </script>
 </body>
 </html>
