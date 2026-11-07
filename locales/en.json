@@ -1,0 +1,616 @@
+{
+  "meta": {
+    "code": "en",
+    "name": "English",
+    "dir": "ltr"
+  },
+  "ui": {
+    "nav.path": "Path",
+    "nav.play": "Playground",
+    "nav.rank": "Ranking",
+    "nav.profile": "Profile",
+    "nav.aria": "Navigation",
+    "stat.streak": "Day streak",
+    "stat.gems": "Gems",
+    "stat.hearts": "Hearts",
+    "path.module": "Module {n}",
+    "path.guide": "Guide",
+    "path.start": "Start",
+    "path.locked": " (locked)",
+    "path.cheer": "You've got this!",
+    "path.endBubble": "At the end: your own JS engine!",
+    "path.chest": "Chest",
+    "path.chestOpen": "Opened",
+    "path.chestReward": "Chest +20",
+    "path.toastPrev": "🔒 Finish earlier lessons first",
+    "path.toastChestLock": "🔒 Finish the module to open the chest",
+    "path.toastChestEmpty": "This chest is already empty",
+    "path.toastGems": "💎 +20 gems!",
+    "path.guideOk": "Got it",
+    "path.exCount": "{n} ex.",
+    "path.nextStop": "Next stop: ",
+    "hearts.title": "Out of hearts",
+    "hearts.body": "Hearts refill every day. You can also top them up.",
+    "hearts.refill": "Refill for 30",
+    "hearts.playground": "Practice in the playground",
+    "hearts.refilled": "❤️ Hearts refilled",
+    "lesson.quitAria": "Quit lesson",
+    "lesson.check": "Check",
+    "lesson.sureTitle": "Are you sure?",
+    "lesson.sureBody": "Progress in this lesson will be lost.",
+    "lesson.stay": "Stay",
+    "lesson.leave": "Leave",
+    "lesson.kindChoice": "Choose an answer",
+    "lesson.kindOrder": "Put in order",
+    "lesson.kindInput": "Type the result",
+    "lesson.retry": " · retry",
+    "lesson.tapTiles": "Tap the tiles below",
+    "lesson.answerAria": "Your answer",
+    "lesson.praise0": "Awesome!",
+    "lesson.praise1": "Exactly!",
+    "lesson.praise2": "Well done!",
+    "lesson.praise3": "That's it!",
+    "lesson.correctPrefix": "Correct: ",
+    "lesson.next": "Continue",
+    "lesson.gotIt": "Got it",
+    "lesson.locked": "🔒 This lesson is locked",
+    "done.title": "Lesson complete!",
+    "done.time": "Time",
+    "done.accuracy": "Accuracy",
+    "done.continue": "Continue",
+    "done.repeat": "Retry",
+    "play.title": "Playground",
+    "play.bubble": "Type code and watch the Rudi.js engine process it!",
+    "play.run": "Run engine",
+    "play.console": "Console (stdout)",
+    "play.ready": "ready",
+    "play.pressRun": "Press “Run engine”",
+    "play.noOutput": "(no output) result: ",
+    "play.error": "error: ",
+    "play.doneMs": "ready · {ms} ms · {steps} steps",
+    "play.tokensEof": "{n} tokens + EOF",
+    "play.tabTokens": "Tokens",
+    "play.tabAst": "AST tree",
+    "play.tabBytecode": "Bytecode",
+    "play.srcAria": "Source code",
+    "play.stageLexer": "Lexer",
+    "play.stageParser": "Parser",
+    "play.lineCol": " (line {line}, col {col})",
+    "play.samples.add": "Addition",
+    "play.samples.prec": "Precedence",
+    "play.samples.closure": "Closure",
+    "play.samples.fib": "Fibonacci",
+    "play.samples.error": "Error",
+    "rank.title": "Ranking",
+    "rank.league": "Bytecode League",
+    "rank.sub": "Top 3 advance to the JIT League",
+    "rank.you": "You",
+    "profile.title": "Profile",
+    "profile.heading": "Engine builder",
+    "profile.sub": "Course: build a JavaScript engine",
+    "profile.streakDays": "day streak",
+    "profile.xpTotal": "total XP",
+    "profile.gems": "gems",
+    "profile.lessons": "lessons",
+    "profile.badges": "Badges",
+    "profile.settings": "Settings",
+    "profile.dark": "Dark mode",
+    "profile.design": "Design system",
+    "profile.reset": "Reset progress",
+    "profile.resetTitle": "Reset progress?",
+    "profile.resetBody": "You will lose XP, streak and completed lessons.",
+    "profile.resetConfirm": "Yes, reset",
+    "profile.cancel": "Cancel",
+    "profile.resetDone": "Progress cleared",
+    "profile.lang": "Language",
+    "profile.langHint": "App and course language",
+    "app.title": "Rudi.js",
+    "modal.aria": "Dialog"
+  },
+  "course": {
+    "modules": {
+      "m1": {
+        "title": "Lexer",
+        "subtitle": "From characters to tokens"
+      },
+      "m2": {
+        "title": "Parser",
+        "subtitle": "From tokens to a tree"
+      },
+      "m3": {
+        "title": "Interpreter",
+        "subtitle": "Bringing the tree to life"
+      },
+      "m4": {
+        "title": "Bytecode VM",
+        "subtitle": "Flat and fast"
+      },
+      "m5": {
+        "title": "Memory & GC",
+        "subtitle": "Who cleans up?"
+      },
+      "m6": {
+        "title": "JIT",
+        "subtitle": "Turbo for hot code"
+      }
+    },
+    "lessons": {
+      "m1l1": {
+        "title": "The code journey"
+      },
+      "m1l2": {
+        "title": "Tokens"
+      },
+      "m1l3": {
+        "title": "Building a scanner"
+      },
+      "m2l1": {
+        "title": "The AST tree"
+      },
+      "m2l2": {
+        "title": "Precedence"
+      },
+      "m2l3": {
+        "title": "Statements"
+      },
+      "m3l1": {
+        "title": "Walking the tree"
+      },
+      "m3l2": {
+        "title": "Scopes"
+      },
+      "m3l3": {
+        "title": "Closures"
+      },
+      "m4l1": {
+        "title": "Stack machine"
+      },
+      "m4l2": {
+        "title": "Jumps"
+      },
+      "m5l1": {
+        "title": "Mark & sweep"
+      },
+      "m5l2": {
+        "title": "Generations"
+      },
+      "m6l1": {
+        "title": "Hidden classes"
+      },
+      "m6l2": {
+        "title": "Tiers of compilation"
+      }
+    },
+    "exercises": {
+      "m1l1": [
+        {
+          "q": "What does a JS engine do first with program text?",
+          "explain": "First the lexer (scanner) turns the character stream into a list of tokens. Only then does the parser build the AST from them.",
+          "options": [
+            "Splits it into tokens",
+            "Executes it line by line",
+            "Compiles it to machine code",
+            "Draws the AST tree"
+          ]
+        },
+        {
+          "q": "Put the engine pipeline stages in order.",
+          "explain": "Source → lexer → tokens → parser → AST → compiler → bytecode → virtual machine → result.",
+          "tiles": [
+            "Source",
+            "Tokens",
+            "AST",
+            "Bytecode",
+            "Result"
+          ]
+        },
+        {
+          "q": "What is the parser's output?",
+          "explain": "The parser reads tokens and builds an abstract syntax tree (AST).",
+          "options": [
+            "A list of tokens",
+            "An AST tree",
+            "Bytecode",
+            "The program result"
+          ]
+        },
+        {
+          "q": "Which engine powers Chrome and Node.js?",
+          "explain": "V8: Chrome and Node.js. SpiderMonkey: Firefox. JavaScriptCore: Safari. Hermes: React Native.",
+          "options": [
+            "SpiderMonkey",
+            "JavaScriptCore",
+            "V8",
+            "Hermes"
+          ]
+        }
+      ],
+      "m1l2": [
+        {
+          "q": "What tokens will the lexer produce for this code?",
+          "explain": "7 tokens: keyword, identifier, operator, number, operator, number, semicolon.",
+          "tiles": [
+            "let",
+            "x",
+            "=",
+            "40",
+            "+",
+            "2",
+            ";"
+          ]
+        },
+        {
+          "q": "What token is \"let\" inside quotes?",
+          "explain": "Inside quotes it's just text: a string token. The lexer recognizes it from the opening \" character.",
+          "options": [
+            "Keyword",
+            "String",
+            "Identifier",
+            "Operator"
+          ]
+        },
+        {
+          "q": "How many tokens (excluding EOF) does this expression have?",
+          "explain": "a, >=, 10. The lexer uses maximal munch, so >= is one token, not > and =.",
+          "options": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "q": "What does our lexer do with whitespace and // comments?",
+          "explain": "Spaces and comments only separate tokens. The lexer skips them. (Real JS remembers newlines for ASI.)",
+          "options": [
+            "Turns them into tokens",
+            "Skips them",
+            "Reports an error",
+            "Replaces them with semicolons"
+          ]
+        }
+      ],
+      "m1l3": [
+        {
+          "q": "What will this snippet add for input 123+4 (i = 0)?",
+          "explain": "The loop consumes digits until +. slice(0, 3) is \"123\".",
+          "options": [
+            "{ number \"1\" }",
+            "{ number \"123\" }",
+            "{ number \"123+4\" }",
+            "{ number 127 }"
+          ]
+        },
+        {
+          "q": "Why check operators longest-first: === before == before =?",
+          "explain": "Maximal munch: if = were first, === would be eaten as three separate = tokens.",
+          "options": [
+            "Because it's faster",
+            "So === doesn't split into == and =",
+            "Because Unicode requires it",
+            "Order doesn't matter"
+          ]
+        },
+        {
+          "q": "How many tokens (excluding EOF) will the lexer emit?",
+          "explain": "console . log ( \"hi\" ) ; — 7 total."
+        }
+      ],
+      "m2l1": [
+        {
+          "q": "What node is the root of every AST in our engine?",
+          "explain": "Program holds a list of statements (body). Same as ESTree.",
+          "options": [
+            "Program",
+            "BlockStatement",
+            "Root",
+            "ExpressionStatement"
+          ]
+        },
+        {
+          "q": "What is the root of this expression?",
+          "explain": "* binds tighter, so 2 * 3 becomes the right child of +. The root is +.",
+          "options": [
+            "BinaryExpression *",
+            "BinaryExpression +",
+            "Literal 40",
+            "Literal 3"
+          ]
+        },
+        {
+          "q": "Put the nodes on the path from root to the number 1.",
+          "explain": "Program → VariableDeclaration → VariableDeclarator (init) → CallExpression (arguments) → Literal 1.",
+          "tiles": [
+            "Program",
+            "VariableDeclaration",
+            "VariableDeclarator",
+            "CallExpression",
+            "Literal"
+          ],
+          "extra": [
+            "BinaryExpression"
+          ]
+        }
+      ],
+      "m2l2": [
+        {
+          "q": "What is the result?",
+          "explain": "* has higher precedence than +, so 2 + (3 * 4) = 14."
+        },
+        {
+          "q": "Operator ** is right-associative. What is the result?",
+          "explain": "2 ** (3 ** 2) = 2 ** 9 = 512. In a Pratt parser: parse the right side with bp − 1."
+        },
+        {
+          "q": "In a Pratt parser: when does an operator \"take\" the left expression?",
+          "explain": "Loop: while (bp(op) > minBp) { … }. That one line handles all precedence.",
+          "options": [
+            "When its binding power > minimum",
+            "When it appears first in the file",
+            "When it's longer",
+            "Always"
+          ]
+        },
+        {
+          "q": "How should this expression be grouped?",
+          "explain": "Subtraction is left-associative: (10 − 4) − 3 = 3. Otherwise you'd get 9.",
+          "options": [
+            "(10 - 4) - 3",
+            "10 - (4 - 3)"
+          ]
+        }
+      ],
+      "m2l3": [
+        {
+          "q": "What node will this code produce?",
+          "explain": "IfStatement has test, consequent (then branch), and alternate (else branch).",
+          "options": [
+            "IfStatement { consequent, alternate }",
+            "ConditionalExpression",
+            "LogicalExpression ||",
+            "Two separate IfStatements"
+          ]
+        },
+        {
+          "q": "What should the parser report?",
+          "explain": "After let the parser expects an identifier. That's a syntax error, caught before anything runs.",
+          "options": [
+            "ReferenceError",
+            "SyntaxError: expected variable name",
+            "Nothing, x = 5",
+            "TypeError"
+          ]
+        },
+        {
+          "q": "Why is this an error?",
+          "explain": "You can assign to an Identifier (or property), not to a BinaryExpression.",
+          "options": [
+            "Missing semicolon",
+            "Left side of = must be an assignment target",
+            "5 is the wrong number",
+            "It's not an error"
+          ]
+        }
+      ],
+      "m3l1": [
+        {
+          "q": "A tree-walking interpreter…",
+          "explain": "evaluate(node) looks at node.type and recursively evaluates children. Simple, but slower than bytecode.",
+          "options": [
+            "Recursively evaluates AST nodes",
+            "Turns code into assembly",
+            "Reads tokens without a parser",
+            "Works only on numbers"
+          ]
+        },
+        {
+          "q": "What will the program print?",
+          "explain": "1 + 2 + 3 + 4 = 10."
+        },
+        {
+          "q": "When will b() NOT be called?",
+          "explain": "Short-circuit: LogicalExpression evaluates the right side only when it must.",
+          "options": [
+            "When a is falsy",
+            "When a is truthy",
+            "Never",
+            "Always"
+          ]
+        }
+      ],
+      "m3l2": [
+        {
+          "q": "What will the program print?",
+          "explain": "A block creates a new environment. Inner x disappears after leaving the block."
+        },
+        {
+          "q": "How does the interpreter look up a variable?",
+          "explain": "Environment chain: env → env.parent → … → global. Missing? ReferenceError.",
+          "options": [
+            "Only in global",
+            "In current env, then parents",
+            "In random order",
+            "In tokens"
+          ]
+        },
+        {
+          "q": "What will happen?",
+          "explain": "The environment remembers which names are const and blocks assignment at runtime.",
+          "options": [
+            "k will be 2",
+            "TypeError: Assignment to constant variable",
+            "Parser SyntaxError",
+            "Nothing"
+          ]
+        }
+      ],
+      "m3l3": [
+        {
+          "q": "What will the program print?",
+          "explain": "The inner function keeps a reference to the environment with n. Each call increments the same n."
+        },
+        {
+          "q": "What does a function object (closure) store in our engine?",
+          "explain": "new Closure(node, env). On call we create a new Env whose parent is the captured env.",
+          "options": [
+            "Only the name",
+            "AST node + creation environment",
+            "A copy of all globals",
+            "Compiled assembly"
+          ]
+        },
+        {
+          "q": "What will the program print?",
+          "explain": "add5 remembers a = 5. 5 + 10 = 15."
+        }
+      ],
+      "m4l1": [
+        {
+          "q": "Put the bytecode for the expression in order.",
+          "explain": "Push both operands first, then ADD pops two and pushes the result.",
+          "tiles": [
+            "PUSH_CONST 40",
+            "PUSH_CONST 2",
+            "ADD"
+          ],
+          "extra": [
+            "SUB"
+          ]
+        },
+        {
+          "q": "What value remains on top of the stack?",
+          "explain": "3 · 4 = 12, then 12 − 2 = 10."
+        },
+        {
+          "q": "Why bytecode instead of walking the AST?",
+          "explain": "Less pointer chasing, better CPU cache, easier optimizations. V8 has the Ignition interpreter.",
+          "options": [
+            "A flat instruction list runs faster",
+            "Because you can't execute an AST",
+            "To make code more readable",
+            "Because browsers require it"
+          ]
+        }
+      ],
+      "m4l2": [
+        {
+          "q": "What instruction does the compiler emit for an if condition?",
+          "explain": "Evaluate test → JUMP_IF_FALSE past the then branch. With else, add JUMP at end of then past else.",
+          "options": [
+            "CALL",
+            "JUMP_IF_FALSE",
+            "RETURN",
+            "DUP"
+          ]
+        },
+        {
+          "q": "Put the loop compilation outline in order.",
+          "explain": "Test at top, conditional jump to end, body and unconditional jump back to test.",
+          "tiles": [
+            "eval c",
+            "JUMP_IF_FALSE → end",
+            "body",
+            "JUMP → top"
+          ]
+        }
+      ],
+      "m5l1": [
+        {
+          "q": "Which objects does mark & sweep remove?",
+          "explain": "Roots: globals, stack, registers. Anything unreachable from roots is garbage.",
+          "options": [
+            "The oldest",
+            "Unreachable from roots",
+            "The largest",
+            "All after every function"
+          ]
+        },
+        {
+          "q": "Put the GC phases in order.",
+          "explain": "Mark: traverse graph from roots. Sweep: free everything without a mark.",
+          "tiles": [
+            "Find roots",
+            "Mark reachable",
+            "Sweep unmarked"
+          ]
+        },
+        {
+          "q": "Why can't reference counting handle cycle a ↔ b?",
+          "explain": "a holds b, b holds a. Even if nothing else sees them, both have count 1.",
+          "options": [
+            "Counts never drop to 0",
+            "Cycles are forbidden in JS",
+            "Because it's too fast",
+            "It handles them fine"
+          ]
+        }
+      ],
+      "m5l2": [
+        {
+          "q": "The generational hypothesis says that…",
+          "explain": "That's why the young generation is collected often and cheaply, and the old one rarely.",
+          "options": [
+            "Most objects die young",
+            "Old objects are removed most often",
+            "Objects never die",
+            "GC runs once a minute"
+          ]
+        },
+        {
+          "q": "What algorithm does V8 use for the young generation?",
+          "explain": "Live objects are copied to the other semi-space half. Dead ones vanish for free.",
+          "options": [
+            "Reference counting",
+            "Scavenge (copying, semi-space)",
+            "It doesn't collect it",
+            "Manual free()"
+          ]
+        }
+      ],
+      "m6l1": [
+        {
+          "q": "When do two objects share a hidden class (shape)?",
+          "explain": "{x, y} and {y, x} are different shapes. Initialize fields in a consistent order.",
+          "options": [
+            "Same properties added in the same order",
+            "Same values",
+            "Always",
+            "When in one array"
+          ]
+        },
+        {
+          "q": "An inline cache speeds up obj.x because…",
+          "explain": "Same shape? Read straight from the remembered offset, without a name lookup.",
+          "options": [
+            "It remembers shape and offset from the last access",
+            "It copies the object",
+            "It removes property x",
+            "It disables GC"
+          ]
+        }
+      ],
+      "m6l2": [
+        {
+          "q": "Order V8 execution tiers from simplest.",
+          "explain": "Ignition: bytecode interpreter. Sparkplug: fast baseline. Maglev: mid-tier optimizer. TurboFan: strongest.",
+          "tiles": [
+            "Ignition",
+            "Sparkplug",
+            "Maglev",
+            "TurboFan"
+          ]
+        },
+        {
+          "q": "When does deoptimization happen?",
+          "explain": "JIT assumed x is always a number. A string showed up? Fall back to slower, safe code.",
+          "options": [
+            "When JIT assumptions (e.g. types) stop holding",
+            "Every 10 seconds",
+            "When code is too short",
+            "Never"
+          ]
+        }
+      ]
+    }
+  }
+}

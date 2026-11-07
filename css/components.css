@@ -220,6 +220,16 @@ p { margin: 0 0 var(--s-3); }
 /* ================= Forms ================= */
 .field { display: grid; gap: 0.375rem; }
 .field__label { font-weight: var(--fw-bold); font-size: var(--fs-sm); color: var(--ink-soft); }
+.field__control {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 var(--s-4);
+  border: 0.125rem solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+html[dir="rtl"] body { text-align: start; }
+html[dir="rtl"] .tabbar__item { flex-direction: row; }
 .input {
   width: 100%; min-height: 3.25rem; padding: 0 var(--s-4);
   border: 0.125rem solid var(--line-strong); border-radius: var(--r-md);

@@ -99,7 +99,7 @@ abstract class SyncWebAssets : DefaultTask() {
     val webFiles: FileTree
         get() = webRoot.asFileTree.matching {
             include("app.html", "design-system.html", "manifest.webmanifest")
-            include("css/**", "js/**", "fonts/**", "assets/**")
+            include("css/**", "js/**", "fonts/**", "assets/**", "locales/**")
         }
 
     @get:OutputDirectory

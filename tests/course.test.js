@@ -37,7 +37,8 @@ test("token-order exercises match the lexer", () => {
 test("input answers that are JS match the engine", () => {
   for (const { l, ex } of all.filter((x) => x.ex.kind === "input" && x.ex.code && !/PUSH/.test(x.ex.code))) {
     let got;
-    if (/tokenów/.test(ex.q)) got = String(E.tokenize(ex.code).length - 1);
+    // Token-count question (any locale): ask how many tokens for console.log("hi");
+    if (ex.code === 'console.log("hi");' && ex.kind === "input") got = String(E.tokenize(ex.code).length - 1);
     else {
       const src = /console\.log/.test(ex.code) ? ex.code : "console.log(" + ex.code + ");";
       const r = E.evaluate(src);

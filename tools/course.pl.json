@@ -1,0 +1,506 @@
+{
+  "modules": {
+    "m1": {
+      "title": "Lekser",
+      "subtitle": "Ze znaków w tokeny"
+    },
+    "m2": {
+      "title": "Parser",
+      "subtitle": "Z tokenów w drzewo"
+    },
+    "m3": {
+      "title": "Interpreter",
+      "subtitle": "Ożywiamy drzewo"
+    },
+    "m4": {
+      "title": "Bytecode VM",
+      "subtitle": "Płasko i szybko"
+    },
+    "m5": {
+      "title": "Pamięć i GC",
+      "subtitle": "Kto sprząta?"
+    },
+    "m6": {
+      "title": "JIT",
+      "subtitle": "Turbo dla gorącego kodu"
+    }
+  },
+  "lessons": {
+    "m1l1": {
+      "title": "Droga kodu"
+    },
+    "m1l2": {
+      "title": "Tokeny"
+    },
+    "m1l3": {
+      "title": "Piszemy skaner"
+    },
+    "m2l1": {
+      "title": "Drzewo AST"
+    },
+    "m2l2": {
+      "title": "Precedencja"
+    },
+    "m2l3": {
+      "title": "Instrukcje"
+    },
+    "m3l1": {
+      "title": "Chodzenie po drzewie"
+    },
+    "m3l2": {
+      "title": "Zakresy"
+    },
+    "m3l3": {
+      "title": "Domknięcia"
+    },
+    "m4l1": {
+      "title": "Maszyna stosowa"
+    },
+    "m4l2": {
+      "title": "Skoki"
+    },
+    "m5l1": {
+      "title": "Mark & sweep"
+    },
+    "m5l2": {
+      "title": "Generacje"
+    },
+    "m6l1": {
+      "title": "Ukryte klasy"
+    },
+    "m6l2": {
+      "title": "Poziomy kompilacji"
+    }
+  },
+  "exercises": {
+    "m1l1": [
+      {
+        "q": "Co silnik JS robi jako pierwsze z tekstem programu?",
+        "explain": "Najpierw lekser (skaner) zamienia ciąg znaków na listę tokenów. Dopiero z nich parser buduje AST.",
+        "options": [
+          "Dzieli go na tokeny",
+          "Wykonuje linijka po linijce",
+          "Kompiluje do kodu maszynowego",
+          "Rysuje drzewo AST"
+        ]
+      },
+      {
+        "q": "Ułóż etapy potoku silnika w kolejności.",
+        "explain": "Źródło → lekser → tokeny → parser → AST → kompilator → bytecode → maszyna wirtualna → wynik.",
+        "tiles": [
+          "Źródło",
+          "Tokeny",
+          "AST",
+          "Bytecode",
+          "Wynik"
+        ]
+      },
+      {
+        "q": "Co jest wyjściem parsera?",
+        "explain": "Parser czyta tokeny i buduje abstrakcyjne drzewo składni (AST).",
+        "options": [
+          "Lista tokenów",
+          "Drzewo AST",
+          "Bytecode",
+          "Wynik programu"
+        ]
+      },
+      {
+        "q": "Który silnik napędza Chrome i Node.js?",
+        "explain": "V8: Chrome i Node.js. SpiderMonkey: Firefox. JavaScriptCore: Safari. Hermes: React Native.",
+        "options": [
+          "SpiderMonkey",
+          "JavaScriptCore",
+          "V8",
+          "Hermes"
+        ]
+      }
+    ],
+    "m1l2": [
+      {
+        "q": "Na jakie tokeny lekser podzieli ten kod?",
+        "explain": "7 tokenów: słowo kluczowe, identyfikator, operator, liczba, operator, liczba, średnik.",
+        "tiles": [
+          "let",
+          "x",
+          "=",
+          "40",
+          "+",
+          "2",
+          ";"
+        ]
+      },
+      {
+        "q": "Jakim tokenem jest \"let\" zapisane w cudzysłowie?",
+        "explain": "W cudzysłowie to po prostu tekst: token typu string. Lekser rozpoznaje to po znaku otwierającym \".",
+        "options": [
+          "Słowo kluczowe",
+          "String",
+          "Identyfikator",
+          "Operator"
+        ]
+      },
+      {
+        "q": "Ile tokenów (bez EOF) ma to wyrażenie?",
+        "explain": "a, >=, 10. Lekser wybiera najdłuższe dopasowanie (maximal munch), więc >= to jeden token, nie > i =.",
+        "options": [
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      {
+        "q": "Co nasz lekser robi z białymi znakami i komentarzami //?",
+        "explain": "Spacje i komentarze tylko oddzielają tokeny. Lekser je przeskakuje. (Prawdziwy JS pamięta nowe linie dla ASI.)",
+        "options": [
+          "Tworzy z nich tokeny",
+          "Pomija je",
+          "Zgłasza błąd",
+          "Zamienia na średniki"
+        ]
+      }
+    ],
+    "m1l3": [
+      {
+        "q": "Co doda ten fragment dla wejścia 123+4 (i = 0)?",
+        "explain": "Pętla zjada cyfry aż do +. slice(0, 3) to \"123\".",
+        "options": [
+          "{ number \"1\" }",
+          "{ number \"123\" }",
+          "{ number \"123+4\" }",
+          "{ number 127 }"
+        ]
+      },
+      {
+        "q": "Dlaczego operatory sprawdzamy od najdłuższych: === przed == przed =?",
+        "explain": "Maximal munch: gdyby = było pierwsze, === zostałoby zjedzone jako trzy osobne =.",
+        "options": [
+          "Bo tak jest szybciej",
+          "Żeby === nie rozpadło się na == i =",
+          "Bo tak wymaga Unicode",
+          "Kolejność nie ma znaczenia"
+        ]
+      },
+      {
+        "q": "Ile tokenów (bez EOF) wygeneruje lekser?",
+        "explain": "console . log ( \"hi\" ) ; – razem 7."
+      }
+    ],
+    "m2l1": [
+      {
+        "q": "Jaki węzeł jest korzeniem każdego AST w naszym silniku?",
+        "explain": "Program trzyma listę instrukcji (body). Tak samo jak w ESTree.",
+        "options": [
+          "Program",
+          "BlockStatement",
+          "Root",
+          "ExpressionStatement"
+        ]
+      },
+      {
+        "q": "Co jest korzeniem tego wyrażenia?",
+        "explain": "* wiąże mocniej, więc 2 * 3 staje się prawym dzieckiem +. Korzeniem jest +.",
+        "options": [
+          "BinaryExpression *",
+          "BinaryExpression +",
+          "Literal 40",
+          "Literal 3"
+        ]
+      },
+      {
+        "q": "Ułóż węzły na ścieżce od korzenia do liczby 1.",
+        "explain": "Program → VariableDeclaration → VariableDeclarator (init) → CallExpression (arguments) → Literal 1.",
+        "tiles": [
+          "Program",
+          "VariableDeclaration",
+          "VariableDeclarator",
+          "CallExpression",
+          "Literal"
+        ],
+        "extra": [
+          "BinaryExpression"
+        ]
+      }
+    ],
+    "m2l2": [
+      {
+        "q": "Jaki jest wynik?",
+        "explain": "* ma wyższą siłę wiązania niż +, więc 2 + (3 * 4) = 14."
+      },
+      {
+        "q": "Operator ** jest prawostronnie łączny. Jaki jest wynik?",
+        "explain": "2 ** (3 ** 2) = 2 ** 9 = 512. W parserze Pratta: prawą stronę parsujemy z bp − 1."
+      },
+      {
+        "q": "W parserze Pratta: kiedy operator „przejmuje” lewe wyrażenie?",
+        "explain": "Pętla: while (bp(op) > minBp) { … }. To jedna linijka, która załatwia całą precedencję.",
+        "options": [
+          "Gdy jego siła wiązania > minimalna",
+          "Gdy stoi pierwszy w pliku",
+          "Gdy jest dłuższy",
+          "Zawsze"
+        ]
+      },
+      {
+        "q": "Jak powinno zostać zgrupowane to wyrażenie?",
+        "explain": "Odejmowanie jest lewostronnie łączne: (10 − 4) − 3 = 3. Inaczej wyszłoby 9.",
+        "options": [
+          "(10 - 4) - 3",
+          "10 - (4 - 3)"
+        ]
+      }
+    ],
+    "m2l3": [
+      {
+        "q": "Jaki węzeł powstanie z tego kodu?",
+        "explain": "IfStatement ma test, consequent (gałąź then) i alternate (gałąź else).",
+        "options": [
+          "IfStatement { consequent, alternate }",
+          "ConditionalExpression",
+          "LogicalExpression ||",
+          "Dwa osobne IfStatement"
+        ]
+      },
+      {
+        "q": "Co powinien zgłosić parser?",
+        "explain": "Po let parser oczekuje identyfikatora. To błąd składni, wykryty zanim cokolwiek się wykona.",
+        "options": [
+          "ReferenceError",
+          "SyntaxError: oczekiwano nazwy zmiennej",
+          "Nic, x = 5",
+          "TypeError"
+        ]
+      },
+      {
+        "q": "Dlaczego to jest błąd?",
+        "explain": "Przypisać można do Identifier (albo właściwości), nie do BinaryExpression.",
+        "options": [
+          "Brakuje średnika",
+          "Lewa strona = musi być celem przypisania",
+          "5 to zła liczba",
+          "To nie jest błąd"
+        ]
+      }
+    ],
+    "m3l1": [
+      {
+        "q": "Interpreter typu tree-walking…",
+        "explain": "evaluate(node) patrzy na node.type i rekurencyjnie oblicza dzieci. Prosto, ale wolniej niż bytecode.",
+        "options": [
+          "Rekurencyjnie oblicza węzły AST",
+          "Zamienia kod na asembler",
+          "Czyta tokeny bez parsera",
+          "Działa tylko na liczbach"
+        ]
+      },
+      {
+        "q": "Co wypisze program?",
+        "explain": "1 + 2 + 3 + 4 = 10."
+      },
+      {
+        "q": "Kiedy b() NIE zostanie wywołane?",
+        "explain": "Short-circuit: LogicalExpression oblicza prawą stronę tylko wtedy, gdy musi.",
+        "options": [
+          "Gdy a jest fałszywe",
+          "Gdy a jest prawdziwe",
+          "Nigdy",
+          "Zawsze"
+        ]
+      }
+    ],
+    "m3l2": [
+      {
+        "q": "Co wypisze program?",
+        "explain": "Blok tworzy nowe środowisko. Wewnętrzne x znika po wyjściu z bloku."
+      },
+      {
+        "q": "Jak interpreter szuka zmiennej?",
+        "explain": "Łańcuch środowisk: env → env.parent → … → global. Nie ma? ReferenceError.",
+        "options": [
+          "Tylko w globalnym",
+          "W bieżącym środowisku, potem w rodzicach",
+          "W losowej kolejności",
+          "W tokenach"
+        ]
+      },
+      {
+        "q": "Co się stanie?",
+        "explain": "Środowisko pamięta, które nazwy są const, i blokuje przypisanie w czasie wykonania.",
+        "options": [
+          "k będzie 2",
+          "TypeError: Assignment to constant variable",
+          "SyntaxError parsera",
+          "Nic"
+        ]
+      }
+    ],
+    "m3l3": [
+      {
+        "q": "Co wypisze program?",
+        "explain": "Funkcja wewnętrzna trzyma referencję do środowiska z n. Każde wywołanie zwiększa to samo n."
+      },
+      {
+        "q": "Co przechowuje obiekt funkcji (closure) w naszym silniku?",
+        "explain": "new Closure(node, env). Przy wywołaniu tworzymy nowe Env, którego rodzicem jest zapamiętane env.",
+        "options": [
+          "Tylko nazwę",
+          "Węzeł AST + środowisko utworzenia",
+          "Kopię wszystkich zmiennych globalnych",
+          "Skompilowany asembler"
+        ]
+      },
+      {
+        "q": "Co wypisze program?",
+        "explain": "add5 pamięta a = 5. 5 + 10 = 15."
+      }
+    ],
+    "m4l1": [
+      {
+        "q": "Ułóż bytecode dla wyrażenia.",
+        "explain": "Najpierw oba argumenty na stos, potem ADD zdejmuje dwa i wrzuca wynik.",
+        "tiles": [
+          "PUSH_CONST 40",
+          "PUSH_CONST 2",
+          "ADD"
+        ],
+        "extra": [
+          "SUB"
+        ]
+      },
+      {
+        "q": "Jaka wartość zostanie na szczycie stosu?",
+        "explain": "3 · 4 = 12, potem 12 − 2 = 10."
+      },
+      {
+        "q": "Po co bytecode zamiast chodzenia po AST?",
+        "explain": "Mniej skakania po wskaźnikach, lepsza pamięć podręczna CPU, łatwiej o optymalizacje. V8 ma interpreter Ignition.",
+        "options": [
+          "Płaska lista instrukcji jest szybsza do wykonania",
+          "Bo AST nie da się wykonać",
+          "Żeby kod był czytelniejszy",
+          "Bo przeglądarki tego wymagają"
+        ]
+      }
+    ],
+    "m4l2": [
+      {
+        "q": "Jaką instrukcję wygeneruje kompilator dla warunku if?",
+        "explain": "Oblicz test → JUMP_IF_FALSE za gałąź then. Gdy jest else, na końcu then dodajemy JUMP za else.",
+        "options": [
+          "CALL",
+          "JUMP_IF_FALSE",
+          "RETURN",
+          "DUP"
+        ]
+      },
+      {
+        "q": "Ułóż schemat kompilacji pętli.",
+        "explain": "Test na górze, skok warunkowy na koniec, ciało i skok bezwarunkowy z powrotem do testu.",
+        "tiles": [
+          "oblicz c",
+          "JUMP_IF_FALSE → koniec",
+          "body",
+          "JUMP → początek"
+        ]
+      }
+    ],
+    "m5l1": [
+      {
+        "q": "Które obiekty usuwa mark & sweep?",
+        "explain": "Korzenie: zmienne globalne, stos, rejestry. Co nie da się z nich osiągnąć, to śmieci.",
+        "options": [
+          "Najstarsze",
+          "Nieosiągalne z korzeni",
+          "Największe",
+          "Wszystkie po każdej funkcji"
+        ]
+      },
+      {
+        "q": "Ułóż fazy odśmiecania.",
+        "explain": "Mark: przejście grafu od korzeni. Sweep: zwolnienie wszystkiego, co nie ma znacznika.",
+        "tiles": [
+          "Znajdź korzenie",
+          "Oznacz osiągalne",
+          "Zamieć nieoznaczone"
+        ]
+      },
+      {
+        "q": "Dlaczego liczenie referencji nie radzi sobie z cyklem a ↔ b?",
+        "explain": "a trzyma b, b trzyma a. Nawet gdy nikt inny ich nie widzi, oba mają licznik 1.",
+        "options": [
+          "Liczniki nigdy nie spadną do 0",
+          "Cykle są zabronione w JS",
+          "Bo jest za szybkie",
+          "Radzi sobie bez problemu"
+        ]
+      }
+    ],
+    "m5l2": [
+      {
+        "q": "Hipoteza generacyjna mówi, że…",
+        "explain": "Dlatego młodą generację sprząta się często i tanio, a starą rzadko.",
+        "options": [
+          "Większość obiektów umiera młodo",
+          "Stare obiekty są najczęściej usuwane",
+          "Obiekty nigdy nie umierają",
+          "GC działa raz na minutę"
+        ]
+      },
+      {
+        "q": "Jakim algorytmem V8 sprząta młodą generację?",
+        "explain": "Żywe obiekty są kopiowane do drugiej połowy przestrzeni. Martwe znikają za darmo.",
+        "options": [
+          "Liczeniem referencji",
+          "Scavenge (kopiujący, semi-space)",
+          "Nie sprząta jej",
+          "Ręcznym free()"
+        ]
+      }
+    ],
+    "m6l1": [
+      {
+        "q": "Kiedy dwa obiekty dzielą ukrytą klasę (shape)?",
+        "explain": "{x, y} i {y, x} to różne kształty. Dlatego warto inicjalizować pola w stałej kolejności.",
+        "options": [
+          "Mają te same właściwości dodane w tej samej kolejności",
+          "Mają te same wartości",
+          "Zawsze",
+          "Gdy są w jednej tablicy"
+        ]
+      },
+      {
+        "q": "Inline cache przyspiesza obj.x, ponieważ…",
+        "explain": "Ten sam shape? Czytamy od razu spod zapamiętanego offsetu, bez szukania po nazwie.",
+        "options": [
+          "Zapamiętuje shape i offset z poprzedniego dostępu",
+          "Kopiuje obiekt",
+          "Usuwa właściwość x",
+          "Wyłącza GC"
+        ]
+      }
+    ],
+    "m6l2": [
+      {
+        "q": "Ułóż poziomy wykonania w V8 od najprostszego.",
+        "explain": "Ignition: interpreter bytecode. Sparkplug: szybki baseline. Maglev: średni optymalizator. TurboFan: najmocniejszy.",
+        "tiles": [
+          "Ignition",
+          "Sparkplug",
+          "Maglev",
+          "TurboFan"
+        ]
+      },
+      {
+        "q": "Kiedy następuje deoptymalizacja?",
+        "explain": "JIT założył, że x to zawsze liczba. Przyszedł string? Wracamy do wolniejszego, bezpiecznego kodu.",
+        "options": [
+          "Gdy założenia JIT (np. typy) przestają być prawdziwe",
+          "Co 10 sekund",
+          "Gdy kod jest za krótki",
+          "Nigdy"
+        ]
+      }
+    ]
+  }
+}

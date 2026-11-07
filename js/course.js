@@ -3,7 +3,7 @@
      choice: { q, code?, options[], answer (index), explain }
      order:  { q, code?, tiles[] (correct order; string or {t, type}), extra?[] (distractors), explain }
      input:  { q, code?, answer (string | string[]), explain }   — "what does it print?" style */
-window.RUDI_COURSE = [
+window.RUDI_COURSE_SCHEMA = [
   {
     id: "m1", title: "Lekser", subtitle: "Ze znaków w tokeny", color: "fox",
     lessons: [
@@ -194,3 +194,5 @@ window.RUDI_COURSE = [
     ]
   }
 ];
+
+window.RUDI_COURSE = window.RUDI_COURSE_SCHEMA;

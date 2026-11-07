@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="pl">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#E8622C">
-<title>Rudi.js: zbuduj własny silnik JavaScript</title>
+<title>Rudi.js</title>
 <meta name="description" content="Otwarty, grywalizowany kurs: lekser, parser Pratta, AST, interpreter, bytecode VM, GC i JIT. 5 minut dziennie z czerwoną pandą Rudim.">
 <meta property="og:title" content="Rudi.js: zbuduj własny silnik JavaScript">
 <meta property="og:description" content="Grywalizowany kurs budowy silnika JS: od pierwszego tokena po JIT. Za darmo, w przeglądarce.">
@@ -26,6 +26,10 @@
     <nav class="lnav__links" aria-label="Sekcje">
       <a href="#jak">Kurs</a><a href="#program">Program</a><a href="#potok">Architektura</a><a href="#plac">Plac zabaw</a>
     </nav>
+    <label class="lnav__lang">
+      <span class="visually-hidden">Language</span>
+      <select id="lang" aria-label="Language"></select>
+    </label>
     <a class="btn btn--ghost btn--sm" href="https://github.com/chiddekel/rudi-js"><span data-icon="github"></span>GitHub</a>
     <a class="btn btn--sm" href="app.html">Zacznij naukę →</a>
   </div>
@@ -182,10 +186,34 @@
   </div>
 </footer>
 
+<script src="js/i18n.js"></script>
 <script src="js/rudi.js"></script>
 <script src="js/engine.js"></script>
 <script src="js/course.js"></script>
 <script src="js/viz.js"></script>
+<script>
+(function () {
+  var sel = document.getElementById("lang");
+  if (sel && window.RudiI18n) {
+    window.RudiI18n.SUPPORTED.forEach(function (l) {
+      var o = document.createElement("option");
+      o.value = l.code; o.textContent = l.name;
+      sel.appendChild(o);
+    });
+    window.RudiI18n.boot().then(function () {
+      sel.value = window.RudiI18n.code();
+      document.documentElement.lang = window.RudiI18n.code();
+      document.documentElement.dir = (window.RudiI18n.pack().meta && window.RudiI18n.pack().meta.dir) || "ltr";
+    });
+    sel.addEventListener("change", function () {
+      window.RudiI18n.setLocale(sel.value).then(function () {
+        document.documentElement.lang = window.RudiI18n.code();
+        document.documentElement.dir = (window.RudiI18n.pack().meta && window.RudiI18n.pack().meta.dir) || "ltr";
+      });
+    });
+  }
+})();
+</script>
 <script>
 (function () {
   var R = window.Rudi, E = window.RudiEngine, V = window.RudiViz, $ = function (id) { return document.getElementById(id); };
