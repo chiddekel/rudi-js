@@ -42,9 +42,9 @@
 - 🧪 **Plac zabaw**: piszesz kod i na żywo widzisz tokeny, drzewo AST, bytecode i wynik.
 - 🔥 **Grywalizacja**: seria dni, XP, klejnoty, serca, odznaki, skrzynie i liga.
 - 🐼 **Rudi żyje**: 10 pogodnych min, płynne animacje i radość przy każdym ukończonym etapie.
-- 📱 **Web + Android 8.0+**: PWA i natywna aplikacja, obie działają offline.
+- 📱 **Web + Android 8.0+**: PWA i natywna aplikacja z **GeckoView** — działa offline nawet bez systemowego WebView.
 - 🌗 **Jasny i ciemny motyw**, skalowanie z rozmiarem tekstu (`rem`), obsługa `prefers-reduced-motion`.
-- 🪶 **Zero zależności**: czysty HTML, CSS i JS, bez builda.
+- 🪶 **Zero zależności** w kursie: czysty HTML, CSS i JS, bez builda.
 
     </td>
   </tr>
@@ -64,7 +64,7 @@
   </tr>
   <tr>
     <td width="50%"><img src="docs/readme/desktop-path.png" alt="Ścieżka nauki na desktopie"><p align="center"><b>Desktop</b> · boczne menu, ścieżka lekcji</p></td>
-    <td width="50%"><img src="docs/readme/android.png" alt="Aplikacja Android na tablecie"><p align="center"><b>Android</b> · natywna aplikacja, offline</p></td>
+    <td width="50%"><img src="docs/readme/android.png" alt="Aplikacja Android na tablecie"><p align="center"><b>Android</b> · GeckoView, offline od API 26</p></td>
   </tr>
 </table>
 
@@ -127,14 +127,28 @@ xdg-open app.html             # albo: python3 -m http.server 8080
 npm test                      # node:test: silnik + spójność kursu
 ```
 
-**Android 8.0+** (Kotlin, WebView, offline, bez uprawnienia INTERNET):
+**Android 8.0+** (Kotlin + **GeckoView**, offline, bez uprawnienia INTERNET):
+
+Aplikacja nie polega na systemowym WebView. Host kopiuje bundel kursu do prywatnego katalogu aplikacji i ładuje go przez `file://`, więc nawigacja (`location.hash`) działa na API 26+ także wtedy, gdy dostawca WebView jest niedostępny.
 
 ```sh
 cd android
-./gradlew assembleDebug       # app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleDebug
+# APK per ABI, np.:
+#   app/build/outputs/apk/debug/app-x86_64-debug.apk
+#   app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
 ```
 
 Gotowe APK z każdego builda znajdziesz w artefaktach [GitHub Actions](https://github.com/chiddekel/rudi-js/actions/workflows/ci.yml). CI kończy się błędem przy każdym ostrzeżeniu Gradle, Kotlina lub lintu.
+
+**Szybkie sprawdzenie UI na emulatorze** (wymaga jawnego seriala ADB; nie czyści danych aplikacji):
+
+```sh
+python3 tests/android/ui.py emulator-5554          # wypisz widoczne etykiety
+python3 tests/android/ui.py emulator-5554 "Lekcja" # stuknij po etykiecie a11y
+```
+
+Checklistę i znane poprawki Android 8 znajdziesz w [`docs/qa/android-8.md`](docs/qa/android-8.md).
 
 <details>
 <summary><b>📁 Struktura projektu</b></summary>
@@ -149,8 +163,10 @@ Gotowe APK z każdego builda znajdziesz w artefaktach [GitHub Actions](https://g
 | `js/app.js` · `js/rudi.js` · `js/viz.js` | Logika aplikacji, maskotka i miny, wizualizacje (kod, tokeny, AST) |
 | `css/` | `tokens.css`, `components.css`, `app.css`, `landing.css`, `fonts.css` |
 | `fonts/` | Nunito + JetBrains Mono (OFL), hostowane lokalnie |
-| `android/` | Aplikacja Android: Kotlin, AGP 9, `minSdk 26`, `targetSdk 37` |
+| `android/` | Aplikacja Android: Kotlin + GeckoView, AGP 9, `minSdk 26`, `targetSdk 37`, APK per ABI |
 | `tests/` | `node:test`: silnik i treść kursu |
+| `tests/android/ui.py` | Sterownik ADB po etykietach accessibility (E2E na emulatorze) |
+| `docs/qa/android-8.md` | Checklist i poprawki QA dla Android 8 / API 26 |
 | `stitch/` | Ekrany z Google Stitch, wizualna referencja projektu |
 | `docs/readme/` | Grafiki tego README |
 
